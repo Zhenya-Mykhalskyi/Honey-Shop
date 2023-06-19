@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "726948687055",
+    "project_id": "honey-project2",
+    "storage_bucket": "honey-project2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:726948687055:android:53779b0c83e558fa409bba",
+        "android_client_info": {
+          "package_name": "com.example.honey_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "726948687055-p208vo64gdjcon0c5jk740acilvlpc1s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.honey_project",
+            "certificate_hash": "3b529c9585c1ab6efc455a9915175eba01300d5f"
+          }
+        },
+        {
+          "client_id": "726948687055-70s2b9oa6gu6v8c8no48a61fcqb7r1eo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9njfa8BgzYo1P83tl2-WzP4N-7jMvcwo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "726948687055-70s2b9oa6gu6v8c8no48a61fcqb7r1eo.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "726948687055-fggr7tuebtbmscp139h6epoh1peeg1c5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.honeyProject"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
