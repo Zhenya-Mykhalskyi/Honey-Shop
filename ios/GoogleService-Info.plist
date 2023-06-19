@@ -30,5 +30,9 @@
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
 	<string>1:726948687055:ios:326be2c4be752206409bba</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+  	<string>tel</string>
+	</array>
 </dict>
 </plist>

@@ -5,7 +5,8 @@ import 'package:pinput/pinput.dart';
 
 class OTPScreen extends StatefulWidget {
   final String phone;
-  OTPScreen(this.phone);
+  final String name;
+  OTPScreen(this.phone, this.name);
   @override
   _OTPScreenState createState() => _OTPScreenState();
 }

@@ -23,12 +23,12 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    Color backColor = const Color(0xFF1B1B1B);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Honey',
       theme: ThemeData(
-        primarySwatch: Colors.amber,
-        scaffoldBackgroundColor: const Color.fromARGB(255, 23, 23, 23),
+        appBarTheme: AppBarTheme(backgroundColor: backColor),
+        scaffoldBackgroundColor: backColor,
         textTheme: const TextTheme(
           titleLarge: TextStyle(color: Colors.white),
           titleMedium: TextStyle(color: Colors.white),
