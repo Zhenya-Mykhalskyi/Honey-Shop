@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:honey/screens/products_overview_screen.dart';
@@ -24,24 +25,54 @@ class _OTPScreenState extends State<OTPScreen> {
         color: Color.fromRGBO(30, 60, 87, 1),
         fontWeight: FontWeight.w600),
     decoration: BoxDecoration(
-      border: Border.all(color: Color.fromARGB(255, 255, 255, 255)),
+      border: Border.all(color: const Color.fromARGB(255, 255, 255, 255)),
       borderRadius: BorderRadius.circular(20),
     ),
   );
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _verifyPhone();
   }
 
-  void handleVerificationSuccess() {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => const ProductScreen()),
-      (route) => false,
-    );
+  Future<void> handleVerificationSuccess(String name, String phone) async {
+    try {
+      final CollectionReference usersCollection =
+          FirebaseFirestore.instance.collection('users');
+
+      // QuerySnapshot querySnapshot = await usersCollection
+      //     .where('phoneNumber', isEqualTo: '+380$phone')
+      //     .get();
+
+      // if (querySnapshot.docs.isNotEmpty) {
+      //   final GlobalKey<ScaffoldState> _scaffoldKey =
+      //       GlobalKey<ScaffoldState>();
+      //   // Користувач з таким номером вже існує
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(content: Text('Користувач з таким номером вже існує')),
+      //   );
+
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const ProductScreen()),
+        (route) => false, //видалити всі маршрути крім цільового
+      );
+      try {
+        await usersCollection.add({
+          'phoneNumber': '+380$phone',
+          'name': name,
+        });
+
+        print('User data saved successfully!');
+      } catch (error) {
+        print('Error saving user data: $error');
+      }
+
+      print('User data saved successfully!');
+    } catch (error) {
+      print('Error saving user data: $error');
+    }
   }
 
   _verifyPhone() async {
@@ -49,7 +80,7 @@ class _OTPScreenState extends State<OTPScreen> {
       phoneNumber: '+380${widget.phone}',
       verificationCompleted: (PhoneAuthCredential credential) async {
         await FirebaseAuth.instance.signInWithCredential(credential);
-        handleVerificationSuccess();
+        handleVerificationSuccess(widget.name, widget.phone);
       },
       verificationFailed: (FirebaseAuthException e) {
         print(e.message);
@@ -94,13 +125,12 @@ class _OTPScreenState extends State<OTPScreen> {
               defaultPinTheme: defaultPinTheme,
               controller: _pinPutController,
               pinAnimationType: PinAnimationType.fade,
-              //  onSubmitted: (when press 'ok' in keyboard)
               onCompleted: (pin) async {
                 try {
                   await FirebaseAuth.instance.signInWithCredential(
                       PhoneAuthProvider.credential(
                           verificationId: _verificationCode!, smsCode: pin));
-                  handleVerificationSuccess();
+                  handleVerificationSuccess(widget.name, widget.phone);
                 } catch (e) {
                   ScaffoldMessenger.of(context)
                       .showSnackBar(SnackBar(content: Text(e.toString())));

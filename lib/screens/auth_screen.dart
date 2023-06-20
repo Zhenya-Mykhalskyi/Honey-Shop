@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 // import 'package:phone_number/phone_number.dart';
 
@@ -25,16 +26,38 @@ class _AuthScreenState extends State<AuthScreen> {
       );
       return;
     }
+
+    final phoneNumber = '+380${_phonecontroller.text}';
+    print(phoneNumber);
+    bool exists = await checkPhoneNumberExists(phoneNumber);
+    if (exists) {
+      print(exists);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Номер телефону вже існує'),
+        ),
+      );
+      return;
+    }
     _formKey.currentState!.save();
-    setState(() {
-      //
-    });
+    print(exists);
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => OTPScreen(_phonecontroller.text),
+        builder: (context) =>
+            OTPScreen(_phonecontroller.text, _namecontroller.text),
       ),
     );
   }
+
+  Future<bool> checkPhoneNumberExists(String phone) async {
+    final CollectionReference userColection =
+        FirebaseFirestore.instance.collection('users');
+    QuerySnapshot querySnapshot =
+        await userColection.where('phoneNumber', isEqualTo: phone).get();
+    return querySnapshot.docs.isNotEmpty;
+  }
+
+  bool isFocused = false;
 
   @override
   Widget build(BuildContext context) {
@@ -117,14 +140,24 @@ class _AuthScreenState extends State<AuthScreen> {
                         borderRadius: BorderRadius.circular(9.0),
                       ),
                       child: TextFormField(
-                        decoration: const InputDecoration(
-                          border: InputBorder
-                              .none, // вимкнути ободок всередині текстового поля
+                        decoration: InputDecoration(
+                          prefix: !isFocused ? null : const Text('+380 '),
+                          border: InputBorder.none, // вимкнути ободок
                           hintText: 'Номер телефону',
-                          hintStyle: TextStyle(color: Colors.white),
+                          hintStyle: const TextStyle(color: Colors.white),
                           filled: true,
                           fillColor: Colors.transparent, // прозорий фон
                         ),
+                        onTap: () {
+                          setState(() {
+                            isFocused = true;
+                          });
+                        },
+                        onEditingComplete: () {
+                          setState(() {
+                            isFocused = false;
+                          });
+                        },
                         controller: _phonecontroller,
                         keyboardType: TextInputType.phone,
                         validator: (value) {
