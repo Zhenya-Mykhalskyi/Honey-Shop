@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
   final void Function() action;
-  const CustomButton({required this.action});
+  final String text;
+  const CustomButton({required this.action, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +21,11 @@ class CustomButton extends StatelessWidget {
               MaterialStateProperty.all(const Color.fromARGB(255, 255, 179, 0)),
         ),
         onPressed: action,
-        child: const Padding(
-          padding: EdgeInsets.all(15.0),
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
           child: Text(
-            'Зареєструватися',
-            style: TextStyle(
+            text,
+            style: const TextStyle(
                 color: Color.fromARGB(255, 74, 43, 41),
                 fontFamily: 'MA',
                 fontWeight: FontWeight.bold,

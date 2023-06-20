@@ -1,13 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:honey/screens/auth_screen.dart';
 import 'package:honey/screens/products_overview_screen.dart';
 import 'package:pinput/pinput.dart';
 
 class OTPScreen extends StatefulWidget {
   final String phone;
   final String name;
-  OTPScreen(this.phone, this.name);
+  final AuthMode _authMode;
+  OTPScreen(this.phone, this.name, this._authMode);
   @override
   _OTPScreenState createState() => _OTPScreenState();
 }
@@ -40,36 +42,24 @@ class _OTPScreenState extends State<OTPScreen> {
     try {
       final CollectionReference usersCollection =
           FirebaseFirestore.instance.collection('users');
+      if (widget._authMode == AuthMode.Signup) {
+        print('authmode == signup');
+        try {
+          await usersCollection.add({
+            'phoneNumber': '+380$phone',
+            'name': name,
+          });
 
-      // QuerySnapshot querySnapshot = await usersCollection
-      //     .where('phoneNumber', isEqualTo: '+380$phone')
-      //     .get();
-
-      // if (querySnapshot.docs.isNotEmpty) {
-      //   final GlobalKey<ScaffoldState> _scaffoldKey =
-      //       GlobalKey<ScaffoldState>();
-      //   // Користувач з таким номером вже існує
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //     SnackBar(content: Text('Користувач з таким номером вже існує')),
-      //   );
-
+          print('User data saved successfully!');
+        } catch (error) {
+          print('Error saving user data: $error');
+        }
+      }
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const ProductScreen()),
         (route) => false, //видалити всі маршрути крім цільового
       );
-      try {
-        await usersCollection.add({
-          'phoneNumber': '+380$phone',
-          'name': name,
-        });
-
-        print('User data saved successfully!');
-      } catch (error) {
-        print('Error saving user data: $error');
-      }
-
-      print('User data saved successfully!');
     } catch (error) {
       print('Error saving user data: $error');
     }
