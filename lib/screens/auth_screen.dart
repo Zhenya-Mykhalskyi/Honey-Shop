@@ -88,10 +88,10 @@ class _AuthScreenState extends State<AuthScreen> {
       appBar: AppBar(
         elevation: 0,
         leading: Padding(
-          padding: const EdgeInsets.only(left: 10),
+          padding: const EdgeInsets.only(left: 15),
           child: Image.asset('./assets/img/logo.png'),
         ),
-        leadingWidth: 100,
+        leadingWidth: 85,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

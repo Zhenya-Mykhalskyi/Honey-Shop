@@ -8,35 +8,48 @@ class ProductScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CollectionReference productsCollection =
-        FirebaseFirestore.instance.collection('messages');
+        FirebaseFirestore.instance.collection('products');
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Honey'),
+        toolbarHeight: 100,
+        elevation: 0,
+        leading: Container(
+          margin: const EdgeInsets.only(left: 20, top: 20),
+          child: Image.asset('./assets/img/logo.png'),
+        ),
+        leadingWidth: 95,
         actions: [
-          DropdownButton(
-            underline: Container(),
-            icon: const Icon(Icons.more_vert, color: Colors.black),
-            items: [
-              DropdownMenuItem(
-                value: 'logout',
-                child: Row(
-                  children: const [
-                    Icon(Icons.exit_to_app),
-                    SizedBox(width: 8),
-                    Text(
-                      'Logout',
-                      style: TextStyle(color: Colors.black),
-                    )
-                  ],
-                ),
-              )
-            ],
-            onChanged: (itemIdentifier) {
-              if (itemIdentifier == 'logout') {
-                FirebaseAuth.instance.signOut();
-              }
-            },
+          Container(
+            margin: const EdgeInsets.only(top: 35, right: 10),
+            child: DropdownButton(
+              underline: Container(), //скрити полоску
+              icon: const Icon(
+                Icons.person,
+                color: Colors.white,
+                size: 40,
+              ),
+              items: [
+                DropdownMenuItem(
+                  value: 'logout',
+                  child: Row(
+                    children: const [
+                      Icon(Icons.exit_to_app),
+                      SizedBox(width: 8),
+                      Text(
+                        'Logout',
+                        style: TextStyle(color: Colors.black),
+                      )
+                    ],
+                  ),
+                )
+              ],
+              onChanged: (itemIdentifier) {
+                if (itemIdentifier == 'logout') {
+                  FirebaseAuth.instance.signOut();
+                }
+              },
+            ),
           )
         ],
       ),
@@ -60,12 +73,10 @@ class ProductScreen extends StatelessWidget {
                 // Отримуємо дані з документа
                 final productData =
                     documents[index].data() as Map<String, dynamic>;
-                // Отримуємо необхідні поля з документа
-                return ListTile(
-                  title: Text(productData['text'] as String),
-                  // subtitle: Text(productData['price'].toString()),
-                  // trailing: Image.network(productData['imageUrl']),
-                );
+
+                return Text(productData['title']);
+                // subtitle: Text(productData['price'].toString()),
+                // trailing: Image.network(productData['imageUrl']),
               },
             );
           }
