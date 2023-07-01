@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:honey/admin/admin_screens/products_edit_screen.dart';
+import 'package:honey/admin/admin_screens/edit_overview_screen.dart';
 import 'package:honey/screens/auth_screen.dart';
 import 'package:honey/screens/products_overview_screen.dart';
 import 'package:honey/screens/splash_screen.dart';
@@ -42,7 +42,7 @@ class _MyAppState extends State<MyApp> {
           bodySmall: TextStyle(color: Colors.white, fontFamily: 'MA'),
         ),
       ),
-      home: ProductsEditScreen(),
+      home: const EditOverViewScreen(),
 
       // StreamBuilder(
       //   stream: FirebaseAuth.instance.authStateChanges(),

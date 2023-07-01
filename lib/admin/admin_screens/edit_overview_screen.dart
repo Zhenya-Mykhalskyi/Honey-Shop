@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
+import 'package:honey/admin/admin_screens/product_edit_screen.dart';
 import 'package:honey/widgets/custom_button.dart';
 
-class ProductsEditScreen extends StatelessWidget {
-  const ProductsEditScreen({super.key});
+class EditOverViewScreen extends StatelessWidget {
+  const EditOverViewScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +23,7 @@ class ProductsEditScreen extends StatelessWidget {
         leadingWidth: 90,
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Expanded(
             child: StreamBuilder(
@@ -56,7 +59,8 @@ class ProductsEditScreen extends StatelessWidget {
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(10),
                                     child: Image.network(
-                                      productData['imageUrl'],
+                                      productData['imageUrl'] ??
+                                          'https://cdn-icons-png.flaticon.com/128/3875/3875172.png',
                                       width: 75,
                                       height: 75,
                                     ),
@@ -72,15 +76,15 @@ class ProductsEditScreen extends StatelessWidget {
                                         Text(
                                           productData['title'],
                                           style: const TextStyle(
-                                            fontSize: 16,
-                                            // fontWeight: FontWeight.w400,
+                                            fontSize: 19,
+                                            fontWeight: FontWeight.w400,
                                           ),
                                         ),
                                         const SizedBox(height: 8),
                                         Text(
-                                          '₴${productData['price']} / 0.5',
+                                          '₴${productData['price'].toStringAsFixed(0)} / 0.5',
                                           style: const TextStyle(
-                                            fontSize: 14,
+                                            fontSize: 16,
                                             // fontWeight: FontWeight.w400,
                                           ),
                                         ),
@@ -88,7 +92,7 @@ class ProductsEditScreen extends StatelessWidget {
                                         Text(
                                           'Залишилось  ${productData['litersLeft']} л',
                                           style: const TextStyle(
-                                            fontSize: 12,
+                                            fontSize: 14,
                                             // fontWeight: FontWeight.w400,
                                           ),
                                         ),
@@ -96,12 +100,23 @@ class ProductsEditScreen extends StatelessWidget {
                                     ),
                                   ),
                                   const SizedBox(width: 25),
-                                  const Padding(
-                                    padding: EdgeInsets.only(bottom: 50),
-                                    child: Icon(
-                                      Icons.edit,
-                                      color: Color.fromARGB(255, 217, 217, 217),
-                                      size: 25,
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 50),
+                                    child: IconButton(
+                                      icon: const Icon(Icons.edit),
+                                      onPressed: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                ProductEditScreen(
+                                              isAdd: false,
+                                              productId: products[index].id,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      color: const Color.fromARGB(
+                                          255, 217, 217, 217),
                                     ),
                                   ),
                                 ],
@@ -115,7 +130,19 @@ class ProductsEditScreen extends StatelessWidget {
                   return Container();
                 }),
           ),
-          CustomButton(action: () {}, text: 'Додати товар')
+          CustomButton(
+            action: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ProductEditScreen(
+                    isAdd: true,
+                    productId: productCollection.doc().id,
+                  ),
+                ),
+              );
+            },
+            text: 'Додати товар',
+          ),
         ],
       ),
     );
