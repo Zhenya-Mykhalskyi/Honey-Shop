@@ -88,7 +88,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
       });
       String newTitle = _titleController.text;
       double newPrice = double.parse(_priceController.text);
-      double newLitersLeft = double.parse(_litersLeftController.text);
+      int newLitersLeft = int.parse(_litersLeftController.text);
       String newShortDescription = _shortDescriptionController.text;
       String newLongDescription = _longDescriptionController.text;
       if (_pikedImage != null) {
@@ -96,7 +96,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
         Reference ref = FirebaseStorage.instance
             .ref()
             .child('product_images')
-            .child('${newTitle.toLowerCase()}.jpg');
+            .child('${newTitle.toLowerCase().replaceAll(' ', '_')}.jpg');
         final imageBytes = await _pikedImage!.readAsBytes();
         await ref.putData(imageBytes);
         _imageUrl = await ref.getDownloadURL();
@@ -104,7 +104,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
 
       await FirebaseFirestore.instance
           .collection('products')
-          .doc(newTitle.toLowerCase()) //  назва як ID
+          .doc(newTitle.toLowerCase().replaceAll(' ', '_')) //  назва як ID
           .set({
         'title': newTitle,
         'price': newPrice,
@@ -156,7 +156,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
         Reference ref = FirebaseStorage.instance
             .ref()
             .child('product_images')
-            .child('${newTitle.toLowerCase()}.jpg');
+            .child('${widget.productId}.jpg');
         final imageBytes = await _pikedImage!.readAsBytes();
         await ref.putData(imageBytes);
         _imageUrl = await ref.getDownloadURL();
@@ -185,13 +185,37 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     }
   }
 
+  Future<void> deleteProduct(String productId, String imageUrl) async {
+    try {
+      // Видалення картинки
+      if (imageUrl.isNotEmpty) {
+        final storageRef = FirebaseStorage.instance.refFromURL(imageUrl);
+        await storageRef.delete();
+      }
+
+      // Видалення продукту з Firestore
+      final productRef =
+          FirebaseFirestore.instance.collection('products').doc(productId);
+      await productRef.delete();
+
+      print('Продукт успішно видалений з Firestore і картинка з хранилища.');
+    } catch (error) {
+      print('Сталася помилка при видаленні продукту: $error');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        actions: [],
-      ),
+      appBar: AppBar(elevation: 0, actions: [
+        IconButton(
+          icon: const Icon(Icons.delete),
+          onPressed: () {
+            deleteProduct(widget.productId, _currentImageUrl!);
+            Navigator.of(context).pop();
+          },
+        )
+      ]),
       body: _isLoading
           ? const Center(
               child: CircularProgressIndicator(
@@ -329,7 +353,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                           CustomTextField(
                             hintText: 'Розгорнутий опис',
                             maxLength: 1000, //порахувати скільки символів*
-                            maxLines: 4,
+                            maxLines: 6,
                             controller: _longDescriptionController,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -408,10 +432,6 @@ class CustomTextField extends StatelessWidget {
     );
   }
 }
-
-
-
-
 
 // import 'dart:io';
 
