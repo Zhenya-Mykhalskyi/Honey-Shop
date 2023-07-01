@@ -251,7 +251,6 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                               TextButton(
                                 onPressed: () async {
                                   Navigator.of(context).pop();
-
                                   deleteProduct(
                                       widget.productId, _currentImageUrl!);
                                   Navigator.of(context).pop();

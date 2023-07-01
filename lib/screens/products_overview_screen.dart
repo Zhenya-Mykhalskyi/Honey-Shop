@@ -29,11 +29,11 @@ class ProductScreen extends StatelessWidget {
                 color: Colors.white,
                 size: 40,
               ),
-              items: [
+              items: const [
                 DropdownMenuItem(
                   value: 'logout',
                   child: Row(
-                    children: const [
+                    children: [
                       Icon(Icons.exit_to_app),
                       SizedBox(width: 8),
                       Text(
