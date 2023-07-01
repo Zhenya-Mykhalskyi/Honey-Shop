@@ -37,6 +37,9 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
 
   Future<void> getProductData() async {
     try {
+      setState(() {
+        _isLoading = true;
+      });
       DocumentSnapshot productSnapshot = await FirebaseFirestore.instance
           .collection('products')
           .doc(widget.productId)
@@ -72,6 +75,10 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     } catch (e) {
       // print('Error: $e');
       // Handle errors
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -187,20 +194,24 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
 
   Future<void> deleteProduct(String productId, String imageUrl) async {
     try {
-      // Видалення картинки
+      setState(() {
+        _isLoading = true;
+      });
       if (imageUrl.isNotEmpty) {
         final storageRef = FirebaseStorage.instance.refFromURL(imageUrl);
         await storageRef.delete();
       }
-
-      // Видалення продукту з Firestore
       final productRef =
           FirebaseFirestore.instance.collection('products').doc(productId);
       await productRef.delete();
 
-      print('Продукт успішно видалений з Firestore і картинка з хранилища.');
+      print('Продукт успішно видалений.');
     } catch (error) {
       print('Сталася помилка при видаленні продукту: $error');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -238,10 +249,11 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                             alignment: MainAxisAlignment.spaceAround,
                             children: [
                               TextButton(
-                                onPressed: () {
+                                onPressed: () async {
+                                  Navigator.of(context).pop();
+
                                   deleteProduct(
                                       widget.productId, _currentImageUrl!);
-                                  Navigator.of(context).pop();
                                   Navigator.of(context).pop();
                                 },
                                 child: const Text(
@@ -268,46 +280,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                   );
                 },
               );
-            }
-            // ScaffoldMessenger.of(context).showSnackBar(
-            //   SnackBar(
-            //     backgroundColor: const Color.fromARGB(255, 27, 27, 27),
-            //     content: Center(
-            //       child: Container(
-            //         padding: const EdgeInsets.all(10),
-            //         child: Column(
-            //           children: [
-            //             const Text('Впевнені, що хочете видалити товар?'),
-            //             const SizedBox(height: 20),
-            //             Row(
-            //               children: [
-            //                 TextButton(
-            //                   onPressed: () => ScaffoldMessenger.of(context)
-            //                       .removeCurrentSnackBar(),
-            //                   child: const Text('Скасувати'),
-            //                 ),
-            //                 TextButton(
-            //                   onPressed: () {
-            //                     deleteProduct(
-            //                         widget.productId, _currentImageUrl!);
-            //                     Navigator.of(context).pop();
-            //                     ScaffoldMessenger.of(context)
-            //                         .removeCurrentSnackBar();
-            //                   },
-            //                   child: const Text('Так'),
-            //                 ),
-            //               ],
-            //             ),
-            //           ],
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // );
-            // deleteProduct(widget.productId, _currentImageUrl!);
-            // Navigator.of(context).pop();
-
-            )
+            })
       ]),
       body: _isLoading
           ? const Center(
@@ -354,17 +327,20 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                               ),
                                             )
                                       // редагуємо
-                                      : _currentImageUrl != null
+                                      : _pikedImage != null
                                           ? InkWell(
                                               onTap: pickAndUploadImage,
-                                              child: Image.network(
-                                                _currentImageUrl!,
+                                              child: Image.file(
+                                                _pikedImage!,
                                                 fit: BoxFit.cover,
                                               ),
                                             )
                                           : InkWell(
                                               onTap: pickAndUploadImage,
-                                              child: const Text('error'),
+                                              child: Image.network(
+                                                _currentImageUrl!,
+                                                fit: BoxFit.cover,
+                                              ),
                                             )),
                               const SizedBox(width: 14),
                               Expanded(
