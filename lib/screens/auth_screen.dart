@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 // import 'package:phone_number/phone_number.dart';
 
-import '../services/otp.dart';
+import 'otp_screen.dart';
 import '../widgets/custom_button.dart';
 
 enum AuthMode { Signup, Login }

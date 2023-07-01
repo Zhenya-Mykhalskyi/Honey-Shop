@@ -2,8 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:honey/screens/auth_screen.dart';
-import 'package:honey/screens/products_overview_screen.dart';
 import 'package:pinput/pinput.dart';
+
+import '../main.dart';
 
 class OTPScreen extends StatefulWidget {
   final String phone;
@@ -57,7 +58,7 @@ class _OTPScreenState extends State<OTPScreen> {
       }
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => const ProductScreen()),
+        MaterialPageRoute(builder: (context) => MyApp()),
         (route) => false, //видалити всі маршрути крім цільового
       );
     } catch (error) {

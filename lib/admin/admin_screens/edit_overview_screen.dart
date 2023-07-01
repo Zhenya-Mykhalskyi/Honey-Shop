@@ -82,8 +82,9 @@ class EditOverViewScreen extends StatelessWidget {
                                         ),
                                         const SizedBox(height: 8),
                                         Text(
-                                          '₴${productData['price'].toStringAsFixed(0)} / 0.5',
+                                          '₴${productData['price'].toStringAsFixed(2)} / 0.5',
                                           style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
                                             fontSize: 16,
                                             // fontWeight: FontWeight.w400,
                                           ),
