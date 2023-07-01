@@ -76,6 +76,12 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
   }
 
   Future<void> addProduct() async {
+    final isValid = _formkey.currentState
+        ?.validate(); //викликає всі валідатори та вертає значення true, якщо всі валідатори return null (всі дані пройшли провірку)
+    if (!isValid! || _pikedImage == null) {
+      return; // пририває виконання функії, код нище не буде виконуватись
+    }
+
     try {
       setState(() {
         _isLoading = true;
@@ -131,13 +137,18 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
   }
 
   Future<void> updateProductData() async {
+    final isValid = _formkey.currentState
+        ?.validate(); //викликає всі валідатори та вертає значення true, якщо всі валідатори return null (всі дані пройшли провірку)
+    if (!isValid! || _currentImageUrl == null) {
+      return; // пририває виконання функії, код нище не буде виконуватись
+    }
     try {
       setState(() {
         _isLoading = true;
       });
       String newTitle = _titleController.text;
       double newPrice = double.parse(_priceController.text);
-      double newLitersLeft = double.parse(_litersLeftController.text);
+      int newLitersLeft = int.parse(_litersLeftController.text);
       String newShortDescription = _shortDescriptionController.text;
       String newLongDescription = _longDescriptionController.text;
 
@@ -179,6 +190,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        actions: [],
       ),
       body: _isLoading
           ? const Center(
@@ -242,35 +254,90 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                 child: Column(
                                   children: [
                                     CustomTextField(
-                                        hintText: 'Назва товару',
-                                        maxLength: 30,
-                                        maxLines: 1,
-                                        controller: _titleController),
+                                      hintText: 'Назва товару',
+                                      maxLength: 40,
+                                      maxLines: 1,
+                                      controller: _titleController,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Будь ласка, введіть назву товару';
+                                        }
+                                        if (value.toString().length >= 40) {
+                                          return 'Повинна бути коротшою 40 символів';
+                                        }
+                                        return null;
+                                      },
+                                    ),
                                     CustomTextField(
-                                        hintText: 'Ціна за 0.5 л',
-                                        maxLength: 30,
-                                        maxLines: 1,
-                                        controller: _priceController),
+                                      hintText: 'Ціна за 0.5 л',
+                                      maxLength: 10,
+                                      maxLines: 1,
+                                      controller: _priceController,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'Будь ласка, введіть ціну за товар';
+                                        }
+                                        if (value.isEmpty) {
+                                          return 'Ціна товару не може бути порожньою';
+                                        }
+                                        if (double.tryParse(value) == null) {
+                                          return 'Повинна бути числом';
+                                        }
+                                        double price = double.parse(value);
+                                        if (price <= 0) {
+                                          return '>= 0)';
+                                        }
+                                        return null;
+                                      },
+                                    ),
                                   ],
                                 ),
                               ),
                             ],
                           ),
                           CustomTextField(
-                              hintText: 'Кількість літрів',
-                              maxLength: 10,
-                              maxLines: 1,
-                              controller: _litersLeftController),
+                            hintText: 'Кількість літрів',
+                            maxLength: 10,
+                            maxLines: 1,
+                            controller: _litersLeftController,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Будь ласка, введіть кількість літрів';
+                              }
+                              if (int.tryParse(value) == null) {
+                                return 'Повинна бути цілим числом';
+                              }
+                              int liters = int.parse(value);
+                              if (liters <= 0) {
+                                return '>= 0';
+                              }
+                              return null;
+                            },
+                          ),
                           CustomTextField(
-                              hintText: 'Короткий опис',
-                              maxLength: 200, //порахувати скільки символів*
-                              maxLines: 4,
-                              controller: _shortDescriptionController),
+                            hintText: 'Короткий опис',
+                            maxLength: 200, //порахувати скільки символів*
+                            maxLines: 4,
+                            controller: _shortDescriptionController,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Будь ласка, введіть короткий опис товару';
+                              }
+                              return null;
+                            },
+                          ),
                           CustomTextField(
-                              hintText: 'Розгорнутий опис',
-                              maxLength: 1000, //порахувати скільки символів*
-                              maxLines: 4,
-                              controller: _longDescriptionController),
+                            hintText: 'Розгорнутий опис',
+                            maxLength: 1000, //порахувати скільки символів*
+                            maxLines: 4,
+                            controller: _longDescriptionController,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Будь ласка, введіть розгорнутий опис товару';
+                              }
+                              return null;
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -291,13 +358,15 @@ class CustomTextField extends StatelessWidget {
   final int maxLength;
   final int maxLines;
   final TextEditingController controller;
+  final String? Function(String?)? validator;
 
   const CustomTextField(
       {super.key,
       required this.hintText,
       required this.maxLength,
       required this.maxLines,
-      required this.controller});
+      required this.controller,
+      required this.validator});
 
   @override
   Widget build(BuildContext context) {
@@ -325,6 +394,7 @@ class CustomTextField extends StatelessWidget {
               maxLines: maxLines,
               controller: controller,
               maxLength: maxLength,
+              validator: validator,
               style: const TextStyle(color: Colors.white),
               decoration: const InputDecoration(
                 contentPadding: EdgeInsets.all(8),
