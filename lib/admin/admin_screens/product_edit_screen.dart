@@ -209,12 +209,105 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     return Scaffold(
       appBar: AppBar(elevation: 0, actions: [
         IconButton(
-          icon: const Icon(Icons.delete),
-          onPressed: () {
-            deleteProduct(widget.productId, _currentImageUrl!);
-            Navigator.of(context).pop();
-          },
-        )
+            icon: const Icon(Icons.delete),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return Dialog(
+                    backgroundColor: const Color.fromARGB(255, 27, 27, 27),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(30.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(height: 15),
+                          const Text(
+                            'Ви впевнені, що хочете видалити товар?',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'MA',
+                            ),
+                          ),
+                          const SizedBox(height: 15),
+                          ButtonBar(
+                            alignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  deleteProduct(
+                                      widget.productId, _currentImageUrl!);
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text(
+                                  'Так',
+                                  style: TextStyle(
+                                      color: Colors.red, fontFamily: 'MA'),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text(
+                                  'Скасувати',
+                                  style: TextStyle(
+                                      color: Colors.white, fontFamily: 'MA'),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            }
+            // ScaffoldMessenger.of(context).showSnackBar(
+            //   SnackBar(
+            //     backgroundColor: const Color.fromARGB(255, 27, 27, 27),
+            //     content: Center(
+            //       child: Container(
+            //         padding: const EdgeInsets.all(10),
+            //         child: Column(
+            //           children: [
+            //             const Text('Впевнені, що хочете видалити товар?'),
+            //             const SizedBox(height: 20),
+            //             Row(
+            //               children: [
+            //                 TextButton(
+            //                   onPressed: () => ScaffoldMessenger.of(context)
+            //                       .removeCurrentSnackBar(),
+            //                   child: const Text('Скасувати'),
+            //                 ),
+            //                 TextButton(
+            //                   onPressed: () {
+            //                     deleteProduct(
+            //                         widget.productId, _currentImageUrl!);
+            //                     Navigator.of(context).pop();
+            //                     ScaffoldMessenger.of(context)
+            //                         .removeCurrentSnackBar();
+            //                   },
+            //                   child: const Text('Так'),
+            //                 ),
+            //               ],
+            //             ),
+            //           ],
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // );
+            // deleteProduct(widget.productId, _currentImageUrl!);
+            // Navigator.of(context).pop();
+
+            )
       ]),
       body: _isLoading
           ? const Center(
