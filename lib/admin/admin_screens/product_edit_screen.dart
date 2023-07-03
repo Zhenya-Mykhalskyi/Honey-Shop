@@ -120,14 +120,13 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
         'shortDescription': newShortDescription,
         'longDescription': newLongDescription,
       });
-
-      Navigator.of(context).pop();
     } catch (e) {
       print(e);
     } finally {
       setState(() {
         _isLoading = false;
       });
+      Navigator.of(context).pop();
     }
   }
 
@@ -181,14 +180,13 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
         'shortDescription': newShortDescription,
         'longDescription': newLongDescription,
       });
-
-      Navigator.of(context).pop();
     } catch (e) {
       print(e);
     } finally {
       setState(() {
         _isLoading = false;
       });
+      Navigator.of(context).pop();
     }
   }
 
@@ -212,6 +210,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
       setState(() {
         _isLoading = false;
       });
+      Navigator.of(context).pop();
     }
   }
 
