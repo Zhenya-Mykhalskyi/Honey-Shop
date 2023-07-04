@@ -342,7 +342,9 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                       const EdgeInsets.only(top: 8, right: 10),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(color: Colors.white),
+                                    border: Border.all(
+                                        color: const Color.fromARGB(
+                                            255, 255, 179, 0)),
                                   ),
                                   child: widget
                                           .isAdd // додаємо чи редагуємо товар?
@@ -371,16 +373,24 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                       : _pikedImage != null
                                           ? InkWell(
                                               onTap: pickAndUploadImage,
-                                              child: Image.file(
-                                                _pikedImage!,
-                                                fit: BoxFit.cover,
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                child: Image.file(
+                                                  _pikedImage!,
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ),
                                             )
                                           : InkWell(
                                               onTap: pickAndUploadImage,
-                                              child: Image.network(
-                                                _currentImageUrl!,
-                                                fit: BoxFit.cover,
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                child: Image.network(
+                                                  _currentImageUrl!,
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ),
                                             )),
                               const SizedBox(width: 14),
@@ -546,307 +556,3 @@ class CustomTextField extends StatelessWidget {
     );
   }
 }
-
-// import 'dart:io';
-
-// import 'package:flutter/material.dart';
-// import 'package:image_picker/image_picker.dart';
-// import 'package:firebase_storage/firebase_storage.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
-
-// class Product {
-//   String id;
-//   String title;
-//   double price;
-//   String imageUrl;
-
-//   Product({
-//     required this.id,
-//     required this.title,
-//     required this.price,
-//     required this.imageUrl,
-//   });
-// }
-
-// class ProductManagementPage extends StatefulWidget {
-//   @override
-//   _ProductManagementPageState createState() => _ProductManagementPageState();
-// }
-
-// class _ProductManagementPageState extends State<ProductManagementPage> {
-//   final TextEditingController _titleController = TextEditingController();
-//   final TextEditingController _priceController = TextEditingController();
-//   File? _pickedImage;
-
-//   Future<void> _pickImage(ImageSource source) async {
-//     final picker = ImagePicker();
-//     final pickedFile = await picker.pickImage(source: source);
-
-//     if (pickedFile != null) {
-//       setState(() {
-//         _pickedImage = File(pickedFile.path);
-//       });
-//     }
-//   }
-
-//   Future<void> _addProduct() async {
-//     try {
-//       String title = _titleController.text;
-//       double price = double.parse(_priceController.text);
-
-//       if (_pickedImage != null) {
-//         // Завантаження зображення до Firebase Storage
-//         Reference ref = FirebaseStorage.instance
-//             .ref()
-//             .child('product_images')
-//             .child('${title.toLowerCase().replaceAll(' ', '_')}.jpg');
-//         final imageBytes = await _pickedImage!.readAsBytes();
-//         await ref.putData(imageBytes);
-//         String imageUrl = await ref.getDownloadURL();
-
-//         // Додавання продукту до Firestore
-//         await FirebaseFirestore.instance.collection('products').add({
-//           'title': title,
-//           'price': price,
-//           'imageUrl': imageUrl,
-//         });
-//       }
-
-//       _resetForm();
-//     } catch (e) {
-//       print(e);
-//     }
-//   }
-
-//   Future<void> _updateProduct(Product product) async {
-//     try {
-//       String newTitle = _titleController.text;
-//       double newPrice = double.parse(_priceController.text);
-
-//       if (_pickedImage != null) {
-//         // Завантаження нового зображення до Firebase Storage
-//         Reference ref = FirebaseStorage.instance
-//             .ref()
-//             .child('product_images')
-//             .child('${product.id}.jpg');
-//         final imageBytes = await _pickedImage!.readAsBytes();
-//         await ref.putData(imageBytes);
-//         String imageUrl = await ref.getDownloadURL();
-
-//         // Оновлення продукту в Firestore
-//         await FirebaseFirestore.instance
-//             .collection('products')
-//             .doc(product.id)
-//             .update({
-//           'title': newTitle,
-//           'price': newPrice,
-//           'imageUrl': imageUrl,
-//         });
-//       } else {
-//         // Оновлення продукту в Firestore без зміни зображення
-//         await FirebaseFirestore.instance
-//             .collection('products')
-//             .doc(product.id)
-//             .update({
-//           'title': newTitle,
-//           'price': newPrice,
-//         });
-//       }
-
-//       _resetForm();
-//     } catch (e) {
-//       print(e);
-//     }
-//   }
-
-//   Future<void> _deleteProduct(Product product) async {
-//     try {
-//       // Видалення зображення з Firebase Storage
-//       Reference ref = FirebaseStorage.instance
-//           .ref()
-//           .child('product_images')
-//           .child('${product.id}.jpg');
-//       await ref.delete();
-
-//       // Видалення продукту з Firestore
-//       await FirebaseFirestore.instance
-//           .collection('products')
-//           .doc(product.id)
-//           .delete();
-
-//       _resetForm();
-//     } catch (e) {
-//       print(e);
-//     }
-//   }
-
-//   void _resetForm() {
-//     _titleController.text = '';
-//     _priceController.text = '';
-//     setState(() {
-//       _pickedImage = null;
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Product Management'),
-//       ),
-//       body: Padding(
-//         padding: EdgeInsets.all(16.0),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             Text(
-//               'Add Product',
-//               style: TextStyle(
-//                 fontSize: 24.0,
-//                 fontWeight: FontWeight.bold,
-//               ),
-//             ),
-//             TextFormField(
-//               controller: _titleController,
-//               decoration: InputDecoration(labelText: 'Title'),
-//             ),
-//             TextFormField(
-//               controller: _priceController,
-//               decoration: InputDecoration(labelText: 'Price'),
-//               keyboardType: TextInputType.number,
-//             ),
-//             SizedBox(height: 16.0),
-//             Row(
-//               children: [
-//                 ElevatedButton.icon(
-//                   onPressed: () => _pickImage(ImageSource.gallery),
-//                   icon: Icon(Icons.image),
-//                   label: Text('Pick Image'),
-//                 ),
-//                 SizedBox(width: 8.0),
-//                 ElevatedButton.icon(
-//                   onPressed: _resetForm,
-//                   icon: Icon(Icons.refresh),
-//                   label: Text('Reset'),
-//                 ),
-//                 SizedBox(width: 8.0),
-//                 ElevatedButton.icon(
-//                   onPressed: _addProduct,
-//                   icon: Icon(Icons.add),
-//                   label: Text('Add Product'),
-//                 ),
-//               ],
-//             ),
-//             SizedBox(height: 24.0),
-//             Text(
-//               'Product List',
-//               style: TextStyle(
-//                 fontSize: 24.0,
-//                 fontWeight: FontWeight.bold,
-//               ),
-//             ),
-//             Expanded(
-//               child: StreamBuilder<QuerySnapshot>(
-//                 stream: FirebaseFirestore.instance
-//                     .collection('products')
-//                     .snapshots(),
-//                 builder: (context, snapshot) {
-//                   if (snapshot.hasError) {
-//                     return Text('Error: ${snapshot.error}');
-//                   }
-
-//                   if (snapshot.connectionState == ConnectionState.waiting) {
-//                     return Center(child: CircularProgressIndicator());
-//                   }
-
-//                   List<Product> products = snapshot.data!.docs.map((doc) {
-//                     Map<String, dynamic> data =
-//                         doc.data() as Map<String, dynamic>;
-//                     return Product(
-//                       id: doc.id,
-//                       title: data['title'],
-//                       price: data['price'],
-//                       imageUrl: data['imageUrl'],
-//                     );
-//                   }).toList();
-
-//                   return ListView.builder(
-//                     itemCount: products.length,
-//                     itemBuilder: (context, index) {
-//                       Product product = products[index];
-//                       return ListTile(
-//                         leading: Image.network(product.imageUrl),
-//                         title: Text(product.title),
-//                         subtitle: Text('\$${product.price.toStringAsFixed(2)}'),
-//                         trailing: IconButton(
-//                           icon: Icon(Icons.edit),
-//                           onPressed: () {
-//                             _titleController.text = product.title;
-//                             _priceController.text = product.price.toString();
-//                             showDialog(
-//                               context: context,
-//                               builder: (context) {
-//                                 return AlertDialog(
-//                                   title: Text('Edit Product'),
-//                                   content: Column(
-//                                     mainAxisSize: MainAxisSize.min,
-//                                     children: [
-//                                       TextFormField(
-//                                         controller: _titleController,
-//                                         decoration:
-//                                             InputDecoration(labelText: 'Title'),
-//                                       ),
-//                                       TextFormField(
-//                                         controller: _priceController,
-//                                         decoration:
-//                                             InputDecoration(labelText: 'Price'),
-//                                         keyboardType: TextInputType.number,
-//                                       ),
-//                                       SizedBox(height: 16.0),
-//                                       Row(
-//                                         children: [
-//                                           ElevatedButton.icon(
-//                                             onPressed: () =>
-//                                                 _pickImage(ImageSource.gallery),
-//                                             icon: Icon(Icons.image),
-//                                             label: Text('Pick Image'),
-//                                           ),
-//                                           SizedBox(width: 8.0),
-//                                           ElevatedButton.icon(
-//                                             onPressed: () {
-//                                               _updateProduct(product);
-//                                               Navigator.of(context).pop();
-//                                             },
-//                                             icon: Icon(Icons.save),
-//                                             label: Text('Save'),
-//                                           ),
-//                                           SizedBox(width: 8.0),
-//                                           ElevatedButton.icon(
-//                                             onPressed: () {
-//                                               _deleteProduct(product);
-//                                               Navigator.of(context).pop();
-//                                             },
-//                                             icon: Icon(Icons.delete),
-//                                             label: Text('Delete'),
-//                                           ),
-//                                         ],
-//                                       ),
-//                                     ],
-//                                   ),
-//                                 );
-//                               },
-//                             );
-//                           },
-//                         ),
-//                       );
-//                     },
-//                   );
-//                 },
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }

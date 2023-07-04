@@ -23,7 +23,7 @@ class EditOverViewScreen extends StatelessWidget {
         leadingWidth: 90,
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
             child: StreamBuilder(
@@ -57,7 +57,7 @@ class EditOverViewScreen extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     Expanded(
-                                      flex: 2,
+                                      flex: 1,
                                       child: Padding(
                                         padding:
                                             const EdgeInsets.only(right: 10),
@@ -76,7 +76,7 @@ class EditOverViewScreen extends StatelessWidget {
                                       ),
                                     ),
                                     Expanded(
-                                      flex: 4,
+                                      flex: 2,
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -97,7 +97,7 @@ class EditOverViewScreen extends StatelessWidget {
                                               // fontWeight: FontWeight.w400,
                                             ),
                                           ),
-                                          const SizedBox(height: 14),
+                                          const SizedBox(height: 25),
                                           Text(
                                             'Залишилось  ${productData['litersLeft']} л',
                                             style: const TextStyle(
