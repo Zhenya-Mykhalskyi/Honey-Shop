@@ -62,6 +62,8 @@ class _MyAppState extends State<MyApp> {
             return Scaffold(
               body: _pages[_currentIndex],
               bottomNavigationBar: BottomNavigationBar(
+                // showSelectedLabels: true,
+                // showUnselectedLabels: false,
                 backgroundColor: backColor,
                 iconSize: 30,
                 unselectedItemColor: const Color.fromARGB(255, 88, 88, 88),

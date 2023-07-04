@@ -71,7 +71,8 @@ flutter:
     - assets/img/logo.png
     - assets/img/auth_screen_background.png
     - assets/img/add_photo.png
-    - assets/img/no_photo.png
+    - assets/img/honey1.png
+
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/product_item.dart';
+
 class ProductScreen extends StatelessWidget {
   const ProductScreen({super.key});
 
@@ -12,6 +14,7 @@ class ProductScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        // bottom: TabBar,
         toolbarHeight: 100,
         elevation: 0,
         leading: Container(
@@ -67,17 +70,24 @@ class ProductScreen extends StatelessWidget {
           } else {
             // Отримуємо список документів
             final documents = snapshot.data!.docs;
-            return ListView.builder(
-              itemCount: documents.length,
-              itemBuilder: (context, index) {
-                // Отримуємо дані з документа
-                final productData =
-                    documents[index].data() as Map<String, dynamic>;
+            return Padding(
+              padding: const EdgeInsets.only(right: 20, left: 20, top: 30),
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 25,
+                  childAspectRatio: 1 / 1.8,
+                ),
+                itemCount: documents.length,
+                itemBuilder: (context, index) {
+                  final title = documents[index].get('title');
+                  final price = documents[index].get('price');
+                  final imageUrl = documents[index].get('imageUrl');
 
-                return Text(productData['title']);
-                // subtitle: Text(productData['price'].toString()),
-                // trailing: Image.network(productData['imageUrl']),
-              },
+                  return ProductItem(
+                      title: title, price: price, imageUrl: imageUrl);
+                },
+              ),
             );
           }
         },
