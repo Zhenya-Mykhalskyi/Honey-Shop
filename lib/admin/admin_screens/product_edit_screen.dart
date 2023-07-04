@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 import 'package:honey/widgets/custom_button.dart';
 
@@ -82,11 +83,24 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     }
   }
 
-  Future<void> addProduct() async {
+  Future<void> addProduct(BuildContext context) async {
+    final popContext = Navigator.of(context);
+    final scaffoldContext = ScaffoldMessenger.of(context);
     final isValid = _formkey.currentState
         ?.validate(); //викликає всі валідатори та вертає значення true, якщо всі валідатори return null (всі дані пройшли провірку)
     if (!isValid! || _pikedImage == null) {
       return; // пририває виконання функії, код нище не буде виконуватись
+    }
+    final connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      // Немає з'єднання з Інтернетом
+      scaffoldContext.showSnackBar(
+        const SnackBar(
+          content: Text('Немає з\'єднання з Інтернетом'),
+          duration: Duration(seconds: 3), // Тривалість показу SnackBar
+        ),
+      );
+      return; // Перериваємо виконання функції
     }
 
     try {
@@ -126,7 +140,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
       setState(() {
         _isLoading = false;
       });
-      Navigator.of(context).pop();
+      popContext.pop();
     }
   }
 
@@ -142,11 +156,24 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     return null;
   }
 
-  Future<void> updateProductData() async {
+  Future<void> updateProductData(BuildContext context) async {
+    final popContext = Navigator.of(context);
+    final scaffoldContext = ScaffoldMessenger.of(context);
+    final connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      // Немає з'єднання з Інтернетом
+      scaffoldContext.showSnackBar(
+        const SnackBar(
+          content: Text('Немає з\'єднання з Інтернетом'),
+          duration: Duration(seconds: 3),
+        ),
+      );
+      return;
+    }
     final isValid = _formkey.currentState
         ?.validate(); //викликає всі валідатори та вертає значення true, якщо всі валідатори return null (всі дані пройшли провірку)
     if (!isValid! || _currentImageUrl == null) {
-      return; // пририває виконання функії, код нище не буде виконуватись
+      return;
     }
     try {
       setState(() {
@@ -186,11 +213,25 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
       setState(() {
         _isLoading = false;
       });
-      Navigator.of(context).pop();
+      popContext.pop();
     }
   }
 
-  Future<void> deleteProduct(String productId, String imageUrl) async {
+  Future<void> deleteProduct(
+      BuildContext context, productId, String imageUrl) async {
+    final scaffoldContext = ScaffoldMessenger.of(context);
+    final popContext = Navigator.of(context);
+    final connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      // Немає з'єднання з Інтернетом
+      scaffoldContext.showSnackBar(
+        const SnackBar(
+          content: Text('Немає з\'єднання з Інтернетом'),
+          duration: Duration(seconds: 3),
+        ),
+      );
+      return;
+    }
     try {
       setState(() {
         _isLoading = true;
@@ -210,7 +251,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
       setState(() {
         _isLoading = false;
       });
-      Navigator.of(context).pop();
+      popContext.pop();
     }
   }
 
@@ -250,9 +291,8 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                               TextButton(
                                 onPressed: () async {
                                   Navigator.of(context).pop();
-                                  deleteProduct(
-                                      widget.productId, _currentImageUrl!);
-                                  Navigator.of(context).pop();
+                                  deleteProduct(context, widget.productId,
+                                      _currentImageUrl!);
                                 },
                                 child: const Text(
                                   'Так',
@@ -433,7 +473,11 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                       ),
                     ),
                     CustomButton(
-                      action: widget.isAdd ? addProduct : updateProductData,
+                      action: () {
+                        widget.isAdd
+                            ? addProduct(context)
+                            : updateProductData(context);
+                      },
                       text: 'Зберегти',
                     ),
                   ],

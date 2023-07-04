@@ -41,6 +41,8 @@ dependencies:
   firebase_storage: ^11.2.3
   pinput: ^2.2.31
   image_picker: ^0.8.9
+  connectivity_plus: ^4.0.1
+
 
 
 
