@@ -465,7 +465,6 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                     setState(() {
                                       _isHoney = value ??
                                           false; //Якщо value не є null, то воно присвоюється змінній _isHoney. Якщо value є null, то присвоюється значення false.
-                                      print(_isHoney);
                                     });
                                   },
                                 ),

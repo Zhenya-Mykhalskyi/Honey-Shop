@@ -52,6 +52,10 @@ class ProductItem extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 16,
                       ),
+                      maxLines:
+                          2, // Максимальна кількість рядків для відображення
+                      overflow: TextOverflow
+                          .ellipsis, // Текст, що перевищує максимальну кількість рядків, буде обрізано з крапками
                     ),
                     const SizedBox(height: 7),
                     Row(

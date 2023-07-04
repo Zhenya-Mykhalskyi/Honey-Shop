@@ -67,7 +67,7 @@ class ProductGrid extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          return const Text('No products found');
+          return const Center(child: Text('Продуктів не знайдено'));
         } else {
           // Отримуємо список документів
           final documents = snapshot.data!.docs;
@@ -78,14 +78,13 @@ class ProductGrid extends StatelessWidget {
                 crossAxisCount: 2,
                 crossAxisSpacing: 25,
                 mainAxisSpacing: 20,
-                childAspectRatio: 1 / 1.8,
+                childAspectRatio: 1 / 1.7,
               ),
               itemCount: documents.length,
               itemBuilder: (context, index) {
                 final title = documents[index].get('title');
                 final price = documents[index].get('price');
                 final imageUrl = documents[index].get('imageUrl');
-
                 return ProductItem(
                   title: title,
                   price: price,
