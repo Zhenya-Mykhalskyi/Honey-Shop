@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
 import 'package:honey/admin/admin_screens/admin_orders_screen.dart';
 import 'package:honey/admin/admin_screens/edit_overview_screen.dart';
 import 'package:honey/screens/auth_screen.dart';
@@ -54,7 +55,11 @@ class _MyAppState extends State<MyApp> {
       home: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (ctx, userSnapshot) {
-          if (userSnapshot.connectionState == ConnectionState.waiting) {
+          final hasInternet =
+              userSnapshot.connectionState != ConnectionState.none;
+          if (hasInternet &&
+              userSnapshot.connectionState == ConnectionState.waiting) {
+            // Виконуємо перевірку на присутність з'єднання з Інтернетом
             return const SplashScreen();
           }
           if (userSnapshot.hasData) {
@@ -62,8 +67,8 @@ class _MyAppState extends State<MyApp> {
             return Scaffold(
               body: _pages[_currentIndex],
               bottomNavigationBar: BottomNavigationBar(
-                // showSelectedLabels: true,
-                // showUnselectedLabels: false,
+                showSelectedLabels: false,
+                showUnselectedLabels: false,
                 backgroundColor: backColor,
                 iconSize: 30,
                 unselectedItemColor: const Color.fromARGB(255, 88, 88, 88),

@@ -55,30 +55,31 @@ class EditOverViewScreen extends StatelessWidget {
                               padding: const EdgeInsets.all(12),
                               child: IntrinsicHeight(
                                 child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Flexible(
+                                    Expanded(
                                       flex: 2,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: AspectRatio(
-                                          aspectRatio: 1,
-                                          child: Image.network(
-                                            productData['imageUrl'] ??
-                                                'https://cdn-icons-png.flaticon.com/128/3875/3875172.png',
-                                            fit: BoxFit.cover,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 10),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: AspectRatio(
+                                            aspectRatio: 1,
+                                            child: Image.network(
+                                              productData['imageUrl'] ??
+                                                  'https://cdn-icons-png.flaticon.com/128/3875/3875172.png',
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                    Flexible(
+                                    Expanded(
                                       flex: 4,
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             productData['title'],
@@ -107,7 +108,6 @@ class EditOverViewScreen extends StatelessWidget {
                                         ],
                                       ),
                                     ),
-                                    const SizedBox(width: 25),
                                     Padding(
                                       padding:
                                           const EdgeInsets.only(bottom: 50),
