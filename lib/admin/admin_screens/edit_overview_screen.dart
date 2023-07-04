@@ -53,74 +53,83 @@ class EditOverViewScreen extends StatelessWidget {
                             ),
                             child: Container(
                               padding: const EdgeInsets.all(12),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: Image.network(
-                                      productData['imageUrl'] ??
-                                          'https://cdn-icons-png.flaticon.com/128/3875/3875172.png',
-                                      width: 75,
-                                      height: 75,
+                              child: IntrinsicHeight(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Flexible(
+                                      flex: 2,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: AspectRatio(
+                                          aspectRatio: 1,
+                                          child: Image.network(
+                                            productData['imageUrl'] ??
+                                                'https://cdn-icons-png.flaticon.com/128/3875/3875172.png',
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(width: 25),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          productData['title'],
-                                          style: const TextStyle(
-                                            fontSize: 19,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 8),
-                                        Text(
-                                          '₴${productData['price'].toStringAsFixed(2)} / 0.5',
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 16,
-                                            // fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 14),
-                                        Text(
-                                          'Залишилось  ${productData['litersLeft']} л',
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            // fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(width: 25),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 50),
-                                    child: IconButton(
-                                      icon: const Icon(Icons.edit),
-                                      onPressed: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                ProductEditScreen(
-                                              isAdd: false,
-                                              productId: products[index].id,
+                                    Flexible(
+                                      flex: 4,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            productData['title'],
+                                            style: const TextStyle(
+                                              fontSize: 19,
+                                              fontWeight: FontWeight.w400,
                                             ),
                                           ),
-                                        );
-                                      },
-                                      color: const Color.fromARGB(
-                                          255, 217, 217, 217),
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            '₴${productData['price'].toStringAsFixed(2)} / 0.5',
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 16,
+                                              // fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 14),
+                                          Text(
+                                            'Залишилось  ${productData['litersLeft']} л',
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              // fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                    const SizedBox(width: 25),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 50),
+                                      child: IconButton(
+                                        icon: const Icon(Icons.edit),
+                                        onPressed: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ProductEditScreen(
+                                                isAdd: false,
+                                                productId: products[index].id,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        color: const Color.fromARGB(
+                                            255, 217, 217, 217),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
