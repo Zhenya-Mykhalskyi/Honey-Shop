@@ -56,7 +56,7 @@ class ProductItem extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        price.toString(),
+                        '₴${price.toString()}',
                         style: const TextStyle(
                             fontSize: 17, fontWeight: FontWeight.w500),
                       ),
