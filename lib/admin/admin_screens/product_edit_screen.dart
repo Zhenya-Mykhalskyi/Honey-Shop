@@ -29,6 +29,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
   File? _pikedImage; //
   bool _isLoading = false;
   String? _currentImageUrl;
+  bool _isHoney = false;
 
   @override
   void initState() {
@@ -61,14 +62,19 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
         String longDescription = (productSnapshot.data()
                 as Map<String, dynamic>)['longDescription'] ??
             '';
+        bool isHoney =
+            (productSnapshot.data() as Map<String, dynamic>)['isHoney'];
+        print(isHoney);
 
         _priceController.text = price.toString();
         _titleController.text = title;
         _litersLeftController.text = litersLeft.toString();
         _shortDescriptionController.text = shortDescription;
         _longDescriptionController.text = longDescription;
+
         setState(() {
           _currentImageUrl = imageUrl;
+          _isHoney = isHoney;
         });
       } else {
         !widget.isAdd ? print('Product snapshot does not exist') : null;
@@ -112,6 +118,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
       int newLitersLeft = int.parse(_litersLeftController.text);
       String newShortDescription = _shortDescriptionController.text;
       String newLongDescription = _longDescriptionController.text;
+      bool newIsHoney = _isHoney;
       if (_pikedImage != null) {
         //якщо фото вибране
         Reference ref = FirebaseStorage.instance
@@ -133,6 +140,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
         'litersLeft': newLitersLeft,
         'shortDescription': newShortDescription,
         'longDescription': newLongDescription,
+        'isHoney': newIsHoney,
       });
     } catch (e) {
       print(e);
@@ -184,7 +192,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
       int newLitersLeft = int.parse(_litersLeftController.text);
       String newShortDescription = _shortDescriptionController.text;
       String newLongDescription = _longDescriptionController.text;
-
+      bool newIsHoney = _isHoney;
       if (_pikedImage != null) {
         Reference ref = FirebaseStorage.instance
             .ref()
@@ -206,6 +214,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
         'litersLeft': newLitersLeft,
         'shortDescription': newShortDescription,
         'longDescription': newLongDescription,
+        'isHoney': newIsHoney,
       });
     } catch (e) {
       print(e);
@@ -414,7 +423,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                     ),
                                     CustomTextField(
                                       hintText: 'Ціна за 0.5 л',
-                                      maxLength: 10,
+                                      maxLength: 7,
                                       maxLines: 1,
                                       controller: _priceController,
                                       validator: (value) {
@@ -437,6 +446,34 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                   ],
                                 ),
                               ),
+                            ],
+                          ),
+                          //Перевірка чи товар являється медом
+                          Row(
+                            children: [
+                              Transform.scale(
+                                scale: 1.5,
+                                child: Checkbox(
+                                  fillColor: MaterialStateProperty.all<Color>(
+                                    const Color.fromARGB(255, 255, 179, 0),
+                                  ),
+                                  checkColor: Colors.black,
+                                  activeColor:
+                                      const Color.fromARGB(255, 255, 179, 0),
+                                  value: _isHoney,
+                                  onChanged: (bool? value) {
+                                    setState(() {
+                                      _isHoney = value ??
+                                          false; //Якщо value не є null, то воно присвоюється змінній _isHoney. Якщо value є null, то присвоюється значення false.
+                                      print(_isHoney);
+                                    });
+                                  },
+                                ),
+                              ),
+                              const Flexible(
+                                child: Text(
+                                    'Поставте галочку, якщо товар являється медом*'),
+                              )
                             ],
                           ),
                           CustomTextField(
