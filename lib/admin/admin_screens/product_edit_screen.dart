@@ -342,8 +342,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                       const EdgeInsets.only(top: 8, right: 10),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                        width: 1, color: Colors.white),
+                                    border: Border.all(color: Colors.white),
                                   ),
                                   child: widget
                                           .isAdd // додаємо чи редагуємо товар?
@@ -359,9 +358,13 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                             )
                                           : InkWell(
                                               onTap: pickAndUploadImage,
-                                              child: Image.file(
-                                                _pikedImage!,
-                                                fit: BoxFit.cover,
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                child: Image.file(
+                                                  _pikedImage!,
+                                                  fit: BoxFit.cover,
+                                                ),
                                               ),
                                             )
                                       // редагуємо
