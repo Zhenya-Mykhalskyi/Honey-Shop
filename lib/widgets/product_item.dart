@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:honey/screens/product_detail_screen.dart';
 
 class ProductItem extends StatelessWidget {
@@ -39,8 +41,10 @@ class ProductItem extends StatelessWidget {
                         tag: 'prodImg', //для анімації на детальній сторінці
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(15),
-                          child: Image(
-                            image: NetworkImage(imageUrl),
+                          child: CachedNetworkImage(
+                            imageUrl: imageUrl,
+
+                            // image: NetworkImage(imageUrl),
                             fit: BoxFit.cover,
                           ),
                         ),
