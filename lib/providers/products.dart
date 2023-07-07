@@ -196,7 +196,6 @@ class ProductsProvider with ChangeNotifier {
       });
 
       // Оновити дані в моделі продукту
-
       product.title = newTitle;
       product.price = newPrice;
       product.imageUrl = imageUrl;
@@ -215,8 +214,26 @@ class ProductsProvider with ChangeNotifier {
         _items.add(product);
       }
 
-      // Оповістити слухачі про зміни в продукті
       notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> deleteProduct(String productId, String imageUrl) async {
+    try {
+      if (imageUrl.isNotEmpty) {
+        final storageRef = FirebaseStorage.instance.refFromURL(imageUrl);
+        await storageRef.delete();
+      }
+      final productRef =
+          FirebaseFirestore.instance.collection('products').doc(productId);
+      await productRef.delete();
+
+      // Оновити _items, видаляючи продукт з відповідним productId
+      _items.removeWhere((product) => product.id == productId);
+
+      print('Продукт успішно видалений.');
     } catch (e) {
       print(e);
     }
