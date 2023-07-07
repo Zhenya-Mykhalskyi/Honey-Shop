@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/products.dart';
 import '../widgets/product_item.dart';
 
 //Кнопка категорії
@@ -110,12 +112,24 @@ class _ProductScreenState extends State<ProductScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late int activeIndex;
+  Future<void> getData() async {
+    ProductsProvider productProvider =
+        Provider.of<ProductsProvider>(context, listen: false);
+    await productProvider.getProductList();
+  }
 
   @override
   void initState() {
-    super.initState();
     _tabController = TabController(length: 1, vsync: this);
     activeIndex = 0;
+    // getData();
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    getData();
+    super.didChangeDependencies();
   }
 
   @override
