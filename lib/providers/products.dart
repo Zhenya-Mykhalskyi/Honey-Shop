@@ -37,7 +37,7 @@ class ProductsProvider with ChangeNotifier {
     return _items;
   }
 
-  Future<Product?> getProductByIdFromFirestre(String productId) async {
+  Future<Product?> getProductByIdFromFirestore(String productId) async {
     try {
       DocumentSnapshot productSnapshot = await FirebaseFirestore.instance
           .collection('products')
@@ -118,7 +118,6 @@ class ProductsProvider with ChangeNotifier {
           .ref()
           .child('product_images')
           .child('$prodId.jpg');
-
       if (pickedImage != null) {
         final imageBytes = await pickedImage.readAsBytes();
         await ref.putData(imageBytes);
@@ -126,7 +125,6 @@ class ProductsProvider with ChangeNotifier {
       } else {
         imageUrl = currentImgage!;
       }
-
       await FirebaseFirestore.instance
           .collection('products')
           .doc(prodId)
@@ -157,7 +155,6 @@ class ProductsProvider with ChangeNotifier {
         // Продукт не знайдено у списку, додати його
         _items.add(product);
       }
-
       notifyListeners();
     } catch (e) {
       print(e);
@@ -173,10 +170,8 @@ class ProductsProvider with ChangeNotifier {
       final productRef =
           FirebaseFirestore.instance.collection('products').doc(productId);
       await productRef.delete();
-
-      // Оновити _items, видаляючи продукт з відповідним productId
       _items.removeWhere((product) => product.id == productId);
-
+      notifyListeners();
       print('Продукт успішно видалений.');
     } catch (error) {
       print('Сталася помилка при видаленні продукту: $error');

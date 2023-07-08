@@ -119,7 +119,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
       ProductsProvider productProvider =
           Provider.of<ProductsProvider>(context, listen: false);
       await productProvider
-          .getProductByIdFromFirestre(widget.productId)
+          .getProductByIdFromFirestore(widget.productId)
           .then((product) {
         if (product != null) {
           _priceController.text = product.price.toString();
