@@ -1,8 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/product.dart';
 import '../providers/products.dart';
 import '../widgets/product_item.dart';
 
@@ -53,26 +53,32 @@ class TabButton extends StatelessWidget {
 
 //Сітка в залежності від категорії
 class ProductGrid extends StatelessWidget {
-  final Stream<QuerySnapshot> stream;
+  final bool isHoney;
 
-  const ProductGrid({super.key, required this.stream});
+  const ProductGrid({Key? key, required this.isHoney}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: stream,
+    ProductsProvider productProvider =
+        Provider.of<ProductsProvider>(context, listen: false);
+
+    return FutureBuilder<List<Product>>(
+      future: productProvider.getProductList(),
       builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        }
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
-        }
-        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          return const Center(child: Text('Продуктів не знайдено'));
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
         } else {
-          // Отримуємо список документів
-          final documents = snapshot.data!.docs;
+          List<Product> products = snapshot.data ?? [];
+          List<Product> filteredProducts = isHoney
+              ? products.where((product) => product.isHoney).toList()
+              : products.where((product) => !product.isHoney).toList();
+
+          if (filteredProducts.isEmpty) {
+            return const Center(child: Text('No products found'));
+          }
+
           return Padding(
             padding: const EdgeInsets.only(right: 20, left: 20, top: 20),
             child: GridView.builder(
@@ -82,11 +88,11 @@ class ProductGrid extends StatelessWidget {
                 mainAxisSpacing: 20,
                 childAspectRatio: 1 / 1.7,
               ),
-              itemCount: documents.length,
+              itemCount: filteredProducts.length,
               itemBuilder: (context, index) {
-                final title = documents[index].get('title');
-                final price = documents[index].get('price');
-                final imageUrl = documents[index].get('imageUrl');
+                final title = filteredProducts[index].title;
+                final price = filteredProducts[index].price;
+                final imageUrl = filteredProducts[index].imageUrl;
                 return ProductItem(
                   title: title,
                   price: price,
@@ -98,6 +104,44 @@ class ProductGrid extends StatelessWidget {
         }
       },
     );
+
+    // return FutureBuilder<QuerySnapshot>(
+    //   future:   productProvider.getProductList(),
+    //   builder: (context, snapshot) {
+    //     if (snapshot.hasError) {
+    //       return Text('Error: ${snapshot.error}');
+    //     }
+    //     if (snapshot.connectionState == ConnectionState.waiting) {
+    //       return const Center(child: CircularProgressIndicator());
+    //     }
+    //     if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+    //       return const Center(child: Text('Продуктів не знайдено'));
+    // } else {
+    //   // Отримуємо список документів
+    //   final documents = snapshot.data!.docs;
+    //   return Padding(
+    //     padding: const EdgeInsets.only(right: 20, left: 20, top: 20),
+    //     child: GridView.builder(
+    //       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+    //         crossAxisCount: 2,
+    //         crossAxisSpacing: 25,
+    //         mainAxisSpacing: 20,
+    //         childAspectRatio: 1 / 1.7,
+    //       ),
+    //       itemCount: documents.length,
+    //       itemBuilder: (context, index) {
+    //         final title = documents[index].get('title');
+    //         final price = documents[index].get('price');
+    //         final imageUrl = documents[index].get('imageUrl');
+    //         return ProductItem(
+    //           title: title,
+    //           price: price,
+    //           imageUrl: imageUrl,
+    //         );
+    //       },
+    //     ),
+    //   );
+    // }
   }
 }
 
@@ -112,11 +156,12 @@ class _ProductScreenState extends State<ProductScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late int activeIndex;
-  Future<void> getData() async {
-    ProductsProvider productProvider =
-        Provider.of<ProductsProvider>(context, listen: false);
-    await productProvider.getProductList();
-  }
+
+  // Future<void> getData() async {
+  //   ProductsProvider productProvider = context.read<ProductsProvider>();
+  //   await productProvider.getProductList();
+  //   setState(() {});
+  // }
 
   @override
   void initState() {
@@ -127,12 +172,6 @@ class _ProductScreenState extends State<ProductScreen>
   }
 
   @override
-  void didChangeDependencies() {
-    getData();
-    super.didChangeDependencies();
-  }
-
-  @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
@@ -140,8 +179,6 @@ class _ProductScreenState extends State<ProductScreen>
 
   @override
   Widget build(BuildContext context) {
-    final CollectionReference productsCollection =
-        FirebaseFirestore.instance.collection('products');
     return Scaffold(
       appBar: AppBar(
         bottom: PreferredSize(
@@ -161,7 +198,7 @@ class _ProductScreenState extends State<ProductScreen>
                 ),
                 const SizedBox(width: 10),
                 TabButton(
-                  text: 'інші продукти',
+                  text: 'інше',
                   isActive: activeIndex == 1,
                   onPressed: () {
                     setState(() {
@@ -218,15 +255,11 @@ class _ProductScreenState extends State<ProductScreen>
         controller: _tabController,
         children: [
           activeIndex == 0
-              ? ProductGrid(
-                  stream: productsCollection
-                      .where('isHoney', isEqualTo: true)
-                      .snapshots(),
+              ? const ProductGrid(
+                  isHoney: true,
                 )
-              : ProductGrid(
-                  stream: productsCollection
-                      .where('isHoney', isEqualTo: false)
-                      .snapshots(),
+              : const ProductGrid(
+                  isHoney: false,
                 ),
         ],
       ),

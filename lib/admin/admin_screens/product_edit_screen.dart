@@ -46,22 +46,21 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
 
   @override
   void initState() {
+    fetchProductDataAndSetValues();
     super.initState();
-    getProductData();
   }
 
-  Future<void> saveForm(BuildContext context) async {
-    final popContext = Navigator.of(context);
+  Future<void> submitProductForm(BuildContext context) async {
     ProductsProvider productProvider =
         Provider.of<ProductsProvider>(context, listen: false);
+    final popContext = Navigator.of(context);
     final scaffoldContext = ScaffoldMessenger.of(context);
-    //ПЕРЕВІРКА ВАЛІДАТОРІВ
+    final connectivityResult = await Connectivity().checkConnectivity();
     final isValid = _formkey.currentState?.validate();
     if (!isValid!) {
       return;
     }
-    //ПЕРЕВІРКА ЗʼЄДНАННЯ З ІНТЕРНЕТОМ
-    final connectivityResult = await Connectivity().checkConnectivity();
+
     if (connectivityResult == ConnectivityResult.none) {
       scaffoldContext.showSnackBar(
         const SnackBar(
@@ -75,35 +74,23 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
       setState(() {
         _isLoading = true;
       });
-      //ЗАПИС ДАНИХ З КОНТРОЛЛЕРІВ У МОДЕЛЬ ПРОДУКТА
       _editedProduct.title = _titleController.text;
       _editedProduct.price = double.parse(_priceController.text);
       _editedProduct.litersLeft = int.parse(_litersLeftController.text);
       _editedProduct.shortDescription = _shortDescriptionController.text;
       _editedProduct.longDescription = _longDescriptionController.text;
       _editedProduct.isHoney = _isHoney;
-      //ПЕРЕВІРКА ІСНУВАННЯ ПРОДУКТА В БАЗІ
       DocumentSnapshot productSnapshot = await FirebaseFirestore.instance
           .collection('products')
           .doc(widget.productId)
           .get();
-      //РЕДАГУВАННЯ ПРОДУКТА, ЯКЩО ІСНУЄ
       if (productSnapshot.exists) {
-        print('продукт існує');
-        if (_pickedImage != null) {
-          await productProvider.updateProduct(widget.productId, _editedProduct,
-              pickedImage: _pickedImage!);
-        } else {
-          await productProvider.updateProduct(widget.productId, _editedProduct,
-              currentImg: _currentImageUrl);
-        }
-        print('товар відредаговано');
+        await productProvider.updateProduct(widget.productId, _editedProduct,
+            pickedImage: _pickedImage, currentImgage: _currentImageUrl);
         popContext.pop();
-        //ДОДАННЯ ПРОДУКТА, ЯКЩО НЕ ІСНУЄ
       } else {
         if (_pickedImage != null) {
           await productProvider.addProduct(_editedProduct, _pickedImage!);
-          print('створено новий товар');
         } else {
           scaffoldContext.showSnackBar(
             const SnackBar(
@@ -116,7 +103,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
         popContext.pop();
       }
     } catch (error) {
-      print(error);
+      print('Error: $error');
     } finally {
       setState(() {
         _isLoading = false;
@@ -124,15 +111,16 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     }
   }
 
-  Future<void> getProductData() async {
+  Future<void> fetchProductDataAndSetValues() async {
     try {
       setState(() {
         _isLoading = true;
       });
       ProductsProvider productProvider =
           Provider.of<ProductsProvider>(context, listen: false);
-      //ШУКАЄМО ЕЛЕМЕНТ ПО ID ТА ЗАПИСУЄМО КОНТРОЛЛЕРИ ЗНЧЕННЯМИ З FIRESTORE
-      await productProvider.getProductById(widget.productId).then((product) {
+      await productProvider
+          .getProductByIdFromFirestre(widget.productId)
+          .then((product) {
         if (product != null) {
           _priceController.text = product.price.toString();
           _titleController.text = product.title;
@@ -147,120 +135,14 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
           });
         }
       });
-      // print('${widget.productId} ПРОДУКТ ID');
-      // DocumentSnapshot productSnapshot = await FirebaseFirestore.instance
-      //     .collection('products')
-      //     .doc(widget.productId)
-      //     .get();
-      // if (productSnapshot.exists) {
-      //   String title =
-      //       (productSnapshot.data() as Map<String, dynamic>)['title'];
-      //   dynamic price =
-      //       (productSnapshot.data() as Map<String, dynamic>)['price']
-      //           .toStringAsFixed(2);
-      // String imageUrl =
-      //     (productSnapshot.data() as Map<String, dynamic>)['imageUrl'] ?? '';
-      //   dynamic litersLeft =
-      //       (productSnapshot.data() as Map<String, dynamic>)['litersLeft'];
-      //   String shortDescription = (productSnapshot.data()
-      //           as Map<String, dynamic>)['shortDescription'] ??
-      //       '';
-      //   String longDescription = (productSnapshot.data()
-      //           as Map<String, dynamic>)['longDescription'] ??
-      //       '';
-      //   bool isHoney =
-      //       (productSnapshot.data() as Map<String, dynamic>)['isHoney'];
-      //   print(isHoney);
-
-      //   _priceController.text = price.toString();
-      //   _titleController.text = title;
-      //   _litersLeftController.text = litersLeft.toString();
-      //   _shortDescriptionController.text = shortDescription;
-      //   _longDescriptionController.text = longDescription;
-
-      //   if (imageUrl != null) {
-      //     setState(() {
-      //       _currentImageUrl = imageUrl;
-      //       _isHoney = isHoney;
-      //     });
-      //   } else {
-      //     print('Помилка: imageUrl є null');
-      //   }
-      // } else {
-      //   !widget.isAdd ? print('Product snapshot does not exist') : null;
-      // }
-    } catch (e) {
-      // print('Error: $e');
-      // Handle errors
+    } catch (error) {
+      print('Error: $error');
     } finally {
       setState(() {
         _isLoading = false;
       });
     }
   }
-
-  // Future<void> addProduct(BuildContext context) async {
-  //   final popContext = Navigator.of(context);
-  //   final scaffoldContext = ScaffoldMessenger.of(context);
-  //   final isValid = _formkey.currentState
-  //       ?.validate(); //викликає всі валідатори та вертає значення true, якщо всі валідатори return null (всі дані пройшли провірку)
-  //   if (!isValid! || _pickedImage == null) {
-  //     return; // пририває виконання функії, код нище не буде виконуватись
-  //   }
-  //   final connectivityResult = await Connectivity().checkConnectivity();
-  //   if (connectivityResult == ConnectivityResult.none) {
-  //     // Немає з'єднання з Інтернетом
-  //     scaffoldContext.showSnackBar(
-  //       const SnackBar(
-  //         content: Text('Немає з\'єднання з Інтернетом'),
-  //         duration: Duration(seconds: 3), // Тривалість показу SnackBar
-  //       ),
-  //     );
-  //     return; // Перериваємо виконання функції
-  //   }
-
-  //   try {
-  //     setState(() {
-  //       _isLoading = true;
-  //     });
-  //     String newTitle = _titleController.text;
-  //     double newPrice = double.parse(_priceController.text);
-  //     int newLitersLeft = int.parse(_litersLeftController.text);
-  //     String newShortDescription = _shortDescriptionController.text;
-  //     String newLongDescription = _longDescriptionController.text;
-  //     bool newIsHoney = _isHoney;
-  //     if (_pickedImage != null) {
-  //       //якщо фото вибране
-  //       Reference ref = FirebaseStorage.instance
-  //           .ref()
-  //           .child('product_images')
-  //           .child('${newTitle.toLowerCase().replaceAll(' ', '_')}.jpg');
-  //       final imageBytes = await _pickedImage!.readAsBytes();
-  //       await ref.putData(imageBytes);
-  //       _imageUrl = await ref.getDownloadURL();
-  //     }
-
-  //     await FirebaseFirestore.instance
-  //         .collection('products')
-  //         .doc(newTitle.toLowerCase().replaceAll(' ', '_')) //  назва як ID
-  //         .set({
-  //       'title': newTitle,
-  //       'price': newPrice,
-  //       'imageUrl': _imageUrl,
-  //       'litersLeft': newLitersLeft,
-  //       'shortDescription': newShortDescription,
-  //       'longDescription': newLongDescription,
-  //       'isHoney': newIsHoney,
-  //     });
-  //   } catch (e) {
-  //     print(e);
-  //   } finally {
-  //     setState(() {
-  //       _isLoading = false;
-  //     });
-  //     popContext.pop();
-  //   }
-  // }
 
   Future<String?> pickAndUploadImage() async {
     final picker = ImagePicker();
@@ -274,69 +156,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     return null;
   }
 
-  // Future<void> updateProductData(BuildContext context) async {
-  //   final popContext = Navigator.of(context);
-  //   final scaffoldContext = ScaffoldMessenger.of(context);
-  //   final connectivityResult = await Connectivity().checkConnectivity();
-  //   if (connectivityResult == ConnectivityResult.none) {
-  //     // Немає з'єднання з Інтернетом
-  //     scaffoldContext.showSnackBar(
-  //       const SnackBar(
-  //         content: Text('Немає з\'єднання з Інтернетом'),
-  //         duration: Duration(seconds: 3),
-  //       ),
-  //     );
-  //     return;
-  //   }
-  //   final isValid = _formkey.currentState
-  //       ?.validate(); //викликає всі валідатори та вертає значення true, якщо всі валідатори return null (всі дані пройшли провірку)
-  //   if (!isValid! || _currentImageUrl == null) {
-  //     return;
-  //   }
-  //   try {
-  //     setState(() {
-  //       _isLoading = true;
-  //     });
-  //     String newTitle = _titleController.text;
-  //     double newPrice = double.parse(_priceController.text);
-  //     int newLitersLeft = int.parse(_litersLeftController.text);
-  //     String newShortDescription = _shortDescriptionController.text;
-  //     String newLongDescription = _longDescriptionController.text;
-  //     bool newIsHoney = _isHoney;
-  //     if (_pickedImage != null) {
-  //       Reference ref = FirebaseStorage.instance
-  //           .ref()
-  //           .child('product_images')
-  //           .child('${widget.productId}.jpg');
-  //       final imageBytes = await _pickedImage!.readAsBytes();
-  //       await ref.putData(imageBytes);
-  //       _imageUrl = await ref.getDownloadURL();
-  //     } else {
-  //       _imageUrl = _currentImageUrl;
-  //     }
-  //     await FirebaseFirestore.instance
-  //         .collection('products')
-  //         .doc(widget.productId)
-  //         .update({
-  //       'title': newTitle,
-  //       'price': newPrice,
-  //       'imageUrl': _imageUrl,
-  //       'litersLeft': newLitersLeft,
-  //       'shortDescription': newShortDescription,
-  //       'longDescription': newLongDescription,
-  //       'isHoney': newIsHoney,
-  //     });
-  //   } catch (e) {
-  //     print(e);
-  //   } finally {
-  //     setState(() {
-  //       _isLoading = false;
-  //     });
-  //     popContext.pop();
-  //   }
-  // }
-
-  Future<void> deleteProduct(
+  Future<void> deleteProductAndStorageImgage(
       BuildContext context, productId, String imageUrl) async {
     ProductsProvider productProvider =
         Provider.of<ProductsProvider>(context, listen: false);
@@ -344,7 +164,6 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     final popContext = Navigator.of(context);
     final connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
-      // Немає з'єднання з Інтернетом
       scaffoldContext.showSnackBar(
         const SnackBar(
           content: Text('Немає з\'єднання з Інтернетом'),
@@ -353,30 +172,14 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
       );
       return;
     }
-    try {
-      setState(() {
-        _isLoading = true;
-      });
-
-      await productProvider.deleteProduct(widget.productId, _currentImageUrl!);
-      // if (imageUrl.isNotEmpty) {
-      //   //пошук URl картинки, яка відповідає заданому продукту
-      //   final storageRef = FirebaseStorage.instance.refFromURL(imageUrl);
-      //   await storageRef.delete();
-      // }
-      // final productRef =
-      //     FirebaseFirestore.instance.collection('products').doc(productId);
-      // await productRef.delete();
-
-      print('Продукт успішно видалений.');
-    } catch (error) {
-      print('Сталася помилка при видаленні продукту: $error');
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-      popContext.pop();
-    }
+    setState(() {
+      _isLoading = true;
+    });
+    await productProvider.deleteProduct(widget.productId, _currentImageUrl!);
+    setState(() {
+      _isLoading = false;
+    });
+    popContext.pop();
   }
 
   @override
@@ -401,7 +204,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                         children: [
                           const SizedBox(height: 15),
                           const Text(
-                            'Ви впевнені, що хочете видалити товар?',
+                            'Впевнені, що хочете видалити товар?',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 16,
@@ -415,8 +218,8 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                               TextButton(
                                 onPressed: () async {
                                   Navigator.of(context).pop();
-                                  deleteProduct(context, widget.productId,
-                                      _currentImageUrl!);
+                                  deleteProductAndStorageImgage(context,
+                                      widget.productId, _currentImageUrl!);
                                 },
                                 child: const Text(
                                   'Так',
@@ -611,7 +414,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                           ),
                           CustomTextField(
                             hintText: 'Короткий опис',
-                            maxLength: 200, //порахувати скільки символів*
+                            maxLength: 200,
                             maxLines: 4,
                             controller: _shortDescriptionController,
                             validator: (value) {
@@ -623,7 +426,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                           ),
                           CustomTextField(
                             hintText: 'Розгорнутий опис',
-                            maxLength: 1000, //порахувати скільки символів*
+                            maxLength: 1000,
                             maxLines: 6,
                             controller: _longDescriptionController,
                             validator: (value) {
@@ -638,8 +441,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                     ),
                     CustomButton(
                       action: () {
-                        saveForm(context);
-                        // widget.isAdd ? saveForm() : updateProductData(context);
+                        submitProductForm(context);
                       },
                       text: 'Зберегти',
                     ),
@@ -706,3 +508,129 @@ class CustomTextField extends StatelessWidget {
     );
   }
 }
+
+ // Future<void> addProduct(BuildContext context) async {
+  //   final popContext = Navigator.of(context);
+  //   final scaffoldContext = ScaffoldMessenger.of(context);
+  //   final isValid = _formkey.currentState
+  //       ?.validate(); //викликає всі валідатори та вертає значення true, якщо всі валідатори return null (всі дані пройшли провірку)
+  //   if (!isValid! || _pickedImage == null) {
+  //     return; // пририває виконання функії, код нище не буде виконуватись
+  //   }
+  //   final connectivityResult = await Connectivity().checkConnectivity();
+  //   if (connectivityResult == ConnectivityResult.none) {
+  //     // Немає з'єднання з Інтернетом
+  //     scaffoldContext.showSnackBar(
+  //       const SnackBar(
+  //         content: Text('Немає з\'єднання з Інтернетом'),
+  //         duration: Duration(seconds: 3), // Тривалість показу SnackBar
+  //       ),
+  //     );
+  //     return; // Перериваємо виконання функції
+  //   }
+
+  //   try {
+  //     setState(() {
+  //       _isLoading = true;
+  //     });
+  //     String newTitle = _titleController.text;
+  //     double newPrice = double.parse(_priceController.text);
+  //     int newLitersLeft = int.parse(_litersLeftController.text);
+  //     String newShortDescription = _shortDescriptionController.text;
+  //     String newLongDescription = _longDescriptionController.text;
+  //     bool newIsHoney = _isHoney;
+  //     if (_pickedImage != null) {
+  //       //якщо фото вибране
+  //       Reference ref = FirebaseStorage.instance
+  //           .ref()
+  //           .child('product_images')
+  //           .child('${newTitle.toLowerCase().replaceAll(' ', '_')}.jpg');
+  //       final imageBytes = await _pickedImage!.readAsBytes();
+  //       await ref.putData(imageBytes);
+  //       _imageUrl = await ref.getDownloadURL();
+  //     }
+
+  //     await FirebaseFirestore.instance
+  //         .collection('products')
+  //         .doc(newTitle.toLowerCase().replaceAll(' ', '_')) //  назва як ID
+  //         .set({
+  //       'title': newTitle,
+  //       'price': newPrice,
+  //       'imageUrl': _imageUrl,
+  //       'litersLeft': newLitersLeft,
+  //       'shortDescription': newShortDescription,
+  //       'longDescription': newLongDescription,
+  //       'isHoney': newIsHoney,
+  //     });
+  //   } catch (e) {
+  //     print(e);
+  //   } finally {
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //     popContext.pop();
+  //   }
+  // }
+
+
+// Future<void> updateProductData(BuildContext context) async {
+  //   final popContext = Navigator.of(context);
+  //   final scaffoldContext = ScaffoldMessenger.of(context);
+  //   final connectivityResult = await Connectivity().checkConnectivity();
+  //   if (connectivityResult == ConnectivityResult.none) {
+  //     // Немає з'єднання з Інтернетом
+  //     scaffoldContext.showSnackBar(
+  //       const SnackBar(
+  //         content: Text('Немає з\'єднання з Інтернетом'),
+  //         duration: Duration(seconds: 3),
+  //       ),
+  //     );
+  //     return;
+  //   }
+  //   final isValid = _formkey.currentState
+  //       ?.validate(); //викликає всі валідатори та вертає значення true, якщо всі валідатори return null (всі дані пройшли провірку)
+  //   if (!isValid! || _currentImageUrl == null) {
+  //     return;
+  //   }
+  //   try {
+  //     setState(() {
+  //       _isLoading = true;
+  //     });
+  //     String newTitle = _titleController.text;
+  //     double newPrice = double.parse(_priceController.text);
+  //     int newLitersLeft = int.parse(_litersLeftController.text);
+  //     String newShortDescription = _shortDescriptionController.text;
+  //     String newLongDescription = _longDescriptionController.text;
+  //     bool newIsHoney = _isHoney;
+  //     if (_pickedImage != null) {
+  //       Reference ref = FirebaseStorage.instance
+  //           .ref()
+  //           .child('product_images')
+  //           .child('${widget.productId}.jpg');
+  //       final imageBytes = await _pickedImage!.readAsBytes();
+  //       await ref.putData(imageBytes);
+  //       _imageUrl = await ref.getDownloadURL();
+  //     } else {
+  //       _imageUrl = _currentImageUrl;
+  //     }
+  //     await FirebaseFirestore.instance
+  //         .collection('products')
+  //         .doc(widget.productId)
+  //         .update({
+  //       'title': newTitle,
+  //       'price': newPrice,
+  //       'imageUrl': _imageUrl,
+  //       'litersLeft': newLitersLeft,
+  //       'shortDescription': newShortDescription,
+  //       'longDescription': newLongDescription,
+  //       'isHoney': newIsHoney,
+  //     });
+  //   } catch (e) {
+  //     print(e);
+  //   } finally {
+  //     setState(() {
+  //       _isLoading = false;
+  //     });
+  //     popContext.pop();
+  //   }
+  // }

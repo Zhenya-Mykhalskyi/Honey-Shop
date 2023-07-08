@@ -6,117 +6,73 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:honey/providers/product.dart';
 
 class ProductsProvider with ChangeNotifier {
-  // String _currentImageUrl = '';
-
-  // String getCurrentImageUrl() {
-  //   return _currentImageUrl;
-  // }
-
   List<Product> _items = [];
   List<Product> get items {
     return [..._items];
   }
 
   Future<List<Product>> getProductList() async {
-    //Запускати в didChangeDepend
     try {
       QuerySnapshot querySnapshot =
           await FirebaseFirestore.instance.collection('products').get();
-      querySnapshot.docs.forEach((DocumentSnapshot documentSnapshot) {
-        Map<String, dynamic> data =
-            documentSnapshot.data() as Map<String, dynamic>;
-        // String id= data['id'];
-        String id = data['id'];
-        String title = data['title'];
-        double price = data['price'];
-        int litersLeft = data['litersLeft'];
-        String shortDescription = data['shortDescription'];
-        String longDescription = data['longDescription'];
-        String imageUrl = data['imageUrl'];
-        bool isHoney = data['isHoney'];
-
-        if (_items.any((prod) => prod.id == id)) {
-          print('Товар вже існує, не дадано в _items');
-          print('Кількість продуктів в _items: ${items.length}');
-        } else {
-          Product product = Product(
-            id: id,
-            title: title,
-            price: price,
-            shortDescription: shortDescription,
-            longDescription: longDescription,
-            imageUrl: imageUrl,
-            isHoney: isHoney,
-            litersLeft: litersLeft,
-          );
-          _items.add(product);
-          print('Кількість продуктів в _items: ${items.length}');
-          items.every((element) {
-            print(element.id);
-            return true;
-          });
-          // print(items.every((element) {} element.id));
-        }
-      });
+      List<Product> productList = querySnapshot.docs.map((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        return Product(
+          id: data['id'],
+          title: data['title'],
+          price: data['price'],
+          shortDescription: data['shortDescription'],
+          longDescription: data['longDescription'],
+          imageUrl: data['imageUrl'],
+          isHoney: data['isHoney'],
+          litersLeft: data['litersLeft'],
+        );
+      }).toList();
+      _items = productList;
+      notifyListeners();
+      print('Кількість продуктів в _items: ${items.length}');
     } catch (e) {
       print(e);
     }
-
     return _items;
   }
 
-  Future<Product?> getProductById(String productId) async {
+  Future<Product?> getProductByIdFromFirestre(String productId) async {
     try {
       DocumentSnapshot productSnapshot = await FirebaseFirestore.instance
           .collection('products')
           .doc(productId)
           .get();
       if (productSnapshot.exists) {
-        String title =
-            (productSnapshot.data() as Map<String, dynamic>)['title'];
-        double price = double.parse(
-            (productSnapshot.data() as Map<String, dynamic>)['price']
-                .toStringAsFixed(2));
-        String imageUrl =
-            (productSnapshot.data() as Map<String, dynamic>)['imageUrl'] ?? '';
-        int litersLeft =
-            (productSnapshot.data() as Map<String, dynamic>)['litersLeft'];
-        String shortDescription = (productSnapshot.data()
-                as Map<String, dynamic>)['shortDescription'] ??
-            '';
-        String longDescription = (productSnapshot.data()
-                as Map<String, dynamic>)['longDescription'] ??
-            '';
-        bool isHoney =
-            (productSnapshot.data() as Map<String, dynamic>)['isHoney'];
-
         return Product(
           id: productId,
-          title: title,
-          price: price,
-          imageUrl: imageUrl,
-          litersLeft: litersLeft,
-          shortDescription: shortDescription,
-          longDescription: longDescription,
-          isHoney: isHoney,
+          title: (productSnapshot.data() as Map<String, dynamic>)['title'],
+          price: double.parse(
+              (productSnapshot.data() as Map<String, dynamic>)['price']
+                  .toStringAsFixed(2)),
+          imageUrl:
+              (productSnapshot.data() as Map<String, dynamic>)['imageUrl'] ??
+                  '',
+          litersLeft:
+              (productSnapshot.data() as Map<String, dynamic>)['litersLeft'],
+          shortDescription: (productSnapshot.data()
+                  as Map<String, dynamic>)['shortDescription'] ??
+              '',
+          longDescription: (productSnapshot.data()
+                  as Map<String, dynamic>)['longDescription'] ??
+              '',
+          isHoney: (productSnapshot.data() as Map<String, dynamic>)['isHoney'],
         );
       } else {
         return null;
       }
     } catch (e) {
-      // Handle errors
       return null;
     }
   }
 
   Future<void> addProduct(Product product, File pickedImage) async {
     try {
-      String newTitle = product.title;
-      double newPrice = product.price;
-      int newLitersLeft = product.litersLeft;
-      String newShortDescription = product.shortDescription;
-      String newLongDescription = product.longDescription;
-      bool newIsHoney = product.isHoney;
       DocumentReference docRef =
           FirebaseFirestore.instance.collection('products').doc();
       Reference ref = FirebaseStorage.instance
@@ -129,46 +85,35 @@ class ProductsProvider with ChangeNotifier {
 
       await docRef.set({
         'id': docRef.id,
-        'title': newTitle,
-        'price': newPrice,
+        'title': product.title,
+        'price': product.price,
         'imageUrl': imageUrl,
-        'litersLeft': newLitersLeft,
-        'shortDescription': newShortDescription,
-        'longDescription': newLongDescription,
-        'isHoney': newIsHoney,
+        'litersLeft': product.litersLeft,
+        'shortDescription': product.shortDescription,
+        'longDescription': product.longDescription,
+        'isHoney': product.isHoney,
       });
-
-      // Create a new Product object with the same values
       Product newProduct = Product(
         id: docRef.id,
-        title: newTitle,
-        price: newPrice,
+        title: product.title,
+        price: product.price,
         imageUrl: imageUrl,
-        litersLeft: newLitersLeft,
-        shortDescription: newShortDescription,
-        longDescription: newLongDescription,
-        isHoney: newIsHoney,
+        litersLeft: product.litersLeft,
+        shortDescription: product.shortDescription,
+        longDescription: product.longDescription,
+        isHoney: product.isHoney,
       );
-
-      // Add the new product to the list
       _items.add(newProduct);
-      notifyListeners(); // Notify listeners of the change in the list
+      notifyListeners();
     } catch (e) {
       print(e);
     }
   }
 
   Future<void> updateProduct(String prodId, Product product,
-      {File? pickedImage, String? currentImg}) async {
+      {File? pickedImage, String? currentImgage}) async {
     try {
-      String newTitle = product.title;
-      double newPrice = product.price;
-      int newLitersLeft = product.litersLeft;
-      String newShortDescription = product.shortDescription;
-      String newLongDescription = product.longDescription;
-      bool newIsHoney = product.isHoney;
       String imageUrl;
-
       Reference ref = FirebaseStorage.instance
           .ref()
           .child('product_images')
@@ -179,30 +124,29 @@ class ProductsProvider with ChangeNotifier {
         await ref.putData(imageBytes);
         imageUrl = await ref.getDownloadURL();
       } else {
-        imageUrl = currentImg!;
+        imageUrl = currentImgage!;
       }
 
       await FirebaseFirestore.instance
           .collection('products')
           .doc(prodId)
           .update({
-        'title': newTitle,
-        'price': newPrice,
+        'title': product.title,
+        'price': product.price,
         'imageUrl': imageUrl,
-        'litersLeft': newLitersLeft,
-        'shortDescription': newShortDescription,
-        'longDescription': newLongDescription,
-        'isHoney': newIsHoney,
+        'litersLeft': product.litersLeft,
+        'shortDescription': product.shortDescription,
+        'longDescription': product.longDescription,
+        'isHoney': product.isHoney,
       });
 
-      // Оновити дані в моделі продукту
-      product.title = newTitle;
-      product.price = newPrice;
+      product.title = product.title;
+      product.price = product.price;
       product.imageUrl = imageUrl;
-      product.litersLeft = newLitersLeft;
-      product.shortDescription = newShortDescription;
-      product.longDescription = newLongDescription;
-      product.isHoney = newIsHoney;
+      product.litersLeft = product.litersLeft;
+      product.shortDescription = product.shortDescription;
+      product.longDescription = product.longDescription;
+      product.isHoney = product.isHoney;
 
       int index = _items.indexWhere((item) => item.id == prodId);
       if (index != -1) {
@@ -234,8 +178,8 @@ class ProductsProvider with ChangeNotifier {
       _items.removeWhere((product) => product.id == productId);
 
       print('Продукт успішно видалений.');
-    } catch (e) {
-      print(e);
+    } catch (error) {
+      print('Сталася помилка при видаленні продукту: $error');
     }
   }
 }
