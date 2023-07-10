@@ -3,15 +3,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:honey/screens/product_detail_screen.dart';
 
+import '../providers/product.dart';
+import 'liters_counter.dart';
+
 class ProductItem extends StatelessWidget {
-  final String title;
-  final double price;
-  final String imageUrl;
-  const ProductItem(
-      {super.key,
-      required this.title,
-      required this.price,
-      required this.imageUrl});
+  final Product product;
+  const ProductItem({
+    super.key,
+    required this.product,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +25,8 @@ class ProductItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
           ),
           child: Padding(
-            padding: const EdgeInsets.only(
-                left: 14, right: 14, top: 15, bottom: 10), //
+            padding:
+                const EdgeInsets.only(left: 14, right: 14, top: 15, bottom: 10),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -36,36 +36,27 @@ class ProductItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AspectRatio(
-                      aspectRatio: 1, //відношення сторін 1:1
-                      child: Hero(
-                        tag: 'prodImg', //для анімації на детальній сторінці
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: CachedNetworkImage(
-                            imageUrl: imageUrl,
-
-                            // image: NetworkImage(imageUrl),
-                            fit: BoxFit.cover,
-                          ),
+                      aspectRatio: 1,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: CachedNetworkImage(
+                          imageUrl: product.imageUrl,
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
-                      maxLines:
-                          2, // Максимальна кількість рядків для відображення
-                      overflow: TextOverflow
-                          .ellipsis, // Текст, що перевищує максимальну кількість рядків, буде обрізано з крапками
-                    ),
+                    Text(product.title,
+                        style: const TextStyle(
+                          fontSize: 16,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis),
                     const SizedBox(height: 7),
                     Row(
                       children: [
                         Text(
-                          '₴${price.toString()}',
+                          '₴${product.price.toString()}',
                           style: const TextStyle(
                               fontSize: 17, fontWeight: FontWeight.w500),
                         ),
@@ -78,54 +69,10 @@ class ProductItem extends StatelessWidget {
                     ),
                   ],
                 ),
-
-                //ЛІЧИЛЬНИК ЛІЧИЛЬНИК ЛІЧИЛЬНИК ЛІЧИЛЬНИК ЛІЧИЛЬНИК
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.04,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: const Color.fromARGB(255, 65, 65, 65),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.093,
-                          decoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 255, 179, 0)
-                                  .withOpacity(0.85),
-                              borderRadius: BorderRadius.circular(15)),
-                          child: const Center(
-                            child: Icon(Icons.remove,
-                                size: 20.0, color: Colors.black),
-                          ),
-                        ),
-                      ),
-                      const Text(
-                        '0.5 л',
-                        style: TextStyle(
-                          fontSize: 13.0,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 0.093,
-                          decoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 255, 179, 0)
-                                  .withOpacity(0.85),
-                              borderRadius: BorderRadius.circular(15)),
-                          child: const Center(
-                            child: Icon(Icons.add,
-                                size: 20.0, color: Colors.black),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
+                LitersCounter(
+                  // liters: product.liters,
+                  product: product,
+                ),
               ],
             ),
           ),

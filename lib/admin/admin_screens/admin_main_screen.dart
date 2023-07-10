@@ -79,11 +79,11 @@ class _AdminMainScreenState extends State<AdminMainScreen>
               children: [
                 if (_selectedTabIndex == 0) const ProductGrid(isHoney: true),
                 if (_selectedTabIndex == 0)
-                  const CustomStreamBuilder(isHoney: true),
+                  const EditOverViewScreen(isHoney: true),
                 if (_selectedTabIndex == 0) const AdminOrdersScreen(),
                 if (_selectedTabIndex == 1) const ProductGrid(isHoney: false),
                 if (_selectedTabIndex == 1)
-                  const CustomStreamBuilder(isHoney: false),
+                  const EditOverViewScreen(isHoney: false),
                 if (_selectedTabIndex == 1) const AdminOrdersScreen(),
               ],
             ),

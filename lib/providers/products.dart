@@ -11,6 +11,18 @@ class ProductsProvider with ChangeNotifier {
     return [..._items];
   }
 
+  void addHalfLiter(Product product) {
+    product.liters += 0.5;
+    print('${product.title}  ${product.liters}');
+  }
+
+  void subtractHalfLiter(Product product) {
+    if (product.liters >= 0.5) {
+      product.liters -= 0.5;
+      print('${product.title}  ${product.liters}');
+    }
+  }
+
   Future<List<Product>> getProductList() async {
     try {
       QuerySnapshot querySnapshot =
@@ -26,6 +38,7 @@ class ProductsProvider with ChangeNotifier {
           imageUrl: data['imageUrl'],
           isHoney: data['isHoney'],
           litersLeft: data['litersLeft'],
+          liters: (data['liters'] as num).toDouble(),
         );
       }).toList();
       _items = productList;
@@ -62,6 +75,9 @@ class ProductsProvider with ChangeNotifier {
                   as Map<String, dynamic>)['longDescription'] ??
               '',
           isHoney: (productSnapshot.data() as Map<String, dynamic>)['isHoney'],
+          liters: double.parse(
+              (productSnapshot.data() as Map<String, dynamic>)['liters']
+                  .toStringAsFixed(1)),
         );
       } else {
         return null;
@@ -92,6 +108,7 @@ class ProductsProvider with ChangeNotifier {
         'shortDescription': product.shortDescription,
         'longDescription': product.longDescription,
         'isHoney': product.isHoney,
+        'liters': product.liters,
       });
       Product newProduct = Product(
         id: docRef.id,
@@ -102,6 +119,7 @@ class ProductsProvider with ChangeNotifier {
         shortDescription: product.shortDescription,
         longDescription: product.longDescription,
         isHoney: product.isHoney,
+        liters: product.liters,
       );
       _items.add(newProduct);
       notifyListeners();

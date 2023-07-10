@@ -86,13 +86,9 @@ class ProductGrid extends StatelessWidget {
               ),
               itemCount: filteredProducts.length,
               itemBuilder: (context, index) {
-                final title = filteredProducts[index].title;
-                final price = filteredProducts[index].price;
-                final imageUrl = filteredProducts[index].imageUrl;
+                final product = filteredProducts[index];
                 return ProductItem(
-                  title: title,
-                  price: price,
-                  imageUrl: imageUrl,
+                  product: product,
                 );
               },
             ),
@@ -103,118 +99,118 @@ class ProductGrid extends StatelessWidget {
   }
 }
 
-class ProductScreen extends StatefulWidget {
-  const ProductScreen({Key? key}) : super(key: key);
+// class ProductScreen extends StatefulWidget {
+//   const ProductScreen({Key? key}) : super(key: key);
 
-  @override
-  State<ProductScreen> createState() => _ProductScreenState();
-}
+//   @override
+//   State<ProductScreen> createState() => _ProductScreenState();
+// }
 
-class _ProductScreenState extends State<ProductScreen>
-    with SingleTickerProviderStateMixin {
-  late TabController _tabController;
-  late int activeIndex;
+// class _ProductScreenState extends State<ProductScreen>
+//     with SingleTickerProviderStateMixin {
+//   late TabController _tabController;
+//   late int activeIndex;
 
-  @override
-  void initState() {
-    _tabController = TabController(length: 1, vsync: this);
-    activeIndex = 0;
-    super.initState();
-  }
+//   @override
+//   void initState() {
+//     _tabController = TabController(length: 1, vsync: this);
+//     activeIndex = 0;
+//     super.initState();
+//   }
 
-  @override
-  void dispose() {
-    _tabController.dispose();
-    super.dispose();
-  }
+//   @override
+//   void dispose() {
+//     _tabController.dispose();
+//     super.dispose();
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        // appBar: AppBar(
-        //   elevation: 0,
-        // leading: PreferredSize(
-        //   preferredSize: const Size.fromHeight(50),
-        //   child: Container(
-        //     padding: const EdgeInsets.symmetric(horizontal: 15),
-        //     child: Row(
-        //       children: [
-        //         TabButton(
-        //           text: 'мед',
-        //           isActive: activeIndex == 0,
-        //           onPressed: () {
-        //             setState(() {
-        //               activeIndex = 0;
-        //             });
-        //           },
-        //         ),
-        //         const SizedBox(width: 10),
-        //         TabButton(
-        //           text: 'інше',
-        //           isActive: activeIndex == 1,
-        //           onPressed: () {
-        //             setState(() {
-        //               activeIndex = 1;
-        //             });
-        //           },
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        // ),
-        // toolbarHeight: 100,
-        // elevation: 0,
-        // leading: Container(
-        //   margin: const EdgeInsets.only(left: 20, top: 20),
-        //   child: Image.asset('./assets/img/logo.png'),
-        // ),
-        // leadingWidth: 95,
-        // actions: [
-        //   Container(
-        //     margin: const EdgeInsets.only(top: 35, right: 10),
-        //     child: DropdownButton(
-        //       underline: Container(),
-        //       icon: const Icon(
-        //         Icons.person,
-        //         color: Colors.white,
-        //         size: 40,
-        //       ),
-        //       items: const [
-        //         DropdownMenuItem(
-        //           value: 'logout',
-        //           child: Row(
-        //             children: [
-        //               Icon(Icons.exit_to_app),
-        //               SizedBox(width: 8),
-        //               Text(
-        //                 'Logout',
-        //                 style: TextStyle(color: Colors.black),
-        //               )
-        //             ],
-        //           ),
-        //         )
-        //       ],
-        //       onChanged: (itemIdentifier) {
-        //         if (itemIdentifier == 'logout') {
-        //           FirebaseAuth.instance.signOut();
-        //         }
-        //       },
-        //     ),
-        //   )
-        // ],
-        // ),
-        // body: TabBarView(
-        //   controller: _tabController,
-        //   children: [
-        //     activeIndex == 0
-        //         ? const ProductGrid(
-        //             isHoney: true,
-        //           )
-        //         : const ProductGrid(
-        //             isHoney: false,
-        //           ),
-        //   ],
-        // ),
-        );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//         // appBar: AppBar(
+//         //   elevation: 0,
+//         // leading: PreferredSize(
+//         //   preferredSize: const Size.fromHeight(50),
+//         //   child: Container(
+//         //     padding: const EdgeInsets.symmetric(horizontal: 15),
+//         //     child: Row(
+//         //       children: [
+//         //         TabButton(
+//         //           text: 'мед',
+//         //           isActive: activeIndex == 0,
+//         //           onPressed: () {
+//         //             setState(() {
+//         //               activeIndex = 0;
+//         //             });
+//         //           },
+//         //         ),
+//         //         const SizedBox(width: 10),
+//         //         TabButton(
+//         //           text: 'інше',
+//         //           isActive: activeIndex == 1,
+//         //           onPressed: () {
+//         //             setState(() {
+//         //               activeIndex = 1;
+//         //             });
+//         //           },
+//         //         ),
+//         //       ],
+//         //     ),
+//         //   ),
+//         // ),
+//         // toolbarHeight: 100,
+//         // elevation: 0,
+//         // leading: Container(
+//         //   margin: const EdgeInsets.only(left: 20, top: 20),
+//         //   child: Image.asset('./assets/img/logo.png'),
+//         // ),
+//         // leadingWidth: 95,
+//         // actions: [
+//         //   Container(
+//         //     margin: const EdgeInsets.only(top: 35, right: 10),
+//         //     child: DropdownButton(
+//         //       underline: Container(),
+//         //       icon: const Icon(
+//         //         Icons.person,
+//         //         color: Colors.white,
+//         //         size: 40,
+//         //       ),
+//         //       items: const [
+//         //         DropdownMenuItem(
+//         //           value: 'logout',
+//         //           child: Row(
+//         //             children: [
+//         //               Icon(Icons.exit_to_app),
+//         //               SizedBox(width: 8),
+//         //               Text(
+//         //                 'Logout',
+//         //                 style: TextStyle(color: Colors.black),
+//         //               )
+//         //             ],
+//         //           ),
+//         //         )
+//         //       ],
+//         //       onChanged: (itemIdentifier) {
+//         //         if (itemIdentifier == 'logout') {
+//         //           FirebaseAuth.instance.signOut();
+//         //         }
+//         //       },
+//         //     ),
+//         //   )
+//         // ],
+//         // ),
+//         // body: TabBarView(
+//         //   controller: _tabController,
+//         //   children: [
+//         //     activeIndex == 0
+//         //         ? const ProductGrid(
+//         //             isHoney: true,
+//         //           )
+//         //         : const ProductGrid(
+//         //             isHoney: false,
+//         //           ),
+//         //   ],
+//         // ),
+//         );
+//   }
+// }

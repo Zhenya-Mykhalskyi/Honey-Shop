@@ -7,6 +7,7 @@ class Product {
   String shortDescription;
   String longDescription;
   bool isHoney;
+  double liters = 0;
 
   Product({
     required this.id,
@@ -17,5 +18,6 @@ class Product {
     required this.shortDescription,
     required this.longDescription,
     required this.isHoney,
+    required this.liters,
   });
 }
