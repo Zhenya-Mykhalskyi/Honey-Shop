@@ -11,6 +11,9 @@ class ProductsProvider with ChangeNotifier {
     return [..._items];
   }
 
+  double _totalCost = 0;
+  double get totalCost => _totalCost;
+
   void addHalfLiter(Product product) {
     product.liters = (product.liters) + 0.5;
     print('${product.title}  ${product.liters}');
@@ -22,6 +25,17 @@ class ProductsProvider with ChangeNotifier {
       product.liters = (product.liters) - 0.5;
       print('${product.title}  ${product.liters}');
       notifyListeners();
+    }
+  }
+
+  double getProductCost(Product product) {
+    return product.liters * 2 * product.price;
+  }
+
+  void updateTotalCost() {
+    _totalCost = 0;
+    for (Product product in _items) {
+      _totalCost += getProductCost(product);
     }
   }
 

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:honey/widgets/custom_button.dart';
 
 import 'package:honey/widgets/liters_counter.dart';
+import 'package:provider/provider.dart';
 import '../providers/product.dart';
+import '../providers/products.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   final Product product;
@@ -11,6 +13,8 @@ class ProductDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ProductsProvider productProvider = Provider.of<ProductsProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -126,10 +130,11 @@ class ProductDetailScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                         color: const Color.fromARGB(255, 65, 65, 65),
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Text(
-                          '597 грн',
-                          style: TextStyle(fontSize: 20),
+                          productProvider.getProductCost(product).toString(),
+                          // '597 грн',
+                          style: const TextStyle(fontSize: 20),
                         ),
                       ),
                     )
