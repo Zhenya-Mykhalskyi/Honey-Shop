@@ -5,11 +5,9 @@ import 'package:provider/provider.dart';
 import '../providers/products.dart';
 
 class LitersCounter extends StatefulWidget {
-  // final double liters;
   final Product product;
   const LitersCounter({
     super.key,
-    // required this.liters,
     required this.product,
   });
 
@@ -18,14 +16,6 @@ class LitersCounter extends StatefulWidget {
 }
 
 class _LitersCounterState extends State<LitersCounter> {
-  late double _liters;
-
-  @override
-  void initState() {
-    super.initState();
-    _liters = widget.product.liters;
-  }
-
   @override
   Widget build(BuildContext context) {
     final productsProvider = Provider.of<ProductsProvider>(context);
@@ -42,11 +32,6 @@ class _LitersCounterState extends State<LitersCounter> {
           GestureDetector(
             onTap: () {
               productsProvider.subtractHalfLiter(widget.product);
-              setState(() {
-                if (_liters > 0) {
-                  _liters -= 0.5;
-                }
-              });
             },
             child: Container(
               width: MediaQuery.of(context).size.width * 0.093,
@@ -60,17 +45,14 @@ class _LitersCounterState extends State<LitersCounter> {
             ),
           ),
           Text(
-            _liters.toString(),
+            '${widget.product.liters.toString()} л',
             style: const TextStyle(
-              fontSize: 13.0,
+              fontSize: 15.0,
             ),
           ),
           GestureDetector(
             onTap: () {
               productsProvider.addHalfLiter(widget.product);
-              setState(() {
-                _liters += 0.5;
-              });
             },
             child: Container(
               width: MediaQuery.of(context).size.width * 0.093,

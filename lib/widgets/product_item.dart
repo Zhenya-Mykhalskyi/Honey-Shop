@@ -16,8 +16,8 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => const ProductDetailScreen())),
+      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => ProductDetailScreen(product: product))),
       child: GridTile(
         child: Container(
           decoration: BoxDecoration(
@@ -70,7 +70,6 @@ class ProductItem extends StatelessWidget {
                   ],
                 ),
                 LitersCounter(
-                  // liters: product.liters,
                   product: product,
                 ),
               ],

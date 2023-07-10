@@ -1,13 +1,13 @@
 class Product {
-  String id;
-  String title;
-  double price;
-  String imageUrl;
-  int litersLeft;
-  String shortDescription;
-  String longDescription;
-  bool isHoney;
-  double liters = 0;
+  final String id;
+  late final String title;
+  late final double price;
+  late final String imageUrl;
+  late final int litersLeft;
+  late final String shortDescription;
+  late final String longDescription;
+  late final bool isHoney;
+  double liters;
 
   Product({
     required this.id,
@@ -18,6 +18,6 @@ class Product {
     required this.shortDescription,
     required this.longDescription,
     required this.isHoney,
-    required this.liters,
-  });
+    double? liters,
+  }) : liters = liters ?? 0.0;
 }

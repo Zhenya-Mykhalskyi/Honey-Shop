@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:honey/admin/admin_screens/admin_orders_screen.dart';
-import '../../screens/products_overview_screen.dart';
+import '../../screens/products_grid.dart';
 import 'edit_overview_screen.dart';
 
 class TabButton extends StatelessWidget {

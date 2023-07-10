@@ -12,19 +12,25 @@ class ProductsProvider with ChangeNotifier {
   }
 
   void addHalfLiter(Product product) {
-    product.liters += 0.5;
+    product.liters = (product.liters) + 0.5;
     print('${product.title}  ${product.liters}');
+    notifyListeners();
   }
 
   void subtractHalfLiter(Product product) {
     if (product.liters >= 0.5) {
-      product.liters -= 0.5;
+      product.liters = (product.liters) - 0.5;
       print('${product.title}  ${product.liters}');
+      notifyListeners();
     }
   }
 
+  final bool _isProductListFetched = false;
   Future<List<Product>> getProductList() async {
     try {
+      if (_isProductListFetched) {
+        return _items;
+      }
       QuerySnapshot querySnapshot =
           await FirebaseFirestore.instance.collection('products').get();
       List<Product> productList = querySnapshot.docs.map((doc) {
@@ -38,10 +44,10 @@ class ProductsProvider with ChangeNotifier {
           imageUrl: data['imageUrl'],
           isHoney: data['isHoney'],
           litersLeft: data['litersLeft'],
-          liters: (data['liters'] as num).toDouble(),
         );
       }).toList();
       _items = productList;
+
       notifyListeners();
       print('Кількість продуктів в _items: ${items.length}');
     } catch (e) {
@@ -75,9 +81,6 @@ class ProductsProvider with ChangeNotifier {
                   as Map<String, dynamic>)['longDescription'] ??
               '',
           isHoney: (productSnapshot.data() as Map<String, dynamic>)['isHoney'],
-          liters: double.parse(
-              (productSnapshot.data() as Map<String, dynamic>)['liters']
-                  .toStringAsFixed(1)),
         );
       } else {
         return null;
@@ -108,7 +111,6 @@ class ProductsProvider with ChangeNotifier {
         'shortDescription': product.shortDescription,
         'longDescription': product.longDescription,
         'isHoney': product.isHoney,
-        'liters': product.liters,
       });
       Product newProduct = Product(
         id: docRef.id,
@@ -119,7 +121,6 @@ class ProductsProvider with ChangeNotifier {
         shortDescription: product.shortDescription,
         longDescription: product.longDescription,
         isHoney: product.isHoney,
-        liters: product.liters,
       );
       _items.add(newProduct);
       notifyListeners();

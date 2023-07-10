@@ -10,7 +10,7 @@ class OTPScreen extends StatefulWidget {
   final String phone;
   final String name;
   final AuthMode _authMode;
-  OTPScreen(this.phone, this.name, this._authMode);
+  const OTPScreen(this.phone, this.name, this._authMode, {super.key});
   @override
   _OTPScreenState createState() => _OTPScreenState();
 }
@@ -58,7 +58,7 @@ class _OTPScreenState extends State<OTPScreen> {
       }
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => MyApp()),
+        MaterialPageRoute(builder: (context) => const MyApp()),
         (route) => false, //видалити всі маршрути крім цільового
       );
     } catch (error) {
