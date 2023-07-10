@@ -42,6 +42,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     imageUrl: '',
     isHoney: false,
     litersLeft: 0,
+    liters: 0,
   );
 
   @override
