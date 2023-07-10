@@ -25,12 +25,8 @@ class ProductsProvider with ChangeNotifier {
     }
   }
 
-  final bool _isProductListFetched = false;
   Future<List<Product>> getProductList() async {
     try {
-      if (_isProductListFetched) {
-        return _items;
-      }
       QuerySnapshot querySnapshot =
           await FirebaseFirestore.instance.collection('products').get();
       List<Product> productList = querySnapshot.docs.map((doc) {

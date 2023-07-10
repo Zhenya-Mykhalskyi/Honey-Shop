@@ -56,13 +56,9 @@ class ProductGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<ProductsProvider>(
       builder: (context, productProvider, _) {
-        // Check if the product list has already been fetched
         if (productProvider.items.isEmpty) {
-          // Fetch the product list only once
           productProvider.getProductList();
         }
-
-        // Filter the products based on the selected criteria
         List<Product> products = productProvider.items;
         List<Product> filteredProducts = isHoney
             ? products.where((product) => product.isHoney).toList()
