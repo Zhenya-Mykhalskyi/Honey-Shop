@@ -184,6 +184,7 @@ class ProductsProvider with ChangeNotifier {
         // Продукт не знайдено у списку, додати його
         _items.add(product);
       }
+      await getProductList();
       notifyListeners();
     } catch (e) {
       print(e);
