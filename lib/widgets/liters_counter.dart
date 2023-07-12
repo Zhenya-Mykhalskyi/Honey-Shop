@@ -56,7 +56,7 @@ class _LitersCounterState extends State<LitersCounter> {
             onTap: () {
               productsProvider.addHalfLiter(widget.product);
               cart.addItemToCart(widget.product.id, widget.product.price,
-                  widget.product.title);
+                  widget.product.title, widget.product.imageUrl);
             },
             child: Container(
               width: MediaQuery.of(context).size.width * 0.093,
