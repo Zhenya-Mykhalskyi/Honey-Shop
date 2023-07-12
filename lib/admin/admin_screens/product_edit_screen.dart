@@ -415,7 +415,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                           ),
                           CustomTextField(
                             hintText: 'Короткий опис',
-                            maxLength: 200,
+                            maxLength: 400,
                             maxLines: 4,
                             controller: _shortDescriptionController,
                             validator: (value) {

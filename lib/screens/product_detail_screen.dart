@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:honey/widgets/custom_button.dart';
@@ -7,9 +9,17 @@ import 'package:provider/provider.dart';
 import '../providers/product.dart';
 import '../providers/products.dart';
 
-class ProductDetailScreen extends StatelessWidget {
+class ProductDetailScreen extends StatefulWidget {
   final Product product;
-  const ProductDetailScreen({super.key, required this.product});
+  const ProductDetailScreen({Key? key, required this.product})
+      : super(key: key);
+
+  @override
+  _ProductDetailScreenState createState() => _ProductDetailScreenState();
+}
+
+class _ProductDetailScreenState extends State<ProductDetailScreen> {
+  bool _isExpanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -19,132 +29,213 @@ class ProductDetailScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.95,
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Image.network(
-                        product.imageUrl,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          product.title,
-                          style: const TextStyle(fontSize: 26),
-                        ),
-                        const SizedBox(height: 5),
-                        Text(
-                          'Залишилось ${product.litersLeft} л',
-                          style: const TextStyle(
-                              fontSize: 16, color: Color(0xFF929292)),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 20),
-                          child: Text(
-                            '₴ ${product.price.toStringAsFixed(0)}',
-                            style: const TextStyle(
-                              fontSize: 24,
-                              color: Color.fromARGB(255, 255, 179, 0),
-                              fontWeight: FontWeight.w600,
+      body: Stack(
+        children: [
+          _isExpanded
+              ? BackdropFilter(filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50))
+              : Container(),
+          Opacity(
+            opacity: _isExpanded ? 0.2 : 1,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.95,
+                          height: MediaQuery.of(context).size.height * 0.4,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.network(
+                              widget.product.imageUrl,
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(right: 25),
-                          child: Text(
-                            '₴ 199',
-                            style: TextStyle(
-                                decoration: TextDecoration.lineThrough,
-                                decorationColor:
-                                    Color.fromARGB(255, 201, 76, 76),
-                                color: Color.fromARGB(255, 114, 114, 114),
-                                fontSize: 18),
-                          ),
-                        )
-                      ],
-                    )
-                  ],
-                ),
-                const SizedBox(height: 30),
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: product.shortDescription,
-                        style: const TextStyle(
-                            height: 1.45, fontSize: 16, fontFamily: 'MA'),
                       ),
-                      TextSpan(
-                        text: ' Детальніше',
-                        style: const TextStyle(
-                          height: 1.45,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline,
+                      const SizedBox(height: 20),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Flexible(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.product.title,
+                                  style: const TextStyle(fontSize: 26),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  'Залишилось ${widget.product.litersLeft} л',
+                                  style: const TextStyle(
+                                      fontSize: 16, color: Color(0xFF929292)),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 20),
+                                child: Text(
+                                  '₴ ${widget.product.price.toStringAsFixed(0)}',
+                                  style: const TextStyle(
+                                    fontSize: 24,
+                                    color: Color.fromARGB(255, 255, 179, 0),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.only(right: 25),
+                                child: Text(
+                                  '₴ 199',
+                                  style: TextStyle(
+                                      decoration: TextDecoration.lineThrough,
+                                      decorationColor:
+                                          Color.fromARGB(255, 201, 76, 76),
+                                      color: Color.fromARGB(255, 114, 114, 114),
+                                      fontSize: 18),
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 30),
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: widget.product.shortDescription.length <=
+                                      140
+                                  ? widget.product.shortDescription
+                                  : '${widget.product.shortDescription.substring(0, 140)}... ',
+                              style: const TextStyle(
+                                  height: 1.45, fontSize: 16, fontFamily: 'MA'),
+                            ),
+                            TextSpan(
+                              text: 'Детальніше',
+                              style: const TextStyle(
+                                height: 1.45,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  setState(() {
+                                    _isExpanded = true;
+                                  });
+                                },
+                            ),
+                          ],
                         ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Yo')),
-                            );
-                          },
+                      ),
+                      const SizedBox(height: 30),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            child: LitersCounter(product: widget.product),
+                          ),
+                          Container(
+                            height: MediaQuery.of(context).size.height * 0.04,
+                            width: MediaQuery.of(context).size.width * 0.25,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: const Color.fromARGB(255, 65, 65, 65),
+                            ),
+                            child: Center(
+                              child: Text(
+                                productProvider
+                                    .getProductCost(widget.product)
+                                    .toString(),
+                                style: const TextStyle(fontSize: 20),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(height: 30),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      child: LitersCounter(product: product),
-                    ),
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.04,
-                      width: MediaQuery.of(context).size.width * 0.25,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: const Color.fromARGB(255, 65, 65, 65),
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child:
+                        CustomButton(action: () {}, text: 'Додати до кошика'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          if (_isExpanded)
+            Center(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                    color: Colors.black.withOpacity(0.9),
+                    child: SingleChildScrollView(
                       child: Center(
-                        child: Text(
-                          productProvider.getProductCost(product).toString(),
-                          // '597 грн',
-                          style: const TextStyle(fontSize: 20),
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    widget.product.title,
+                                    style: const TextStyle(
+                                      color: Color.fromARGB(255, 255, 179, 0),
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        _isExpanded = false;
+                                      });
+                                    },
+                                    icon: const Icon(Icons.close),
+                                    iconSize: 30,
+                                    color: Colors.white,
+                                  )
+                                ],
+                              ),
+                              const SizedBox(height: 15),
+                              Text(
+                                widget.product.shortDescription,
+                                style: const TextStyle(
+                                  height: 1.45,
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    )
-                  ],
+                    ),
+                  ),
                 ),
-              ],
+              ),
             ),
-            CustomButton(action: () {}, text: 'Додати до кошика'),
-          ],
-        ),
+        ],
       ),
     );
   }
