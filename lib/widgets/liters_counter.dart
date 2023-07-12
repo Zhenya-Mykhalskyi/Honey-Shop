@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:honey/providers/product.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/cart.dart';
 import '../providers/products.dart';
 
 class LitersCounter extends StatefulWidget {
@@ -18,6 +19,7 @@ class LitersCounter extends StatefulWidget {
 class _LitersCounterState extends State<LitersCounter> {
   @override
   Widget build(BuildContext context) {
+    final cart = Provider.of<CartProvider>(context, listen: false);
     final productsProvider = Provider.of<ProductsProvider>(context);
 
     return Container(
@@ -53,6 +55,8 @@ class _LitersCounterState extends State<LitersCounter> {
           GestureDetector(
             onTap: () {
               productsProvider.addHalfLiter(widget.product);
+              cart.addItemToCart(widget.product.id, widget.product.price,
+                  widget.product.title);
             },
             child: Container(
               width: MediaQuery.of(context).size.width * 0.093,
