@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:honey/admin/admin_screens/admin_orders_screen.dart';
+import 'package:honey/screens/cart_screen.dart';
 import '../../screens/products_grid.dart';
 import 'edit_overview_screen.dart';
 
@@ -80,11 +81,13 @@ class _AdminMainScreenState extends State<AdminMainScreen>
                 if (_selectedTabIndex == 0) const ProductGrid(isHoney: true),
                 if (_selectedTabIndex == 0)
                   const EditOverViewScreen(isHoney: true),
-                if (_selectedTabIndex == 0) const AdminOrdersScreen(),
+                // if (_selectedTabIndex == 0) const AdminOrdersScreen(),
+                if (_selectedTabIndex == 0) const CartScreen(),
                 if (_selectedTabIndex == 1) const ProductGrid(isHoney: false),
                 if (_selectedTabIndex == 1)
                   const EditOverViewScreen(isHoney: false),
-                if (_selectedTabIndex == 1) const AdminOrdersScreen(),
+                // if (_selectedTabIndex == 1) const AdminOrdersScreen(),
+                if (_selectedTabIndex == 1) const CartScreen(),
               ],
             ),
           ),
@@ -92,7 +95,8 @@ class _AdminMainScreenState extends State<AdminMainScreen>
       ),
       appBar: AppBar(
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(50),
+          preferredSize:
+              Size.fromHeight(_selectedBottomNavBarIndex == 2 ? 0 : 50),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: _selectedBottomNavBarIndex != 2
@@ -119,7 +123,7 @@ class _AdminMainScreenState extends State<AdminMainScreen>
                       ),
                     ],
                   )
-                : null,
+                : const SizedBox.shrink(),
           ),
         ),
         toolbarHeight: 100,
