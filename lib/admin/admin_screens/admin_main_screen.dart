@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'package:honey/admin/admin_screens/admin_orders_screen.dart';
+// import 'package:honey/admin/admin_screens/admin_orders_screen.dart';
 import 'package:honey/screens/cart_screen.dart';
 import '../../screens/products_grid.dart';
 import 'edit_overview_screen.dart';
@@ -193,18 +193,6 @@ class _AdminMainScreenState extends State<AdminMainScreen>
           ),
         ],
       ),
-      // body: TabBarView(
-      //   controller: _tabController,
-      //   children: [
-      //     activeIndex == 0
-      //         ? const ProductGrid(
-      //             isHoney: true,
-      //           )
-      //         : const ProductGrid(
-      //             isHoney: false,
-      //           ),
-      //   ],
-      // ),
     );
   }
 }

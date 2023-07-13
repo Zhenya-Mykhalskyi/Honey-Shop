@@ -2,11 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:honey/widgets/custom_button.dart';
-
-import 'package:honey/widgets/liters_counter.dart';
 import 'package:provider/provider.dart';
-import '../providers/product.dart';
+
+import 'package:honey/widgets/custom_button.dart';
+import 'package:honey/widgets/liters_counter.dart';
+import '../providers/product_model.dart';
 import '../providers/products.dart';
 
 class ProductDetailScreen extends StatefulWidget {
@@ -24,7 +24,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
     ProductsProvider productProvider = Provider.of<ProductsProvider>(context);
-
+    // CartProvider cartProvider = Provider.of<CartProvider>(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -146,7 +146,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         children: [
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.4,
-                            child: LitersCounter(product: widget.product),
+                            child: LitersCounter(
+                              product: widget.product,
+                              // liters: cartProvider.items.values[inde],
+                            ),
                           ),
                           Container(
                             height: MediaQuery.of(context).size.height * 0.04,
@@ -219,7 +222,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               ),
                               const SizedBox(height: 15),
                               Text(
-                                widget.product.shortDescription,
+                                widget.product.longDescription,
                                 style: const TextStyle(
                                   height: 1.45,
                                   color: Colors.white,

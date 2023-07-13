@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 
-class CartItem {
+class CartItemModel {
   final String id;
   final String title;
   final double liters;
   final double price;
   final String imageUrl;
 
-  CartItem(
+  CartItemModel(
       {required this.id,
       required this.title,
       required this.liters,
@@ -16,9 +16,9 @@ class CartItem {
 }
 
 class CartProvider with ChangeNotifier {
-  Map<String, CartItem> _items = {};
+  Map<String, CartItemModel> _items = {};
 
-  Map<String, CartItem> get items {
+  Map<String, CartItemModel> get items {
     return {..._items};
   }
 
@@ -39,38 +39,42 @@ class CartProvider with ChangeNotifier {
   //   return count;
   // }
 
-  void addItemToCart(
-      String productId, double price, String title, String imageUrl) {
+  void addItemToCart({
+    required String productId,
+    required double price,
+    required String title,
+    required String imageUrl,
+    required double liters,
+  }) {
     if (_items.containsKey(productId)) {
       _items.update(
           productId,
-          (existingCartItem) => CartItem(
-                id: existingCartItem.id,
-                title: existingCartItem.title,
-                price: existingCartItem.price,
-                liters: existingCartItem.liters + 0.5,
-                imageUrl: existingCartItem.imageUrl,
-              ));
+          (existingCartItem) => CartItemModel(
+              id: existingCartItem.id,
+              title: existingCartItem.title,
+              price: existingCartItem.price,
+              liters: existingCartItem.liters + 0.5,
+              imageUrl: existingCartItem.imageUrl));
     } else {
       _items.putIfAbsent(
           productId,
-          () => CartItem(
-              id: DateTime.now().toString(),
+          () => CartItemModel(
+              id: productId,
               title: title,
               price: price,
-              liters: 0.5,
+              liters: 1,
               imageUrl: imageUrl));
     }
     notifyListeners();
     print(_items.length);
   }
 
-  void removeItem(String productId) {
+  void removeItemFromCart(String productId) {
     _items.remove(productId);
     notifyListeners();
   }
 
-  void removeSingleItem(String productId) {
+  void removeSingleItemFromCart(String productId) {
     if (!_items.containsKey(productId)) {
       // ! якщо не э частиною корзини.
       return;
@@ -78,7 +82,7 @@ class CartProvider with ChangeNotifier {
     if (_items[productId]!.liters > 0.5) {
       _items.update(
         productId,
-        (existingCartItem) => CartItem(
+        (existingCartItem) => CartItemModel(
           id: existingCartItem.id,
           title: existingCartItem.title,
           price: existingCartItem.price,

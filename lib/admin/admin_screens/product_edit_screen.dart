@@ -6,7 +6,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:provider/provider.dart';
 
 import 'package:honey/widgets/custom_button.dart';
-import '../../providers/product.dart';
+import '../../providers/product_model.dart';
 import '../../providers/products.dart';
 
 class ProductEditScreen extends StatefulWidget {

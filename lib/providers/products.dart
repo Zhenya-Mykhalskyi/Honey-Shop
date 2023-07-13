@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-import 'package:honey/providers/product.dart';
+import 'package:honey/providers/product_model.dart';
 
 class ProductsProvider with ChangeNotifier {
   List<Product> _items = [];
@@ -37,6 +37,11 @@ class ProductsProvider with ChangeNotifier {
     for (Product product in _items) {
       _totalCost += getProductCost(product);
     }
+  }
+
+  Product? getProductById(String productId) {
+    return items.firstWhere((product) => product.id == productId,
+        orElse: () => throw Exception('Product not found'));
   }
 
   Future<List<Product>> getProductList() async {
