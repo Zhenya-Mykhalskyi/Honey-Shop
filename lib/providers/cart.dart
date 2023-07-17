@@ -17,19 +17,24 @@ class CartItemModel {
 
 class CartProvider with ChangeNotifier {
   Map<String, CartItemModel> _items = {};
+  double _totalAmount = 0.0;
 
   Map<String, CartItemModel> get items {
     return {..._items};
   }
 
   double get totalAmount {
-    var total = 0.0;
-    _items.forEach((key, cartItem) {
-      total += cartItem.price * cartItem.liters;
-    });
-
-    return total;
+    return _totalAmount; // Return the stored total amount
   }
+
+  // double get totalAmount {
+  //   var total = 0.0;
+  //   _items.forEach((key, cartItem) {
+  //     total += cartItem.price * cartItem.liters;
+  //   });
+
+  //   return total;
+  // }
 
   // int get itemCount {
   //   var count = 0;
@@ -38,6 +43,13 @@ class CartProvider with ChangeNotifier {
   //   });
   //   return count;
   // }
+
+  void _updateTotalAmount() {
+    _totalAmount = 0.0;
+    _items.forEach((key, cartItem) {
+      _totalAmount += cartItem.price * cartItem.liters;
+    });
+  }
 
   void addItemToCart({
     required String productId,
@@ -62,11 +74,14 @@ class CartProvider with ChangeNotifier {
               id: productId,
               title: title,
               price: price,
-              liters: 1,
+              liters: 0.5,
               imageUrl: imageUrl));
     }
+    print(
+        'Ціна продукта: ${_items.values.toList()[0].price} * Кількість літрів: ${_items.values.toList()[0].liters} = ${_items.values.toList()[0].price * _items.values.toList()[0].liters}');
+    _updateTotalAmount();
     notifyListeners();
-    print(_items.length);
+    // print(_items.length);
   }
 
   void removeItemFromCart(String productId) {
@@ -94,6 +109,9 @@ class CartProvider with ChangeNotifier {
       // к-ть = 1
       _items.remove(productId);
     }
+    print(
+        'Ціна продукта: ${_items.values.toList()[0].price} * Кількість літрів: ${_items.values.toList()[0].liters} = ${_items.values.toList()[0].price * _items.values.toList()[0].liters}');
+    _updateTotalAmount();
     notifyListeners();
   }
 

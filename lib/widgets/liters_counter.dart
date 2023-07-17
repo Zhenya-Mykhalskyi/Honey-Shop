@@ -34,6 +34,7 @@ class _LitersCounterState extends State<LitersCounter> {
           GestureDetector(
             onTap: () {
               productsProvider.subtractHalfLiter(widget.product!);
+              cart.removeSingleItemFromCart(widget.product!.id);
             },
             child: Container(
               width: MediaQuery.of(context).size.width * 0.093,
@@ -62,7 +63,7 @@ class _LitersCounterState extends State<LitersCounter> {
                   productId: widget.product!.id,
                   title: widget.product!.title,
                   imageUrl: widget.product!.imageUrl,
-                  price: widget.product!.liters,
+                  price: widget.product!.price,
                   liters: widget.product!.liters);
             },
             child: Container(
