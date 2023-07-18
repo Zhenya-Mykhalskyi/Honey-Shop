@@ -327,15 +327,15 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                   children: [
                                     CustomTextField(
                                       hintText: 'Назва товару',
-                                      maxLength: 40,
+                                      maxLength: 230,
                                       maxLines: 1,
                                       controller: _titleController,
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
                                           return 'Будь ласка, введіть назву товару';
                                         }
-                                        if (value.toString().length >= 40) {
-                                          return 'Повинна бути коротшою 40 символів';
+                                        if (value.toString().length >= 30) {
+                                          return 'Повинна бути коротшою 30 символів';
                                         }
                                         return null;
                                       },
