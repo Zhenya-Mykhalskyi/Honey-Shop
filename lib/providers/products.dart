@@ -28,15 +28,13 @@ class ProductsProvider with ChangeNotifier {
     }
   }
 
-  double getProductCost(Product product) {
-    return product.liters * 2 * product.price;
+  void resetLiters(Product? product) {
+    product?.liters = 0;
+    notifyListeners();
   }
 
-  void updateTotalCost() {
-    _totalCost = 0;
-    for (Product product in _items) {
-      _totalCost += getProductCost(product);
-    }
+  double getProductCost(Product product) {
+    return product.liters * 2 * product.price;
   }
 
   Product? getProductById(String productId) {

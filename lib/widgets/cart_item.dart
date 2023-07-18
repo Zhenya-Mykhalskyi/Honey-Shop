@@ -1,7 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:honey/providers/product_model.dart';
+import 'package:honey/providers/products.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/cart.dart';
 import 'liters_counter.dart';
 
 class CartItem extends StatefulWidget {
@@ -30,6 +33,8 @@ class CartItem extends StatefulWidget {
 class _CartItemState extends State<CartItem> {
   @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context);
+    final productProvider = Provider.of<ProductsProvider>(context);
     return Padding(
       padding: const EdgeInsets.symmetric(
         vertical: 5,
@@ -65,12 +70,27 @@ class _CartItemState extends State<CartItem> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      widget.title,
-                      style: const TextStyle(
-                        fontSize: 19,
-                        fontWeight: FontWeight.w400,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: Text(
+                            widget.title,
+                            style: const TextStyle(
+                              fontSize: 19,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            cartProvider.removeItemFromCart(widget.productId);
+                            productProvider.resetLiters(widget.product);
+                          },
+                          icon: const Icon(Icons.delete),
+                          color: Colors.white.withOpacity(0.6),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 8),
                     Text(

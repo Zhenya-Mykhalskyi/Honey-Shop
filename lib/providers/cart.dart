@@ -71,6 +71,7 @@ class CartProvider with ChangeNotifier {
 
   void removeItemFromCart(String productId) {
     _items.remove(productId);
+    // print('Ціна продукта: ${_items.values.first.liters}');
     notifyListeners();
   }
 
