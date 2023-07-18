@@ -367,7 +367,6 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                               ),
                             ],
                           ),
-                          //Перевірка чи товар являється медом
                           Row(
                             children: [
                               Transform.scale(

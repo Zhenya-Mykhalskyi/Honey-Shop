@@ -83,13 +83,78 @@ class _CartItemState extends State<CartItem> {
                           ),
                         ),
                         IconButton(
-                          onPressed: () {
-                            cartProvider.removeItemFromCart(widget.productId);
-                            productProvider.resetLiters(widget.product);
-                          },
-                          icon: const Icon(Icons.delete),
-                          color: Colors.white.withOpacity(0.6),
-                        ),
+
+                            // onPressed: () {
+                            //   cartProvider.removeItemFromCart(widget.productId);
+                            //   productProvider.resetLiters(widget.product);
+                            // },
+                            icon: const Icon(Icons.delete),
+                            color: Colors.white.withOpacity(0.6),
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Dialog(
+                                    backgroundColor:
+                                        const Color.fromARGB(255, 27, 27, 27),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(30.0),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          const SizedBox(height: 15),
+                                          const Text(
+                                            'Впевнені, що хочете видалити товар з корзини?',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontFamily: 'MA',
+                                            ),
+                                          ),
+                                          const SizedBox(height: 15),
+                                          ButtonBar(
+                                            alignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              TextButton(
+                                                onPressed: () async {
+                                                  Navigator.of(context).pop();
+                                                  cartProvider
+                                                      .removeItemFromCart(
+                                                          widget.productId);
+                                                  productProvider.resetLiters(
+                                                      widget.product);
+                                                },
+                                                child: const Text(
+                                                  'Так',
+                                                  style: TextStyle(
+                                                      color: Colors.red,
+                                                      fontFamily: 'MA'),
+                                                ),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: const Text(
+                                                  'Скасувати',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontFamily: 'MA'),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            })
                       ],
                     ),
                     const SizedBox(height: 8),
