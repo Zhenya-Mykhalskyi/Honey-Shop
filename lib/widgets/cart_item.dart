@@ -32,7 +32,6 @@ class _CartItemState extends State<CartItem> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-        horizontal: 8,
         vertical: 5,
       ),
       child: Card(
