@@ -200,12 +200,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    widget.product.title,
-                                    style: const TextStyle(
-                                      color: Color.fromARGB(255, 255, 179, 0),
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w500,
+                                  Flexible(
+                                    child: Text(
+                                      widget.product.title,
+                                      style: const TextStyle(
+                                        color: Color.fromARGB(255, 255, 179, 0),
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   ),
                                   IconButton(
