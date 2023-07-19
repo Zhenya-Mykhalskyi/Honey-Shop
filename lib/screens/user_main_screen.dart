@@ -2,8 +2,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:honey/admin/admin_screens/about_admin_screen.dart';
+import 'package:honey/providers/cart.dart';
 import 'package:honey/screens/user_profile_screen.dart';
+import 'package:provider/provider.dart';
 import '../../screens/products_grid.dart';
+import '../widgets/badge.dart';
 import 'cart_screen.dart';
 
 class TabButton extends StatelessWidget {
@@ -140,20 +143,40 @@ class _UserMainScreenState extends State<UserMainScreen>
           _selectedBottomNavBarIndex == 1
               ? Container(
                   margin: const EdgeInsets.only(top: 35, right: 10),
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.shopping_bag_outlined,
-                      color: Colors.white,
-                      size: 30,
+                  child: Consumer<CartProvider>(
+                    builder: (_, cart, child) => Badgee(
+                      value: cart.itemCount.toString(),
+                      child: child!,
                     ),
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const CartScreen(),
-                        ),
-                      );
-                    },
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.shopping_bag_outlined,
+                        color: Colors.white,
+                        size: 30,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const CartScreen(),
+                          ),
+                        );
+                      },
+                    ),
                   ),
+                  // child: IconButton(
+                  //   icon: const Icon(
+                  //     Icons.shopping_bag_outlined,
+                  //     color: Colors.white,
+                  //     size: 30,
+                  //   ),
+                  //   onPressed: () {
+                  //     Navigator.of(context).push(
+                  //       MaterialPageRoute(
+                  //         builder: (context) => const CartScreen(),
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
                 )
               : Container(),
         ],

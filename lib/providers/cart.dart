@@ -30,13 +30,13 @@ class CartProvider with ChangeNotifier {
     return total;
   }
 
-  // int get itemCount {
-  //   var count = 0;
-  //   _items.forEach((key, cartItem) {
-  //     count += cartItem.liters as int;
-  //   });
-  //   return count;
-  // }
+  double get itemCount {
+    double count = 0;
+    _items.forEach((key, cartItem) {
+      count += cartItem.liters;
+    });
+    return count;
+  }
 
   void addItemToCart({
     required String productId,

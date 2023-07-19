@@ -9,8 +9,8 @@ import 'liters_counter.dart';
 
 class CartItem extends StatefulWidget {
   final String productId;
-
   final Product? product;
+
   const CartItem({
     super.key,
     required this.productId,
