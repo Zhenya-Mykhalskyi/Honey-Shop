@@ -8,21 +8,12 @@ import '../providers/cart.dart';
 import 'liters_counter.dart';
 
 class CartItem extends StatefulWidget {
-  final String id;
   final String productId;
-  final double price;
-  final double liters;
-  final String title;
-  final String imageUrl;
+
   final Product? product;
   const CartItem({
     super.key,
-    required this.id,
     required this.productId,
-    required this.price,
-    required this.title,
-    required this.liters,
-    required this.imageUrl,
     required this.product,
   });
 
@@ -58,7 +49,7 @@ class _CartItemState extends State<CartItem> {
                     child: AspectRatio(
                       aspectRatio: 1,
                       child: CachedNetworkImage(
-                        imageUrl: widget.imageUrl,
+                        imageUrl: widget.product!.imageUrl,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -75,7 +66,7 @@ class _CartItemState extends State<CartItem> {
                       children: [
                         Flexible(
                           child: Text(
-                            widget.title,
+                            widget.product!.title,
                             style: const TextStyle(
                               fontSize: 19,
                               fontWeight: FontWeight.w400,
@@ -154,7 +145,7 @@ class _CartItemState extends State<CartItem> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '₴${widget.price.toStringAsFixed(2)} / 0.5',
+                      '₴${widget.product?.price.toStringAsFixed(2)} / 0.5',
                       style: const TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 16,

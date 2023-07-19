@@ -41,11 +41,6 @@ class _CartScreenState extends State<CartScreen> {
                         final product =
                             productsProvider.getProductById(cartData.id);
                         return CartItem(
-                          id: cartData.id,
-                          title: cartData.title,
-                          liters: cartData.liters,
-                          price: cartData.price,
-                          imageUrl: cartData.imageUrl,
                           productId: cartProvider.items.keys.toList()[index],
                           product: product,
                         );
