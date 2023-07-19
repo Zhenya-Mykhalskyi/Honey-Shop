@@ -83,11 +83,6 @@ class _CartItemState extends State<CartItem> {
                           ),
                         ),
                         IconButton(
-
-                            // onPressed: () {
-                            //   cartProvider.removeItemFromCart(widget.productId);
-                            //   productProvider.resetLiters(widget.product);
-                            // },
                             icon: const Icon(Icons.delete),
                             color: Colors.white.withOpacity(0.6),
                             onPressed: () {

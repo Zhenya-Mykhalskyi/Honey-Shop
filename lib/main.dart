@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:honey/providers/cart.dart';
+import 'package:honey/screens/user_main_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:honey/screens/auth_screen.dart';
@@ -62,7 +63,7 @@ class _MyAppState extends State<MyApp> {
               return const SplashScreen();
             }
             if (userSnapshot.hasData) {
-              return const AdminMainScreen();
+              return const UserMainScreen();
             }
             return const AuthScreen();
           },
