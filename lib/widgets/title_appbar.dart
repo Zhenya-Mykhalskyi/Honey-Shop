@@ -10,8 +10,22 @@ class TitleAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(title),
+      // automaticallyImplyLeading:
+      //     false, //ігнорування кнопка назад при розміщенні title
+      // title: Text(title),
+
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Image.asset('assets/img/appbar_title_left.png'),
+          Text(title),
+          Image.asset('assets/img/appbar_title_right.png'),
+          const SizedBox(width: 40)
+        ],
+      ),
       elevation: 0,
+      centerTitle: true,
     );
   }
 }
