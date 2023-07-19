@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:honey/screens/auth_screen.dart';
 import 'package:honey/screens/splash_screen.dart';
 import 'package:honey/providers/products.dart';
-import 'package:honey/admin/admin_screens/admin_main_screen.dart';
+// import 'package:honey/admin/admin_screens/admin_main_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

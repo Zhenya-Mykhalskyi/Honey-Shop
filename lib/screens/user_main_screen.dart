@@ -1,9 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:honey/admin/admin_screens/about_admin_screen.dart';
 import 'package:honey/screens/user_profile_screen.dart';
 import '../../screens/products_grid.dart';
+import 'cart_screen.dart';
 
 class TabButton extends StatelessWidget {
   final String text;
@@ -53,10 +54,10 @@ class UserMainScreen extends StatefulWidget {
   const UserMainScreen({super.key});
 
   @override
-  State<UserMainScreen> createState() => _AdminMainScreenState();
+  State<UserMainScreen> createState() => _UserMainScreenState();
 }
 
-class _AdminMainScreenState extends State<UserMainScreen>
+class _UserMainScreenState extends State<UserMainScreen>
     with SingleTickerProviderStateMixin {
   int _selectedTabIndex = 0;
   int _selectedBottomNavBarIndex = 0;
@@ -80,14 +81,8 @@ class _AdminMainScreenState extends State<UserMainScreen>
                 if (_selectedTabIndex == 0) const UserProfileScreen(),
                 if (_selectedTabIndex == 0) const ProductGrid(isHoney: true),
                 if (_selectedTabIndex == 0) const AboutAdminScreen(),
-                // if (_selectedTabIndex == 0)
-                //   const EditOverViewScreen(isHoney: true),
-                // if (_selectedTabIndex == 0) const AdminOrdersScreen(),
                 if (_selectedTabIndex == 1) const UserProfileScreen(),
                 if (_selectedTabIndex == 1) const ProductGrid(isHoney: false),
-                // if (_selectedTabIndex == 1)
-                //   const EditOverViewScreen(isHoney: false),
-                // if (_selectedTabIndex == 1) const AdminOrdersScreen(),
                 if (_selectedTabIndex == 1) const AboutAdminScreen(),
               ],
             ),
@@ -95,6 +90,11 @@ class _AdminMainScreenState extends State<UserMainScreen>
         ],
       ),
       appBar: AppBar(
+        title: _selectedBottomNavBarIndex == 0
+            ? const Text('Особистий кабінет')
+            : _selectedBottomNavBarIndex == 2
+                ? const Text('Інформація про нас')
+                : null,
         bottom: PreferredSize(
           preferredSize:
               Size.fromHeight(_selectedBottomNavBarIndex == 2 ? 0 : 50),
@@ -129,43 +129,33 @@ class _AdminMainScreenState extends State<UserMainScreen>
         ),
         toolbarHeight: 100,
         elevation: 0,
-        leading: Container(
-          margin: const EdgeInsets.only(left: 20, top: 20),
-          child: Image.asset('./assets/img/logo.png'),
-        ),
+        leading: _selectedBottomNavBarIndex == 1
+            ? Container(
+                margin: const EdgeInsets.only(left: 20, top: 20),
+                child: Image.asset('./assets/img/logo.png'),
+              )
+            : Container(),
         leadingWidth: 95,
         actions: [
-          Container(
-            margin: const EdgeInsets.only(top: 35, right: 10),
-            child: DropdownButton(
-              underline: Container(),
-              icon: const Icon(
-                Icons.person,
-                color: Colors.white,
-                size: 40,
-              ),
-              items: const [
-                DropdownMenuItem(
-                  value: 'logout',
-                  child: Row(
-                    children: [
-                      Icon(Icons.exit_to_app),
-                      SizedBox(width: 8),
-                      Text(
-                        'Logout',
-                        style: TextStyle(color: Colors.black),
-                      )
-                    ],
+          _selectedBottomNavBarIndex == 1
+              ? Container(
+                  margin: const EdgeInsets.only(top: 35, right: 10),
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.shopping_bag_outlined,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const CartScreen(),
+                        ),
+                      );
+                    },
                   ),
                 )
-              ],
-              onChanged: (itemIdentifier) {
-                if (itemIdentifier == 'logout') {
-                  FirebaseAuth.instance.signOut();
-                }
-              },
-            ),
-          )
+              : Container(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -197,3 +187,34 @@ class _AdminMainScreenState extends State<UserMainScreen>
     );
   }
 }
+
+
+
+ // child: DropdownButton(
+                  //   underline: Container(),
+                  //   icon: const Icon(
+                  //     Icons.person,
+                  //     color: Colors.white,
+                  //     size: 40,
+                  //   ),
+                  //   items: const [
+                  //     DropdownMenuItem(
+                  //       value: 'logout',
+                  //       child: Row(
+                  //         children: [
+                  //           Icon(Icons.exit_to_app),
+                  //           SizedBox(width: 8),
+                  //           Text(
+                  //             'Logout',
+                  //             style: TextStyle(color: Colors.black),
+                  //           )
+                  //         ],
+                  //       ),
+                  //     )
+                  //   ],
+                  //   onChanged: (itemIdentifier) {
+                  //     if (itemIdentifier == 'logout') {
+                  //       FirebaseAuth.instance.signOut();
+                  //     }
+                  //   },
+                  // ),
