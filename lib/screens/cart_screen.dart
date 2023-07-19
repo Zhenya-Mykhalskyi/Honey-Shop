@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:honey/widgets/title_appbar.dart';
-
 import 'package:provider/provider.dart';
 
+import 'package:honey/providers/cart.dart';
+import 'package:honey/providers/products.dart';
+import 'package:honey/widgets/app_colors.dart';
+import 'package:honey/widgets/cart_item.dart';
 import 'package:honey/widgets/custom_button.dart';
-import '../widgets/cart_item.dart';
-import '../providers/cart.dart';
-import '../providers/products.dart';
-import 'package:honey/screens/orders_screen.dart';
 import 'package:honey/widgets/separator.dart';
+import 'package:honey/widgets/title_appbar.dart';
+import 'orders_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({
@@ -59,7 +59,7 @@ class _CartScreenState extends State<CartScreen> {
                             const Text(
                               'Загальна сума',
                               style: TextStyle(
-                                  color: Color.fromARGB(255, 255, 179, 0),
+                                  color: AppColors.primaryColor,
                                   fontWeight: FontWeight.w600,
                                   fontSize: 22),
                             ),

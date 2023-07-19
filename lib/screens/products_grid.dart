@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/product_model.dart';
-import '../providers/products.dart';
-import '../widgets/product_item.dart';
+import 'package:honey/providers/product_model.dart';
+import 'package:honey/providers/products.dart';
+import 'package:honey/widgets/product_item.dart';
 
 class ProductGrid extends StatelessWidget {
   final bool isHoney;

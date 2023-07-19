@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:honey/screens/auth_screen.dart';
 import 'package:pinput/pinput.dart';
 
-import '../main.dart';
+import 'package:honey/main.dart';
+import 'auth_screen.dart';
 
 class OTPScreen extends StatefulWidget {
   final String phone;

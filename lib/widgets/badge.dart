@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'app_colors.dart';
+
 class Badgee extends StatelessWidget {
   const Badgee({
     super.key,
@@ -25,7 +27,7 @@ class Badgee extends StatelessWidget {
             padding: const EdgeInsets.all(2.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
-              color: const Color.fromARGB(255, 255, 179, 0),
+              color: AppColors.primaryColor,
             ),
             constraints: const BoxConstraints(
               minWidth: 18,

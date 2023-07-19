@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'app_colors.dart';
+
 class CustomButton extends StatelessWidget {
   final void Function() action;
   final String text;
@@ -17,8 +19,7 @@ class CustomButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(10.0),
             ),
           ),
-          backgroundColor:
-              MaterialStateProperty.all(const Color.fromARGB(255, 255, 179, 0)),
+          backgroundColor: MaterialStateProperty.all(AppColors.primaryColor),
         ),
         onPressed: action,
         child: Padding(

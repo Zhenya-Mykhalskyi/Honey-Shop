@@ -5,9 +5,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:provider/provider.dart';
 
+import 'package:honey/providers/product_model.dart';
+import 'package:honey/providers/products.dart';
+import 'package:honey/widgets/app_colors.dart';
 import 'package:honey/widgets/custom_button.dart';
-import '../../providers/product_model.dart';
-import '../../providers/products.dart';
 
 class ProductEditScreen extends StatefulWidget {
   final String productId;
@@ -251,7 +252,8 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
       body: _isLoading
           ? const Center(
               child: CircularProgressIndicator(
-                  color: Color.fromARGB(255, 255, 179, 0)))
+              color: AppColors.primaryColor,
+            ))
           : Padding(
               padding: const EdgeInsets.all(16),
               child: Form(
@@ -271,8 +273,8 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
                                     border: Border.all(
-                                        color: const Color.fromARGB(
-                                            255, 255, 179, 0)),
+                                      color: AppColors.primaryColor,
+                                    ),
                                   ),
                                   child: widget
                                           .isAdd // додаємо чи редагуємо товар?
@@ -373,11 +375,10 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                 scale: 1.5,
                                 child: Checkbox(
                                   fillColor: MaterialStateProperty.all<Color>(
-                                    const Color.fromARGB(255, 255, 179, 0),
+                                    AppColors.primaryColor,
                                   ),
                                   checkColor: Colors.black,
-                                  activeColor:
-                                      const Color.fromARGB(255, 255, 179, 0),
+                                  activeColor: AppColors.primaryColor,
                                   value: _isHoney,
                                   onChanged: (bool? value) {
                                     setState(() {
@@ -487,7 +488,9 @@ class CustomTextField extends StatelessWidget {
           ),
           Container(
             decoration: BoxDecoration(
-              border: Border.all(color: const Color.fromARGB(255, 255, 179, 0)),
+              border: Border.all(
+                color: AppColors.primaryColor,
+              ),
               borderRadius: BorderRadius.circular(8.0),
             ),
             child: TextFormField(

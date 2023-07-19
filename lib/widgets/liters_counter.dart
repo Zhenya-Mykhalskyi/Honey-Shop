@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:honey/providers/product_model.dart';
+
 import 'package:provider/provider.dart';
 
-import '../providers/cart.dart';
-import '../providers/products.dart';
+import 'package:honey/providers/product_model.dart';
+import 'package:honey/providers/cart.dart';
+import 'package:honey/providers/products.dart';
+import 'app_colors.dart';
 
 class LitersCounter extends StatefulWidget {
   final Product? product;
@@ -39,8 +41,7 @@ class _LitersCounterState extends State<LitersCounter> {
             child: Container(
               width: MediaQuery.of(context).size.width * 0.093,
               decoration: BoxDecoration(
-                  color:
-                      const Color.fromARGB(255, 255, 179, 0).withOpacity(0.85),
+                  color: AppColors.primaryColor.withOpacity(0.85),
                   borderRadius: BorderRadius.circular(15)),
               child: const Center(
                 child: Icon(Icons.remove, size: 20.0, color: Colors.black),
@@ -69,8 +70,7 @@ class _LitersCounterState extends State<LitersCounter> {
             child: Container(
               width: MediaQuery.of(context).size.width * 0.093,
               decoration: BoxDecoration(
-                  color:
-                      const Color.fromARGB(255, 255, 179, 0).withOpacity(0.85),
+                  color: AppColors.primaryColor.withOpacity(0.85),
                   borderRadius: BorderRadius.circular(15)),
               child: const Center(
                 child: Icon(Icons.add, size: 20.0, color: Colors.black),

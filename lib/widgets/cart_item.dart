@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:honey/providers/product_model.dart';
-import 'package:honey/providers/products.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/cart.dart';
+import 'package:honey/providers/cart.dart';
+import 'package:honey/providers/product_model.dart';
+import 'package:honey/providers/products.dart';
 import 'liters_counter.dart';
 
 class CartItem extends StatefulWidget {

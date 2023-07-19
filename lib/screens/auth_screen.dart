@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-// import 'package:phone_number/phone_number.dart';
 
+import 'package:honey/widgets/app_colors.dart';
+import 'package:honey/widgets/custom_button.dart';
 import 'otp_screen.dart';
-import '../widgets/custom_button.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -118,7 +118,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           fontFamily: 'MA',
                           fontWeight: FontWeight.w400,
                           fontSize: 20,
-                          color: Color.fromARGB(255, 255, 179, 0),
+                          color: AppColors.primaryColor,
                         ),
                       ),
                     ),
@@ -135,7 +135,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         decoration: _authMode == AuthMode.Signup
                             ? BoxDecoration(
                                 border: Border.all(
-                                  color: const Color.fromARGB(255, 255, 179, 0),
+                                  color: AppColors.primaryColor,
                                   width: 1.0,
                                 ),
                                 borderRadius: BorderRadius.circular(9.0),
@@ -166,7 +166,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       Container(
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: const Color.fromARGB(255, 255, 179, 0),
+                            color: AppColors.primaryColor,
                             width: 1.0,
                           ),
                           borderRadius: BorderRadius.circular(9.0),

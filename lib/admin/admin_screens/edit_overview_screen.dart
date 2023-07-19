@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-import 'package:honey/admin/admin_screens/product_edit_screen.dart';
+import 'product_edit_screen.dart';
 import 'package:honey/widgets/custom_button.dart';
 
 class EditOverViewScreen extends StatelessWidget {

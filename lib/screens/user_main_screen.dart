@@ -1,57 +1,14 @@
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:honey/admin/admin_screens/about_admin_screen.dart';
 import 'package:honey/providers/cart.dart';
-import 'package:honey/screens/user_profile_screen.dart';
-import 'package:provider/provider.dart';
-import '../../screens/products_grid.dart';
-import '../widgets/badge.dart';
+import 'package:honey/widgets/badge.dart';
+import 'package:honey/widgets/tab_button.dart';
+import 'products_grid.dart';
+import 'user_profile_screen.dart';
 import 'cart_screen.dart';
-
-class TabButton extends StatelessWidget {
-  final String text;
-  final bool isActive;
-  final VoidCallback onPressed;
-
-  const TabButton({
-    super.key,
-    required this.text,
-    required this.isActive,
-    required this.onPressed,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: onPressed,
-      child: Container(
-        decoration: BoxDecoration(
-          color: isActive
-              ? const Color.fromARGB(255, 255, 179, 0)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-              color: isActive ? Colors.transparent : Colors.white, width: 1),
-        ),
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
-        alignment: Alignment.center,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Text(
-            text,
-            style: TextStyle(
-              fontFamily: 'MA',
-              fontSize: 17,
-              fontWeight: FontWeight.w600,
-              color: isActive ? Colors.black : Colors.white,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class UserMainScreen extends StatefulWidget {
   const UserMainScreen({super.key});
@@ -163,20 +120,6 @@ class _UserMainScreenState extends State<UserMainScreen>
                       },
                     ),
                   ),
-                  // child: IconButton(
-                  //   icon: const Icon(
-                  //     Icons.shopping_bag_outlined,
-                  //     color: Colors.white,
-                  //     size: 30,
-                  //   ),
-                  //   onPressed: () {
-                  //     Navigator.of(context).push(
-                  //       MaterialPageRoute(
-                  //         builder: (context) => const CartScreen(),
-                  //       ),
-                  //     );
-                  //   },
-                  // ),
                 )
               : Container(),
         ],
@@ -210,8 +153,6 @@ class _UserMainScreenState extends State<UserMainScreen>
     );
   }
 }
-
-
 
  // child: DropdownButton(
                   //   underline: Container(),

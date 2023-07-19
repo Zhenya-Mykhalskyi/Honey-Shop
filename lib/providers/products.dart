@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
-import 'package:honey/providers/product_model.dart';
+import 'product_model.dart';
 
 class ProductsProvider with ChangeNotifier {
   List<Product> _items = [];

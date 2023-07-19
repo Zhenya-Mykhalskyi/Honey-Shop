@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
+import 'package:honey/providers/product_model.dart';
 import 'package:honey/screens/product_detail_screen.dart';
-
-import '../providers/product_model.dart';
 import 'liters_counter.dart';
 
 class ProductItem extends StatelessWidget {

@@ -13,7 +13,6 @@ class TitleAppBar extends StatelessWidget implements PreferredSizeWidget {
       // automaticallyImplyLeading:
       //     false, //ігнорування кнопка назад при розміщенні title
       // title: Text(title),
-
       title: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
