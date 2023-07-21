@@ -32,65 +32,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
   final List<String> _deliveries = ['Укрпошта', 'Нова пошта'];
   String? _selectedDelivery;
 
-  // Future<void> submitProductForm(BuildContext context) async {
-  //   final popContext = Navigator.of(context);
-  //   final scaffoldContext = ScaffoldMessenger.of(context);
-  //   final connectivityResult = await Connectivity().checkConnectivity();
-  //   final isValid = _formkey.currentState?.validate();
-  //   if (!isValid!) {
-  //     return;
-  //   }
-
-  //   if (connectivityResult == ConnectivityResult.none) {
-  //     scaffoldContext.showSnackBar(
-  //       const SnackBar(
-  //         content: Text('Немає з\'єднання з Інтернетом'),
-  //         duration: Duration(seconds: 3),
-  //       ),
-  //     );
-  //     return;
-  //   }
-  //   try {
-  //     setState(() {
-  //       _isLoading = true;
-  //     });
-  //     _editedProduct.title = _titleController.text;
-  //     _editedProduct.price = double.parse(_priceController.text);
-  //     _editedProduct.litersLeft = int.parse(_litersLeftController.text);
-  //     _editedProduct.shortDescription = _shortDescriptionController.text;
-  //     _editedProduct.longDescription = _longDescriptionController.text;
-  //     _editedProduct.isHoney = _isHoney;
-  //     DocumentSnapshot productSnapshot = await FirebaseFirestore.instance
-  //         .collection('products')
-  //         .doc(widget.productId)
-  //         .get();
-  //     if (productSnapshot.exists) {
-  //       await productProvider.updateProduct(widget.productId, _editedProduct,
-  //           pickedImage: _pickedImage, currentImgage: _currentImageUrl);
-  //       popContext.pop();
-  //     } else {
-  //       if (_pickedImage != null) {
-  //         await productProvider.addProduct(_editedProduct, _pickedImage!);
-  //       } else {
-  //         scaffoldContext.showSnackBar(
-  //           const SnackBar(
-  //             content: Text('Додайте картинку'),
-  //             duration: Duration(seconds: 3),
-  //           ),
-  //         );
-  //         return;
-  //       }
-  //       popContext.pop();
-  //     }
-  //   } catch (error) {
-  //     print('Error: $error');
-  //   } finally {
-  //     setState(() {
-  //       _isLoading = false;
-  //     });
-  //   }
-  // }
-
   void _submitForm() {
     if (_formkey.currentState!.validate()) {
       final Map<String, dynamic> orderData = {
@@ -313,31 +254,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                   },
                                   decoration: const InputDecoration(
                                     contentPadding: EdgeInsets.all(8),
-                                    // border: OutlineInputBorder(
-                                    //   borderSide: const BorderSide(
-                                    //       color: AppColors.primaryColor),
-                                    //   borderRadius: BorderRadius.circular(8.0),
-                                    // ),
                                     counterText: '',
                                     border: InputBorder.none,
                                     prefixStyle: TextStyle(
                                         color: Colors.white, fontSize: 16),
-                                    // focusedBorder: OutlineInputBorder(
-                                    //   borderSide: const BorderSide(
-                                    //       color: AppColors.primaryColor),
-                                    //   borderRadius: BorderRadius.circular(8.0),
-                                    // ),
-                                    // enabledBorder: OutlineInputBorder(
-                                    //   borderSide: const BorderSide(
-                                    //       color: AppColors.primaryColor),
-                                    //   borderRadius: BorderRadius.circular(8.0),
-                                    // ),
-                                    // errorBorder: OutlineInputBorder(
-                                    //   borderSide: const BorderSide(
-                                    //       color: AppColors.primaryColor),
-                                    //   borderRadius: BorderRadius.circular(8.0),
-                                    // ),
-                                    // disabledBorder:
                                   ),
                                 ),
                               ),
@@ -409,10 +329,72 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     const SizedBox(height: 10),
                     const MySeparator(),
                     Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        child: CustomButton(
-                            action: _submitForm,
-                            text: 'Підтвердити замовлення')),
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: CustomButton(
+                          action: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Dialog(
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 27, 27, 27),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(30.0),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const SizedBox(height: 15),
+                                        const Text(
+                                          'Підтвердити замовлення?',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontFamily: 'MA',
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                        const SizedBox(height: 15),
+                                        ButtonBar(
+                                          alignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            TextButton(
+                                              onPressed: () async {
+                                                Navigator.of(context).pop();
+                                                _submitForm();
+                                              },
+                                              child: const Text(
+                                                'Так',
+                                                style: TextStyle(
+                                                  fontFamily: 'MA',
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Text(
+                                                'Повернутися',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontFamily: 'MA'),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          text: 'Підтвердити замовлення'),
+                    ),
                   ],
                 ),
               ),
