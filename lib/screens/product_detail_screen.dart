@@ -148,6 +148,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             width: MediaQuery.of(context).size.width * 0.4,
                             child: LitersCounter(
                               product: widget.product,
+                              productId: widget.product.id,
                             ),
                           ),
                           Container(

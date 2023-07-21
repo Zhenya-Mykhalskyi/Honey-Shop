@@ -38,6 +38,14 @@ class CartProvider with ChangeNotifier {
     return count;
   }
 
+  double getLitersForProduct(String productId) {
+    if (_items.containsKey(productId)) {
+      return _items[productId]!.liters;
+    } else {
+      return 0.0;
+    }
+  }
+
   void addItemToCart({
     required String productId,
     required double price,

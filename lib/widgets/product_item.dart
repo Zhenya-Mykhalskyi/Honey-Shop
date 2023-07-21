@@ -70,6 +70,7 @@ class ProductItem extends StatelessWidget {
                 ),
                 LitersCounter(
                   product: product,
+                  productId: product.id,
                 ),
               ],
             ),

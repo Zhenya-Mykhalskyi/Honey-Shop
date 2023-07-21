@@ -9,10 +9,8 @@ import 'app_colors.dart';
 
 class LitersCounter extends StatefulWidget {
   final Product? product;
-  const LitersCounter({
-    super.key,
-    this.product,
-  });
+  final String? productId;
+  const LitersCounter({super.key, this.product, this.productId});
 
   @override
   State<LitersCounter> createState() => _LitersCounterState();
@@ -51,7 +49,8 @@ class _LitersCounterState extends State<LitersCounter> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
-              '${widget.product!.liters.toString()} л',
+              '${cart.getLitersForProduct(widget.productId!).toString()} л',
+              // '${widget.product!.liters.toString()} л',
               style: const TextStyle(
                 fontSize: 15.0,
               ),
