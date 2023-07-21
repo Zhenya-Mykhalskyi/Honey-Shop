@@ -18,7 +18,6 @@ class _LitersCounterState extends State<LitersCounter> {
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<CartProvider>(context);
-    // final productsProvider = Provider.of<ProductsProvider>(context);
 
     return Container(
       height: MediaQuery.of(context).size.height * 0.04,
@@ -31,7 +30,6 @@ class _LitersCounterState extends State<LitersCounter> {
         children: [
           GestureDetector(
             onTap: () {
-              // productsProvider.subtractHalfLiter(widget.product!);
               cart.removeSingleItemFromCart(widget.product!.id);
             },
             child: Container(
@@ -48,7 +46,6 @@ class _LitersCounterState extends State<LitersCounter> {
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
               '${cart.getLitersForProduct(widget.productId!).toString()} л',
-              // '${widget.product!.liters.toString()} л',
               style: const TextStyle(
                 fontSize: 15.0,
               ),
@@ -56,13 +53,9 @@ class _LitersCounterState extends State<LitersCounter> {
           ),
           GestureDetector(
             onTap: () {
-              // productsProvider.addHalfLiter(widget.product!);
               cart.addItemToCart(
-                  productId: widget.product!.id,
-                  title: widget.product!.title,
-                  imageUrl: widget.product!.imageUrl,
-                  price: widget.product!.price,
-                  liters: widget.product!.liters);
+                product: widget.product!,
+              );
             },
             child: Container(
               width: MediaQuery.of(context).size.width * 0.093,

@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:honey/providers/product_model.dart';
 
 class CartItemModel {
   final String id;
@@ -46,16 +47,10 @@ class CartProvider with ChangeNotifier {
     }
   }
 
-  void addItemToCart({
-    required String productId,
-    required double price,
-    required String title,
-    required String imageUrl,
-    required double liters,
-  }) {
-    if (_items.containsKey(productId)) {
+  void addItemToCart({required Product product}) {
+    if (_items.containsKey(product.id)) {
       _items.update(
-          productId,
+          product.id,
           (existingCartItem) => CartItemModel(
               id: existingCartItem.id,
               title: existingCartItem.title,
@@ -64,13 +59,13 @@ class CartProvider with ChangeNotifier {
               imageUrl: existingCartItem.imageUrl));
     } else {
       _items.putIfAbsent(
-          productId,
+          product.id,
           () => CartItemModel(
-              id: productId,
-              title: title,
-              price: price,
+              id: product.id,
+              title: product.title,
+              price: product.price,
               liters: 0.5,
-              imageUrl: imageUrl));
+              imageUrl: product.imageUrl));
     }
     // print(
     //     'Продукт: ${_items.values.toList()[0].title}   Ціна продукта: ${_items.values.toList()[0].price} * Кількість літрів: ${_items.values.toList()[0].liters} = ${_items.values.toList()[0].price * _items.values.toList()[0].liters}');
