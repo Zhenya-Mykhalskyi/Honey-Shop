@@ -33,6 +33,13 @@ class ProductsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void resetLitersForAllProducts() {
+    for (var product in _items) {
+      product.liters = 0;
+    }
+    notifyListeners();
+  }
+
   double getProductCost(Product product) {
     return product.liters * 2 * product.price;
   }

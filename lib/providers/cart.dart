@@ -71,13 +71,11 @@ class CartProvider with ChangeNotifier {
 
   void removeItemFromCart(String productId) {
     _items.remove(productId);
-    // print('Ціна продукта: ${_items.values.first.liters}');
     notifyListeners();
   }
 
   void removeSingleItemFromCart(String productId) {
     if (!_items.containsKey(productId)) {
-      // ! якщо не э частиною корзини.
       return;
     }
     if (_items[productId]!.liters > 0.5) {
