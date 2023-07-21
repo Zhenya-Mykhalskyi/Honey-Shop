@@ -14,31 +14,31 @@ class ProductsProvider with ChangeNotifier {
   double _totalCost = 0;
   double get totalCost => _totalCost;
 
-  void addHalfLiter(Product product) {
-    product.liters = (product.liters) + 0.5;
-    print('${product.title}  ${product.liters}');
-    notifyListeners();
-  }
+  // void addHalfLiter(Product product) {
+  //   product.liters = (product.liters) + 0.5;
+  //   print('${product.title}  ${product.liters}');
+  //   notifyListeners();
+  // }
 
-  void subtractHalfLiter(Product product) {
-    if (product.liters >= 0.5) {
-      product.liters = (product.liters) - 0.5;
-      print('${product.title}  ${product.liters}');
-      notifyListeners();
-    }
-  }
+  // void subtractHalfLiter(Product product) {
+  //   if (product.liters >= 0.5) {
+  //     product.liters = (product.liters) - 0.5;
+  //     print('${product.title}  ${product.liters}');
+  //     notifyListeners();
+  //   }
+  // }
 
-  void resetLiters(Product? product) {
-    product?.liters = 0;
-    notifyListeners();
-  }
+  // void resetLiters(Product? product) {
+  //   product?.liters = 0;
+  //   notifyListeners();
+  // }
 
-  void resetLitersForAllProducts() {
-    for (var product in _items) {
-      product.liters = 0;
-    }
-    notifyListeners();
-  }
+  // void resetLitersForAllProducts() {
+  //   for (var product in _items) {
+  //     product.liters = 0;
+  //   }
+  //   notifyListeners();
+  // }
 
   double getProductCost(Product product) {
     return product.liters * 2 * product.price;
@@ -191,7 +191,6 @@ class ProductsProvider with ChangeNotifier {
           _items[index] = product;
         }
       } else {
-        // Продукт не знайдено у списку, додати його
         _items.add(product);
       }
       await getProductList();

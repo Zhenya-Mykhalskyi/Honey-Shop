@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import 'package:honey/providers/cart.dart';
 import 'package:honey/providers/product_model.dart';
-import 'package:honey/providers/products.dart';
 import 'liters_counter.dart';
 
 class CartItem extends StatefulWidget {
@@ -25,7 +24,7 @@ class _CartItemState extends State<CartItem> {
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
-    final productProvider = Provider.of<ProductsProvider>(context);
+    // final productProvider = Provider.of<ProductsProvider>(context);
     return Padding(
       padding: const EdgeInsets.symmetric(
         vertical: 5,
@@ -137,8 +136,8 @@ class _CartItemState extends State<CartItem> {
                                                     cartProvider
                                                         .removeItemFromCart(
                                                             widget.productId);
-                                                    productProvider.resetLiters(
-                                                        widget.product);
+                                                    // productProvider.resetLiters(
+                                                    //     widget.product);
                                                   },
                                                   child: const Text(
                                                     'Так',

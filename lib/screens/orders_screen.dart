@@ -3,7 +3,6 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:honey/providers/products.dart';
 import 'package:honey/providers/cart.dart';
 import 'package:honey/widgets/app_colors.dart';
 import 'package:honey/widgets/separator.dart';
@@ -82,10 +81,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   void _resetProductsdata() {
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
-    final productsProvider =
-        Provider.of<ProductsProvider>(context, listen: false);
+    // final productsProvider =
+    //     Provider.of<ProductsProvider>(context, listen: false);
     cartProvider.clear();
-    productsProvider.resetLitersForAllProducts();
+    // productsProvider.resetLitersForAllProducts();
   }
 
   @override

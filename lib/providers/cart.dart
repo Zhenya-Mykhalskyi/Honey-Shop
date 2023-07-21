@@ -72,8 +72,8 @@ class CartProvider with ChangeNotifier {
               liters: 0.5,
               imageUrl: imageUrl));
     }
-    print(
-        'Ціна продукта: ${_items.values.toList()[0].price} * Кількість літрів: ${_items.values.toList()[0].liters} = ${_items.values.toList()[0].price * _items.values.toList()[0].liters}');
+    // print(
+    //     'Продукт: ${_items.values.toList()[0].title}   Ціна продукта: ${_items.values.toList()[0].price} * Кількість літрів: ${_items.values.toList()[0].liters} = ${_items.values.toList()[0].price * _items.values.toList()[0].liters}');
     notifyListeners();
   }
 
@@ -100,8 +100,8 @@ class CartProvider with ChangeNotifier {
     } else {
       _items.remove(productId);
     }
-    print(
-        'Ціна продукта: ${_items.values.toList()[0].price} * Кількість літрів: ${_items.values.toList()[0].liters} = ${_items.values.toList()[0].price * _items.values.toList()[0].liters}');
+    // print(
+    //     'Ціна продукта: ${_items.values.toList()[0].price} * Кількість літрів: ${_items.values.toList()[0].liters} = ${_items.values.toList()[0].price * _items.values.toList()[0].liters}');
     notifyListeners();
   }
 
