@@ -11,17 +11,20 @@ class MySeparator extends StatelessWidget {
       builder: (BuildContext context, BoxConstraints constraints) {
         final boxWidth = constraints.constrainWidth();
         const dashWidth = 10.0;
-
         final dashCount = (boxWidth / (2 * dashWidth)).floor();
+
         return Flex(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           direction: Axis.horizontal,
           children: List.generate(dashCount, (_) {
-            return SizedBox(
-              width: dashWidth,
-              height: 1,
-              child: DecoratedBox(
-                decoration: BoxDecoration(color: color.withOpacity(0.2)),
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: SizedBox(
+                width: dashWidth,
+                height: 1,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(color: color.withOpacity(0.2)),
+                ),
               ),
             );
           }),

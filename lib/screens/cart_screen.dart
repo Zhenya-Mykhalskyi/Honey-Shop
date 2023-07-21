@@ -48,7 +48,7 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                   ),
                   const MySeparator(),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 7),
                     child: Column(
@@ -88,7 +88,7 @@ class _CartScreenState extends State<CartScreen> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   const MySeparator(),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 30),
