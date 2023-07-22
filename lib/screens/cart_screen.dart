@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:honey/widgets/total_amount.dart';
 import 'package:provider/provider.dart';
 
 import 'package:honey/providers/cart.dart';
@@ -48,39 +49,24 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                   const MySeparator(),
                   const SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 7),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 7),
                     child: Column(
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
+                            Text(
                               'Загальна сума',
                               style: TextStyle(
                                   color: AppColors.primaryColor,
                                   fontWeight: FontWeight.w600,
                                   fontSize: 22),
                             ),
-                            Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white.withOpacity(0.1)),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 20),
-                                child: Text(
-                                  '₴ ${cartProvider.totalAmountOfCart.toString()}',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 22,
-                                  ),
-                                ),
-                              ),
-                            ),
+                            TotalAmountOfCart(),
                           ],
                         ),
-                        const Row(children: [
+                        Row(children: [
                           Text('Використати бонуси (55)'),
                           // Checkbox(value: null, onChanged: print)
                         ])

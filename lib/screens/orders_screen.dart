@@ -8,6 +8,7 @@ import 'package:honey/widgets/app_colors.dart';
 import 'package:honey/widgets/separator.dart';
 import 'package:honey/widgets/title_appbar.dart';
 import 'package:honey/widgets/custom_button.dart';
+import 'package:honey/widgets/total_amount.dart';
 
 class OrdersScreen extends StatefulWidget {
   final Map<String, CartItemModel> cartData;
@@ -98,7 +99,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final cartProvider = Provider.of<CartProvider>(context, listen: false);
     return Scaffold(
       appBar: const TitleAppBar(title: 'Оформлення замовлення'),
       body: _isLoading
@@ -306,32 +306,17 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     const SizedBox(height: 20),
                     const MySeparator(),
                     const SizedBox(height: 10),
-                    Row(
+                    const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
+                        Text(
                           'Загальна сума',
                           style: TextStyle(
                               color: AppColors.primaryColor,
                               fontWeight: FontWeight.w600,
                               fontSize: 22),
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white.withOpacity(0.1)),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 20),
-                            child: Text(
-                              '₴ ${cartProvider.totalAmountOfCart.toString()}',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 22,
-                              ),
-                            ),
-                          ),
-                        ),
+                        TotalAmountOfCart()
                       ],
                     ),
                     const SizedBox(height: 10),

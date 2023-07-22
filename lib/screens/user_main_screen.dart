@@ -1,6 +1,5 @@
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:honey/widgets/custom_button.dart';
+import 'package:honey/widgets/total_amount.dart';
 import 'package:provider/provider.dart';
 
 import 'package:honey/admin/admin_screens/about_admin_screen.dart';
@@ -49,39 +48,6 @@ class _UserMainScreenState extends State<UserMainScreen>
               ],
             ),
           ),
-          _selectedBottomNavBarIndex == 1
-              ? Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white.withOpacity(0.1)),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 5, horizontal: 20),
-                          child: Text(
-                            '${cartProvider.totalAmountOfCart.toString()} грн',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 22,
-                            ),
-                          ),
-                        ),
-                      ),
-                      CustomButton(
-                        action: () {},
-                        text: 'Оформити',
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        margin: const EdgeInsets.all(0),
-                      ),
-                    ],
-                  ),
-                )
-              : Container(),
         ],
       ),
       appBar: AppBar(
@@ -135,25 +101,37 @@ class _UserMainScreenState extends State<UserMainScreen>
           _selectedBottomNavBarIndex == 1
               ? Container(
                   margin: const EdgeInsets.only(top: 35, right: 10),
-                  child: Consumer<CartProvider>(
-                    builder: (_, cart, child) => Badgee(
-                      value: cart.itemCount.toString(),
-                      child: child!,
-                    ),
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.shopping_bag_outlined,
-                        color: Colors.white,
-                        size: 30,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        '${cartProvider.totalAmountOfCart.toStringAsFixed(0)} грн',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 22,
+                        ),
                       ),
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const CartScreen(),
+                      Consumer<CartProvider>(
+                        builder: (_, cart, child) => Badgee(
+                          value: cart.itemCount.toString(),
+                          child: child!,
+                        ),
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.shopping_bag_outlined,
+                            color: Colors.white,
+                            size: 30,
                           ),
-                        );
-                      },
-                    ),
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const CartScreen(),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                 )
               : Container(),

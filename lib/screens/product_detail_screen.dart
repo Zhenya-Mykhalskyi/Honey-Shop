@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,9 +29,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       ),
       body: Stack(
         children: [
-          _isExpanded
-              ? BackdropFilter(filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50))
-              : Container(),
           Opacity(
             opacity: _isExpanded ? 0.2 : 1,
             child: Padding(
@@ -166,7 +161,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 style: const TextStyle(fontSize: 20),
                               ),
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ],

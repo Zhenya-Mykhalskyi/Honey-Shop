@@ -30,7 +30,7 @@ class CustomButton extends StatelessWidget {
         ),
         onPressed: action,
         child: Padding(
-          padding: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(15),
           child: Text(
             text,
             style: const TextStyle(
