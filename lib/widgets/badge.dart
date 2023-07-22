@@ -22,7 +22,7 @@ class Badgee extends StatelessWidget {
         child,
         Positioned(
           right: 1,
-          top: 8,
+          top: 1,
           child: Container(
             padding: const EdgeInsets.all(2.0),
             decoration: BoxDecoration(
