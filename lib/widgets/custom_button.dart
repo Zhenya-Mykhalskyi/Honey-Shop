@@ -5,13 +5,20 @@ import 'app_colors.dart';
 class CustomButton extends StatelessWidget {
   final void Function() action;
   final String text;
-  const CustomButton({super.key, required this.action, required this.text});
+  final double? width;
+  final EdgeInsetsGeometry? margin;
+  const CustomButton(
+      {super.key,
+      required this.action,
+      required this.text,
+      this.width,
+      this.margin});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 25, top: 30),
-      width: MediaQuery.of(context).size.width * 0.9,
+      margin: margin ?? const EdgeInsets.only(bottom: 25, top: 30),
+      width: width ?? MediaQuery.of(context).size.width * 0.9,
       child: ElevatedButton(
         style: ButtonStyle(
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(

@@ -1,5 +1,6 @@
 // import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:honey/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
 
 import 'package:honey/admin/admin_screens/about_admin_screen.dart';
@@ -31,6 +32,7 @@ class _UserMainScreenState extends State<UserMainScreen>
 
   @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context);
     return Scaffold(
       body: Column(
         children: [
@@ -47,6 +49,39 @@ class _UserMainScreenState extends State<UserMainScreen>
               ],
             ),
           ),
+          _selectedBottomNavBarIndex == 1
+              ? Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white.withOpacity(0.1)),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 20),
+                          child: Text(
+                            '${cartProvider.totalAmountOfCart.toString()} грн',
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 22,
+                            ),
+                          ),
+                        ),
+                      ),
+                      CustomButton(
+                        action: () {},
+                        text: 'Оформити',
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        margin: const EdgeInsets.all(0),
+                      ),
+                    ],
+                  ),
+                )
+              : Container(),
         ],
       ),
       appBar: AppBar(

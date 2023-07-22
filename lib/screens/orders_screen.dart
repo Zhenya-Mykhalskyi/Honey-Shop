@@ -52,12 +52,12 @@ class _OrdersScreenState extends State<OrdersScreen> {
           });
         }),
       };
-      saveOrderToFirestore(orderData);
+      _saveOrderToFirestore(orderData);
       _resetProductsdata();
     }
   }
 
-  Future<void> saveOrderToFirestore(Map<String, dynamic> orderData) async {
+  Future<void> _saveOrderToFirestore(Map<String, dynamic> orderData) async {
     final popContext = Navigator.of(context);
     final scaffoldContext = ScaffoldMessenger.of(context);
     final connectivityResult = await Connectivity().checkConnectivity();
