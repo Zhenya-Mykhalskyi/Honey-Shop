@@ -22,13 +22,22 @@ class CartProvider with ChangeNotifier {
     return {..._items};
   }
 
-  double get totalAmount {
+  double get totalAmountOfCart {
     var total = 0.0;
     _items.forEach((key, cartItem) {
-      total += cartItem.price * cartItem.liters;
+      total += cartItem.price * 2 * cartItem.liters;
     });
 
     return total;
+  }
+
+  double getTotalAmountForProductById(String productId) {
+    if (_items.containsKey(productId)) {
+      final cartItem = _items[productId]!;
+      return cartItem.price * 2 * cartItem.liters;
+    } else {
+      return 0.0;
+    }
   }
 
   double get itemCount {
@@ -39,7 +48,7 @@ class CartProvider with ChangeNotifier {
     return count;
   }
 
-  double getLitersForProduct(String productId) {
+  double getProductLitersById(String productId) {
     if (_items.containsKey(productId)) {
       return _items[productId]!.liters;
     } else {
@@ -47,7 +56,7 @@ class CartProvider with ChangeNotifier {
     }
   }
 
-  void addItemToCart({required Product product}) {
+  void addHalfLiterToCart({required Product product}) {
     if (_items.containsKey(product.id)) {
       _items.update(
           product.id,
@@ -67,17 +76,10 @@ class CartProvider with ChangeNotifier {
               liters: 0.5,
               imageUrl: product.imageUrl));
     }
-    // print(
-    //     'Продукт: ${_items.values.toList()[0].title}   Ціна продукта: ${_items.values.toList()[0].price} * Кількість літрів: ${_items.values.toList()[0].liters} = ${_items.values.toList()[0].price * _items.values.toList()[0].liters}');
     notifyListeners();
   }
 
-  void removeItemFromCart(String productId) {
-    _items.remove(productId);
-    notifyListeners();
-  }
-
-  void removeSingleItemFromCart(String productId) {
+  void removeHalfLiterFromCart(String productId) {
     if (!_items.containsKey(productId)) {
       return;
     }
@@ -95,8 +97,11 @@ class CartProvider with ChangeNotifier {
     } else {
       _items.remove(productId);
     }
-    // print(
-    //     'Ціна продукта: ${_items.values.toList()[0].price} * Кількість літрів: ${_items.values.toList()[0].liters} = ${_items.values.toList()[0].price * _items.values.toList()[0].liters}');
+    notifyListeners();
+  }
+
+  void removeItemFromCart(String productId) {
+    _items.remove(productId);
     notifyListeners();
   }
 

@@ -7,8 +7,8 @@ import 'app_colors.dart';
 
 class LitersCounter extends StatefulWidget {
   final Product? product;
-  final String? productId;
-  const LitersCounter({super.key, this.product, this.productId});
+
+  const LitersCounter({super.key, this.product});
 
   @override
   State<LitersCounter> createState() => _LitersCounterState();
@@ -30,7 +30,7 @@ class _LitersCounterState extends State<LitersCounter> {
         children: [
           GestureDetector(
             onTap: () {
-              cart.removeSingleItemFromCart(widget.product!.id);
+              cart.removeHalfLiterFromCart(widget.product!.id);
             },
             child: Container(
               width: MediaQuery.of(context).size.width * 0.093,
@@ -45,7 +45,7 @@ class _LitersCounterState extends State<LitersCounter> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
-              '${cart.getLitersForProduct(widget.productId!).toString()} л',
+              '${cart.getProductLitersById(widget.product!.id).toString()} л',
               style: const TextStyle(
                 fontSize: 15.0,
               ),
@@ -53,7 +53,7 @@ class _LitersCounterState extends State<LitersCounter> {
           ),
           GestureDetector(
             onTap: () {
-              cart.addItemToCart(
+              cart.addHalfLiterToCart(
                 product: widget.product!,
               );
             },

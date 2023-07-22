@@ -315,7 +315,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             padding: const EdgeInsets.symmetric(
                                 vertical: 5, horizontal: 20),
                             child: Text(
-                              '₴ ${cartProvider.totalAmount.toString()}',
+                              '₴ ${cartProvider.totalAmountOfCart.toString()}',
                               style: const TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 22,

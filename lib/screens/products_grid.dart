@@ -5,9 +5,9 @@ import 'package:honey/providers/product_model.dart';
 import 'package:honey/providers/products.dart';
 import 'package:honey/widgets/product_item.dart';
 
-class ProductGrid extends StatelessWidget {
+class ProductsGrid extends StatelessWidget {
   final bool isHoney;
-  const ProductGrid({Key? key, required this.isHoney}) : super(key: key);
+  const ProductsGrid({Key? key, required this.isHoney}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

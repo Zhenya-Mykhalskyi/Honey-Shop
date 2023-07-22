@@ -39,10 +39,10 @@ class _UserMainScreenState extends State<UserMainScreen>
               index: _selectedBottomNavBarIndex,
               children: [
                 if (_selectedTabIndex == 0) const UserProfileScreen(),
-                if (_selectedTabIndex == 0) const ProductGrid(isHoney: true),
+                if (_selectedTabIndex == 0) const ProductsGrid(isHoney: true),
                 if (_selectedTabIndex == 0) const AboutAdminScreen(),
                 if (_selectedTabIndex == 1) const UserProfileScreen(),
-                if (_selectedTabIndex == 1) const ProductGrid(isHoney: false),
+                if (_selectedTabIndex == 1) const ProductsGrid(isHoney: false),
                 if (_selectedTabIndex == 1) const AboutAdminScreen(),
               ],
             ),
@@ -153,32 +153,3 @@ class _UserMainScreenState extends State<UserMainScreen>
     );
   }
 }
-
- // child: DropdownButton(
-                  //   underline: Container(),
-                  //   icon: const Icon(
-                  //     Icons.person,
-                  //     color: Colors.white,
-                  //     size: 40,
-                  //   ),
-                  //   items: const [
-                  //     DropdownMenuItem(
-                  //       value: 'logout',
-                  //       child: Row(
-                  //         children: [
-                  //           Icon(Icons.exit_to_app),
-                  //           SizedBox(width: 8),
-                  //           Text(
-                  //             'Logout',
-                  //             style: TextStyle(color: Colors.black),
-                  //           )
-                  //         ],
-                  //       ),
-                  //     )
-                  //   ],
-                  //   onChanged: (itemIdentifier) {
-                  //     if (itemIdentifier == 'logout') {
-                  //       FirebaseAuth.instance.signOut();
-                  //     }
-                  //   },
-                  // ),

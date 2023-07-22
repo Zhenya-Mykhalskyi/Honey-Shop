@@ -34,12 +34,12 @@ class _AdminMainScreenState extends State<AdminMainScreen>
             child: IndexedStack(
               index: _selectedBottomNavBarIndex,
               children: [
-                if (_selectedTabIndex == 0) const ProductGrid(isHoney: true),
+                if (_selectedTabIndex == 0) const ProductsGrid(isHoney: true),
                 if (_selectedTabIndex == 0)
                   const EditOverViewScreen(isHoney: true),
                 // if (_selectedTabIndex == 0) const AdminOrdersScreen(),
                 if (_selectedTabIndex == 0) const CartScreen(),
-                if (_selectedTabIndex == 1) const ProductGrid(isHoney: false),
+                if (_selectedTabIndex == 1) const ProductsGrid(isHoney: false),
                 if (_selectedTabIndex == 1)
                   const EditOverViewScreen(isHoney: false),
                 // if (_selectedTabIndex == 1) const AdminOrdersScreen(),

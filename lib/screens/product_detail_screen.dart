@@ -2,11 +2,11 @@ import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'package:honey/providers/product_model.dart';
-import 'package:honey/providers/products.dart';
 import 'package:honey/widgets/app_colors.dart';
-import 'package:provider/provider.dart';
+import 'package:honey/providers/cart.dart';
 import 'package:honey/widgets/custom_button.dart';
 import 'package:honey/widgets/liters_counter.dart';
 
@@ -24,7 +24,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ProductsProvider productProvider = Provider.of<ProductsProvider>(context);
+    final cartProvider = Provider.of<CartProvider>(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -148,7 +148,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             width: MediaQuery.of(context).size.width * 0.4,
                             child: LitersCounter(
                               product: widget.product,
-                              productId: widget.product.id,
                             ),
                           ),
                           Container(
@@ -160,8 +159,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             ),
                             child: Center(
                               child: Text(
-                                productProvider
-                                    .getProductCost(widget.product)
+                                cartProvider
+                                    .getTotalAmountForProductById(
+                                        widget.product.id)
                                     .toString(),
                                 style: const TextStyle(fontSize: 20),
                               ),

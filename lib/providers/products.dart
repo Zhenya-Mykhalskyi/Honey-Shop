@@ -11,39 +11,6 @@ class ProductsProvider with ChangeNotifier {
     return [..._items];
   }
 
-  double _totalCost = 0;
-  double get totalCost => _totalCost;
-
-  // void addHalfLiter(Product product) {
-  //   product.liters = (product.liters) + 0.5;
-  //   print('${product.title}  ${product.liters}');
-  //   notifyListeners();
-  // }
-
-  // void subtractHalfLiter(Product product) {
-  //   if (product.liters >= 0.5) {
-  //     product.liters = (product.liters) - 0.5;
-  //     print('${product.title}  ${product.liters}');
-  //     notifyListeners();
-  //   }
-  // }
-
-  // void resetLiters(Product? product) {
-  //   product?.liters = 0;
-  //   notifyListeners();
-  // }
-
-  // void resetLitersForAllProducts() {
-  //   for (var product in _items) {
-  //     product.liters = 0;
-  //   }
-  //   notifyListeners();
-  // }
-
-  double getProductCost(Product product) {
-    return product.liters * 2 * product.price;
-  }
-
   Product? getProductById(String productId) {
     return items.firstWhere((product) => product.id == productId,
         orElse: () => throw Exception('Product not found'));

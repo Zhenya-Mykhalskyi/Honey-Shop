@@ -41,7 +41,7 @@ class _CartScreenState extends State<CartScreen> {
                         final product =
                             productsProvider.getProductById(cartData.id);
                         return CartItem(
-                          productId: cartProvider.items.keys.toList()[index],
+                          // productId: cartProvider.items.keys.toList()[index],
                           product: product,
                         );
                       },
@@ -71,7 +71,7 @@ class _CartScreenState extends State<CartScreen> {
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 5, horizontal: 20),
                                 child: Text(
-                                  '₴ ${cartProvider.totalAmount.toString()}',
+                                  '₴ ${cartProvider.totalAmountOfCart.toString()}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 22,

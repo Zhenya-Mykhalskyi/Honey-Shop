@@ -7,12 +7,10 @@ import 'package:honey/providers/product_model.dart';
 import 'liters_counter.dart';
 
 class CartItem extends StatefulWidget {
-  final String productId;
   final Product? product;
 
   const CartItem({
     super.key,
-    required this.productId,
     required this.product,
   });
 
@@ -24,7 +22,6 @@ class _CartItemState extends State<CartItem> {
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
-    // final productProvider = Provider.of<ProductsProvider>(context);
     return Padding(
       padding: const EdgeInsets.symmetric(
         vertical: 5,
@@ -135,7 +132,7 @@ class _CartItemState extends State<CartItem> {
                                                     Navigator.of(context).pop();
                                                     cartProvider
                                                         .removeItemFromCart(
-                                                            widget.productId);
+                                                            widget.product!.id);
                                                     // productProvider.resetLiters(
                                                     //     widget.product);
                                                   },
@@ -175,7 +172,6 @@ class _CartItemState extends State<CartItem> {
                       children: [
                         LitersCounter(
                           product: widget.product,
-                          productId: widget.product!.id,
                         ),
                       ],
                     ),
