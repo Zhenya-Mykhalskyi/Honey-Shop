@@ -41,7 +41,6 @@ class _CartScreenState extends State<CartScreen> {
                         final product =
                             productsProvider.getProductById(cartData.id);
                         return CartItem(
-                          // productId: cartProvider.items.keys.toList()[index],
                           product: product,
                         );
                       },
@@ -94,9 +93,11 @@ class _CartScreenState extends State<CartScreen> {
                     padding: const EdgeInsets.only(bottom: 30),
                     child: CustomButton(
                       action: () {
+                        final cartData = cartProvider.items;
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => const OrdersScreen(),
+                            builder: (context) =>
+                                OrdersScreen(cartData: cartData),
                           ),
                         );
                       },

@@ -10,7 +10,8 @@ import 'package:honey/widgets/title_appbar.dart';
 import 'package:honey/widgets/custom_button.dart';
 
 class OrdersScreen extends StatefulWidget {
-  const OrdersScreen({super.key});
+  final Map<String, CartItemModel> cartData;
+  const OrdersScreen({super.key, required this.cartData});
 
   @override
   State<OrdersScreen> createState() => _OrdersScreenState();
@@ -41,6 +42,15 @@ class _OrdersScreenState extends State<OrdersScreen> {
         'patronymic': _patronymicController.text,
         'postOfficeNumber': _postOfficeNumberController.text,
         'comment': _commentController.text,
+        'products': widget.cartData.map((productId, cartItem) {
+          return MapEntry(productId, {
+            'id': cartItem.id,
+            'title': cartItem.title,
+            'liters': cartItem.liters,
+            'price': cartItem.price,
+            'imageUrl': cartItem.imageUrl,
+          });
+        }),
       };
       saveOrderToFirestore(orderData);
       _resetProductsdata();
@@ -65,9 +75,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
       setState(() {
         _isLoading = true;
       });
+
       final CollectionReference ordersCollection =
           FirebaseFirestore.instance.collection('orders');
       await ordersCollection.add(orderData);
+
       popContext.pop();
       popContext.pop();
     } catch (e) {
@@ -81,10 +93,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   void _resetProductsdata() {
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
-    // final productsProvider =
-    //     Provider.of<ProductsProvider>(context, listen: false);
     cartProvider.clear();
-    // productsProvider.resetLitersForAllProducts();
   }
 
   @override
