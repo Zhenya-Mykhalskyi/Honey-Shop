@@ -39,14 +39,48 @@ class _OTPScreenState extends State<OTPScreen> {
     _verifyPhone();
   }
 
-  Future<void> handleVerificationSuccess(String name, String phone) async {
+  void _verifyPhone() async {
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: '+380${widget.phone}',
+      verificationCompleted: _onVerificationCompleted,
+      verificationFailed: _onVerificationFailed,
+      codeSent: _onCodeSent,
+      codeAutoRetrievalTimeout: _onCodeAutoRetrievalTimeout,
+      timeout: const Duration(seconds: 120),
+    );
+  }
+
+  void _onVerificationCompleted(PhoneAuthCredential credential) async {
+    UserCredential authResult =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+    String uid = authResult.user!.uid; // Отримуємо UID з FirebaseAuth
+    _handleVerificationSuccess(widget.name, widget.phone, uid);
+  }
+
+  void _onVerificationFailed(FirebaseAuthException e) {
+    print(e.message);
+  }
+
+  void _onCodeSent(String? verificationID, int? resendToken) {
+    setState(() {
+      _verificationCode = verificationID;
+    });
+  }
+
+  void _onCodeAutoRetrievalTimeout(String verificationID) {
+    setState(() {
+      _verificationCode = verificationID;
+    });
+  }
+
+  void _handleVerificationSuccess(String name, String phone, String uid) async {
     try {
       final CollectionReference usersCollection =
           FirebaseFirestore.instance.collection('users');
       if (widget._authMode == AuthMode.Signup) {
         print('authmode == signup');
         try {
-          await usersCollection.add({
+          await usersCollection.doc(uid).set({
             'phoneNumber': '+380$phone',
             'name': name,
           });
@@ -64,30 +98,6 @@ class _OTPScreenState extends State<OTPScreen> {
     } catch (error) {
       print('Error saving user data: $error');
     }
-  }
-
-  _verifyPhone() async {
-    await FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: '+380${widget.phone}',
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        await FirebaseAuth.instance.signInWithCredential(credential);
-        handleVerificationSuccess(widget.name, widget.phone);
-      },
-      verificationFailed: (FirebaseAuthException e) {
-        print(e.message);
-      },
-      codeSent: (String? verficationID, int? resendToken) {
-        setState(() {
-          _verificationCode = verficationID;
-        });
-      },
-      codeAutoRetrievalTimeout: (String verificationID) {
-        setState(() {
-          _verificationCode = verificationID;
-        });
-      },
-      timeout: const Duration(seconds: 120),
-    );
   }
 
   @override
@@ -116,21 +126,25 @@ class _OTPScreenState extends State<OTPScreen> {
               defaultPinTheme: defaultPinTheme,
               controller: _pinPutController,
               pinAnimationType: PinAnimationType.fade,
-              onCompleted: (pin) async {
-                try {
-                  await FirebaseAuth.instance.signInWithCredential(
-                      PhoneAuthProvider.credential(
-                          verificationId: _verificationCode!, smsCode: pin));
-                  handleVerificationSuccess(widget.name, widget.phone);
-                } catch (e) {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text(e.toString())));
-                }
-              },
+              onCompleted: _onPinCompleted,
             ),
           )
         ],
       ),
     );
+  }
+
+  void _onPinCompleted(String pin) async {
+    try {
+      final credential = PhoneAuthProvider.credential(
+          verificationId: _verificationCode!, smsCode: pin);
+      UserCredential authResult =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      String uid = authResult.user!.uid;
+      _handleVerificationSuccess(widget.name, widget.phone, uid);
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
+    }
   }
 }
