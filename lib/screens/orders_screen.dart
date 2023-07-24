@@ -66,6 +66,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
         }),
       };
       _saveOrderToFirestore(orderData);
+      _saveUserData();
       _resetProductsdata();
     }
   }
@@ -101,6 +102,31 @@ class _OrdersScreenState extends State<OrdersScreen> {
       setState(() {
         _isLoading = false;
       });
+    }
+  }
+
+  Future<void> _saveUserData() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        return;
+      }
+
+      final userData = {
+        'fullName': _fullNameController.text,
+        'deliveryPhoneNumber': '+380${_phoneNumberController.text}',
+        'address': _addressController.text,
+        'selectedDelivery': _selectedDelivery,
+        'postOfficeNumber': _postOfficeNumberController.text,
+      };
+
+      final CollectionReference usersCollection =
+          FirebaseFirestore.instance.collection('users');
+      await usersCollection
+          .doc(user.uid)
+          .set(userData, SetOptions(merge: true));
+    } catch (e) {
+      print('Error saving user data: $e');
     }
   }
 
