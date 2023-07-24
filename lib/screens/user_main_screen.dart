@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:honey/widgets/total_amount.dart';
+import 'package:honey/widgets/title_appbar.dart';
 import 'package:provider/provider.dart';
 
 import 'package:honey/admin/admin_screens/about_admin_screen.dart';
@@ -50,56 +50,48 @@ class _UserMainScreenState extends State<UserMainScreen>
           ),
         ],
       ),
-      appBar: AppBar(
-        title: _selectedBottomNavBarIndex == 0
-            ? const Text('Особистий кабінет')
-            : _selectedBottomNavBarIndex == 2
-                ? const Text('Інформація про нас')
-                : null,
-        bottom: PreferredSize(
-          preferredSize:
-              Size.fromHeight(_selectedBottomNavBarIndex == 2 ? 0 : 50),
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: _selectedBottomNavBarIndex == 1
-                ? Row(
-                    children: [
-                      TabButton(
-                        text: 'мед',
-                        isActive: _selectedTabIndex == 0,
-                        onPressed: () {
-                          setState(() {
-                            _selectedTabIndex = 0;
-                          });
-                        },
-                      ),
-                      const SizedBox(width: 10),
-                      TabButton(
-                        text: 'інше',
-                        isActive: _selectedTabIndex == 1,
-                        onPressed: () {
-                          setState(() {
-                            _selectedTabIndex = 1;
-                          });
-                        },
-                      ),
-                    ],
-                  )
-                : const SizedBox.shrink(),
-          ),
-        ),
-        toolbarHeight: 100,
-        elevation: 0,
-        leading: _selectedBottomNavBarIndex == 1
-            ? Container(
+      appBar: _selectedBottomNavBarIndex == 1
+          ? AppBar(
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(50),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: _selectedBottomNavBarIndex == 1
+                      ? Row(
+                          children: [
+                            TabButton(
+                              text: 'мед',
+                              isActive: _selectedTabIndex == 0,
+                              onPressed: () {
+                                setState(() {
+                                  _selectedTabIndex = 0;
+                                });
+                              },
+                            ),
+                            const SizedBox(width: 10),
+                            TabButton(
+                              text: 'інше',
+                              isActive: _selectedTabIndex == 1,
+                              onPressed: () {
+                                setState(() {
+                                  _selectedTabIndex = 1;
+                                });
+                              },
+                            ),
+                          ],
+                        )
+                      : const SizedBox.shrink(),
+                ),
+              ),
+              toolbarHeight: 100,
+              elevation: 0,
+              leading: Container(
                 margin: const EdgeInsets.only(left: 20, top: 20),
                 child: Image.asset('./assets/img/logo.png'),
-              )
-            : Container(),
-        leadingWidth: 95,
-        actions: [
-          _selectedBottomNavBarIndex == 1
-              ? Container(
+              ),
+              leadingWidth: 95,
+              actions: [
+                Container(
                   margin: const EdgeInsets.only(top: 35, right: 10),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -134,9 +126,12 @@ class _UserMainScreenState extends State<UserMainScreen>
                     ],
                   ),
                 )
-              : Container(),
-        ],
-      ),
+              ],
+            )
+          : TitleAppBar(
+              title: _selectedBottomNavBarIndex == 0
+                  ? 'Особистий кабінет'
+                  : 'Інформація про магазин'),
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false,

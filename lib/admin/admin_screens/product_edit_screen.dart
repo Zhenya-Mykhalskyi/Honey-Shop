@@ -267,63 +267,64 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                           Row(
                             children: [
                               Container(
-                                  width: 150,
-                                  height: 150,
-                                  margin:
-                                      const EdgeInsets.only(top: 8, right: 10),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                      color: AppColors.primaryColor,
-                                    ),
+                                width: 150,
+                                height: 150,
+                                margin:
+                                    const EdgeInsets.only(top: 8, right: 10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: AppColors.primaryColor,
                                   ),
-                                  child: widget
-                                          .isAdd // додаємо чи редагуємо товар?
-                                      ? _pickedImage == null
-                                          ? InkWell(
-                                              onTap: pickAndUploadImage,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(25.0),
-                                                child: Image.asset(
-                                                    'assets/img/add_photo.png'),
+                                ),
+                                child: widget
+                                        .isAdd // додаємо чи редагуємо товар?
+                                    ? _pickedImage == null
+                                        ? InkWell(
+                                            onTap: pickAndUploadImage,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(25.0),
+                                              child: Image.asset(
+                                                  'assets/img/add_photo.png'),
+                                            ),
+                                          )
+                                        : InkWell(
+                                            onTap: pickAndUploadImage,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              child: Image.file(
+                                                _pickedImage!,
+                                                fit: BoxFit.cover,
                                               ),
-                                            )
-                                          : InkWell(
-                                              onTap: pickAndUploadImage,
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                child: Image.file(
-                                                  _pickedImage!,
-                                                  fit: BoxFit.cover,
-                                                ),
+                                            ),
+                                          )
+                                    // редагуємо
+                                    : _pickedImage != null
+                                        ? InkWell(
+                                            onTap: pickAndUploadImage,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              child: Image.file(
+                                                _pickedImage!,
+                                                fit: BoxFit.cover,
                                               ),
-                                            )
-                                      // редагуємо
-                                      : _pickedImage != null
-                                          ? InkWell(
-                                              onTap: pickAndUploadImage,
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                child: Image.file(
-                                                  _pickedImage!,
-                                                  fit: BoxFit.cover,
-                                                ),
+                                            ),
+                                          )
+                                        : InkWell(
+                                            onTap: pickAndUploadImage,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              child: Image.network(
+                                                _currentImageUrl!,
+                                                fit: BoxFit.cover,
                                               ),
-                                            )
-                                          : InkWell(
-                                              onTap: pickAndUploadImage,
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                child: Image.network(
-                                                  _currentImageUrl!,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                            )),
+                                            ),
+                                          ),
+                              ),
                               const SizedBox(width: 14),
                               Expanded(
                                 child: Column(
