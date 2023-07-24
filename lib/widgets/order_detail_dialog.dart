@@ -5,7 +5,6 @@ import 'package:honey/widgets/app_colors.dart';
 
 class OrderDetailsDialog extends StatelessWidget {
   final Order order;
-
   const OrderDetailsDialog({super.key, required this.order});
 
   @override
