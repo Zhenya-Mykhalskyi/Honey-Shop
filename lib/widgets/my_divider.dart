@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class MySeparator extends StatelessWidget {
-  const MySeparator({Key? key, this.color = Colors.white}) : super(key: key);
+class MyDivider extends StatelessWidget {
+  const MyDivider({Key? key, this.color = Colors.white}) : super(key: key);
 
   final Color color;
 
@@ -12,7 +12,6 @@ class MySeparator extends StatelessWidget {
         final boxWidth = constraints.constrainWidth();
         const dashWidth = 10.0;
         final dashCount = (boxWidth / (2 * dashWidth)).floor();
-
         return Flex(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           direction: Axis.horizontal,

@@ -20,7 +20,7 @@ class UserMainScreen extends StatefulWidget {
 class _UserMainScreenState extends State<UserMainScreen>
     with SingleTickerProviderStateMixin {
   int _selectedTabIndex = 0;
-  int _selectedBottomNavBarIndex = 1;
+  int _selectedBottomNavBarIndex = 0;
 
   void _onBottomNavBarTapped(int index) {
     setState(() {

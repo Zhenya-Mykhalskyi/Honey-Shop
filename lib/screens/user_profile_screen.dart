@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:honey/widgets/app_colors.dart';
+import 'package:honey/widgets/my_divider.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({Key? key}) : super(key: key);
@@ -60,15 +61,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
     return Scaffold(
       body: Center(
-        child: Column(
-          children: [
-            ElevatedButton(
-              onPressed: () => _logout(context),
-              child: const Text('Вийти з акаунту'),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
-              child: Card(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Card(
                 color: Colors.white.withOpacity(0.1),
                 elevation: 2,
                 shape: RoundedRectangleBorder(
@@ -80,14 +78,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     child: Row(
                       children: [
                         Expanded(
-                          flex: 1,
+                          flex: 3,
                           child: AspectRatio(
                             aspectRatio: 1,
                             child: Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(
-                                  color: AppColors.primaryColor,
+                                  color: Colors.white,
                                 ),
                               ),
                               child: ClipRRect(
@@ -108,59 +106,31 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 10),
+                        const SizedBox(width: 14),
                         Expanded(
-                          flex: 2,
+                          flex: 7,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
+                              Column(
                                 children: [
-                                  const Icon(
-                                    Icons.person_2_outlined,
-                                    color: Colors.white,
+                                  ProfileInfoCardSingleRow(
+                                    icon: Icons.person_2_outlined,
+                                    text: userName.toString(),
                                   ),
-                                  const SizedBox(width: 12),
-                                  Text(
-                                    userName.toString(),
-                                    style: const TextStyle(
-                                      fontSize: 19,
-                                    ),
+                                  const SizedBox(height: 9),
+                                  ProfileInfoCardSingleRow(
+                                    icon: Icons.phone_outlined,
+                                    text: user!.phoneNumber.toString(),
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 7),
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.phone_outlined,
-                                    color: Colors.white,
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Text(
-                                    user!.phoneNumber.toString(),
-                                    style: const TextStyle(
-                                      fontSize: 19,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 25),
-                              const Row(
-                                children: [
-                                  Icon(
-                                    Icons.star_border_purple500_outlined,
-                                    color: AppColors.primaryColor,
-                                  ),
-                                  SizedBox(width: 12),
-                                  Text(
-                                    'Мої бонуси:',
-                                    style: TextStyle(
-                                      fontSize: 19,
-                                      color: AppColors.primaryColor,
-                                    ),
-                                  ),
-                                ],
+                              const ProfileInfoCardSingleRow(
+                                icon: Icons.star_border_sharp,
+                                text: 'Мої бонуси:',
+                                color: AppColors.primaryColor,
+                                fontWeight: FontWeight.bold,
                               ),
                             ],
                           ),
@@ -170,10 +140,46 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ),
                 ),
               ),
-            ),
-          ],
+              const MyDivider(),
+              ElevatedButton(
+                onPressed: () => _logout(context),
+                child: const Text('Вийти з акаунту'),
+              ),
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+class ProfileInfoCardSingleRow extends StatelessWidget {
+  final IconData icon;
+  final String text;
+  final Color? color;
+  final FontWeight? fontWeight;
+  const ProfileInfoCardSingleRow({
+    super.key,
+    required this.icon,
+    required this.text,
+    this.color,
+    this.fontWeight,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(icon, color: color ?? Colors.white),
+        const SizedBox(width: 12),
+        Text(
+          text,
+          style: TextStyle(
+              fontSize: 19,
+              color: color ?? Colors.white,
+              fontWeight: fontWeight),
+        ),
+      ],
     );
   }
 }

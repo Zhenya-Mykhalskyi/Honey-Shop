@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import 'package:honey/providers/cart.dart';
 import 'package:honey/widgets/app_colors.dart';
-import 'package:honey/widgets/separator.dart';
+import 'package:honey/widgets/my_divider.dart';
 import 'package:honey/widgets/title_appbar.dart';
 import 'package:honey/widgets/custom_button.dart';
 import 'package:honey/widgets/total_amount.dart';
@@ -115,7 +115,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                       'Для здійснення покупки, будь ласка, заповніть форму на цій сторінці, і ми звʼяжемось з Вами в найкоротші терміни :)',
                       style: TextStyle(fontSize: 16),
                     ),
-                    const MySeparator(),
+                    const MyDivider(),
                     const SizedBox(height: 30),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -304,7 +304,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const MySeparator(),
+                    const MyDivider(),
                     const SizedBox(height: 10),
                     const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -320,7 +320,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                       ],
                     ),
                     const SizedBox(height: 10),
-                    const MySeparator(),
+                    const MyDivider(),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       child: CustomButton(

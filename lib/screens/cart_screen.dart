@@ -7,7 +7,7 @@ import 'package:honey/providers/products.dart';
 import 'package:honey/widgets/app_colors.dart';
 import 'package:honey/widgets/cart_item.dart';
 import 'package:honey/widgets/custom_button.dart';
-import 'package:honey/widgets/separator.dart';
+import 'package:honey/widgets/my_divider.dart';
 import 'package:honey/widgets/title_appbar.dart';
 import 'orders_screen.dart';
 
@@ -47,7 +47,7 @@ class _CartScreenState extends State<CartScreen> {
                       },
                     ),
                   ),
-                  const MySeparator(),
+                  const MyDivider(),
                   const SizedBox(height: 10),
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 7),
@@ -74,7 +74,7 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  const MySeparator(),
+                  const MyDivider(),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 30),
                     child: CustomButton(
