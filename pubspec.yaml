@@ -75,9 +75,7 @@ flutter:
     - assets/img/logo.png
     - assets/img/auth_screen_background.png
     - assets/img/add_photo.png
-    - assets/img/honey1.png
-    - assets/img/appbar_title_left.png
-    - assets/img/appbar_title_right.png
+    - assets/img/delivery_info_truck.png
 
   #   - images/a_dot_ham.jpeg
 

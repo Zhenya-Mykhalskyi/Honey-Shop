@@ -18,8 +18,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   @override
   void initState() {
-    super.initState();
     _fetchUserName();
+    super.initState();
   }
 
   void _fetchUserName() async {
@@ -62,9 +62,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     return Scaffold(
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Card(
                 color: Colors.white.withOpacity(0.1),
@@ -130,7 +129,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 icon: Icons.star_border_sharp,
                                 text: 'Мої бонуси:',
                                 color: AppColors.primaryColor,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w700,
                               ),
                             ],
                           ),
@@ -140,7 +139,66 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ),
                 ),
               ),
+              const SizedBox(height: 15),
               const MyDivider(),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Image.asset(
+                              'assets/img/delivery_info_truck.png',
+                              height: 25,
+                            ),
+                            const SizedBox(width: 10),
+                            const Text(
+                              'Інформація доставки:',
+                              style: TextStyle(
+                                  color: AppColors.primaryColor,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 18),
+                            ),
+                          ],
+                        ),
+                        IconButton(
+                            onPressed: () {},
+                            icon: const Icon(
+                              Icons.edit,
+                              color: Color.fromARGB(255, 217, 217, 217),
+                              size: 25,
+                            ))
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const DeliveryInfoSingleText(
+                            text: 'Євгеній Михальський'),
+                        DeliveryInfoSingleText(
+                            text: user.phoneNumber.toString()),
+                        const DeliveryInfoSingleText(text: 'м. Тернопіль'),
+                        const DeliveryInfoSingleText(text: 'УкрПошта'),
+                        const DeliveryInfoSingleText(
+                            text: '46003 Клопотенка 44'),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
+                    const MyDivider(),
+                    const SizedBox(height: 30),
+                    const Text(
+                      'Мої замовлення:',
+                      style: TextStyle(
+                          color: AppColors.primaryColor,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 18),
+                    ),
+                  ],
+                ),
+              ),
               ElevatedButton(
                 onPressed: () => _logout(context),
                 child: const Text('Вийти з акаунту'),
@@ -171,15 +229,31 @@ class ProfileInfoCardSingleRow extends StatelessWidget {
     return Row(
       children: [
         Icon(icon, color: color ?? Colors.white),
-        const SizedBox(width: 12),
+        const SizedBox(width: 10),
         Text(
           text,
           style: TextStyle(
-              fontSize: 19,
+              fontSize: 17,
               color: color ?? Colors.white,
               fontWeight: fontWeight),
         ),
       ],
+    );
+  }
+}
+
+class DeliveryInfoSingleText extends StatelessWidget {
+  final String text;
+  const DeliveryInfoSingleText({
+    required this.text,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: const TextStyle(fontSize: 17, height: 1.7),
     );
   }
 }
