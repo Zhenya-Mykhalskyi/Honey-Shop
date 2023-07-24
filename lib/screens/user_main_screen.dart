@@ -6,7 +6,7 @@ import 'package:honey/admin/admin_screens/about_admin_screen.dart';
 import 'package:honey/providers/cart.dart';
 import 'package:honey/widgets/badge.dart';
 import 'package:honey/widgets/tab_button.dart';
-import 'products_grid.dart';
+import '../widgets/products_grid.dart';
 import 'user_profile_screen.dart';
 import 'cart_screen.dart';
 

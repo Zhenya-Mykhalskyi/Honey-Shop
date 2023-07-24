@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:honey/screens/cart_screen.dart';
-import 'package:honey/screens/products_grid.dart';
+import 'package:honey/widgets/products_grid.dart';
 import 'package:honey/widgets/tab_button.dart';
 import 'edit_overview_screen.dart';
 

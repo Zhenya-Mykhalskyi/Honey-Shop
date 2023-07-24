@@ -292,10 +292,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ],
                 ),
               ),
-              // ElevatedButton(
-              //   onPressed: () => _logout(context),
-              //   child: const Text('Вийти з акаунту'),
-              // ),
+              ElevatedButton(
+                onPressed: () => _logout(context),
+                child: const Text('Вийти з акаунту'),
+              ),
             ],
           ),
         ),
