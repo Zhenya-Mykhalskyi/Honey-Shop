@@ -5,6 +5,31 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:honey/widgets/app_colors.dart';
 import 'package:honey/widgets/my_divider.dart';
+import 'package:honey/widgets/order_card.dart';
+
+class Order {
+  final String orderId;
+  final String userId;
+  final String fullName;
+  final String phoneNumber;
+  final String address;
+  final String postOfficeNumber;
+  final double totalAmount;
+  final String date;
+  final String time;
+  Order({
+    required this.fullName,
+    required this.phoneNumber,
+    required this.address,
+    required this.postOfficeNumber,
+    required this.date,
+    required this.time,
+    required this.orderId,
+    required this.userId,
+    required this.totalAmount,
+    required List<Map<String, dynamic>> products,
+  });
+}
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({Key? key}) : super(key: key);
@@ -15,14 +40,16 @@ class UserProfileScreen extends StatefulWidget {
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   String? userName;
+  late Stream<List<Order>> _ordersStream;
 
   @override
   void initState() {
-    _fetchUserName();
+    _fetchUserData();
+    _ordersStream = _fetchOrdersStream();
     super.initState();
   }
 
-  void _fetchUserName() async {
+  void _fetchUserData() async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
@@ -47,6 +74,43 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     }
   }
 
+  Stream<List<Order>> _fetchOrdersStream() {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      return Stream.value([]);
+    }
+    return FirebaseFirestore.instance
+        .collection('orders')
+        .where('userId', isEqualTo: user.uid)
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) {
+              final data = doc.data();
+              final List<Map<String, dynamic>> products =
+                  (data['products'] as Map<String, dynamic>)
+                      .entries
+                      .map((entry) => {
+                            'id': entry.key,
+                            'title': entry.value['title'],
+                            'liters': entry.value['liters'],
+                            'price': entry.value['price'],
+                            'imageUrl': entry.value['imageUrl'],
+                          })
+                      .toList();
+              return Order(
+                orderId: doc.id,
+                userId: data['userId'],
+                fullName: data['fullName'],
+                phoneNumber: data['phoneNumber'],
+                address: data['address'],
+                postOfficeNumber: data['postOfficeNumber'],
+                totalAmount: double.parse(data['totalAmount']),
+                date: data['date'],
+                time: data['time'],
+                products: products,
+              );
+            }).toList());
+  }
+
   void _logout(BuildContext context) async {
     try {
       await FirebaseAuth.instance.signOut();
@@ -58,7 +122,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
-
     return Scaffold(
       body: Center(
         child: Padding(
@@ -118,7 +181,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                     icon: Icons.person_2_outlined,
                                     text: userName.toString(),
                                   ),
-                                  const SizedBox(height: 9),
+                                  const SizedBox(height: 7),
                                   ProfileInfoCardSingleRow(
                                     icon: Icons.phone_outlined,
                                     text: user!.phoneNumber.toString(),
@@ -173,28 +236,57 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             ))
                       ],
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const DeliveryInfoSingleText(
-                            text: 'Євгеній Михальський'),
-                        DeliveryInfoSingleText(
-                            text: user.phoneNumber.toString()),
-                        const DeliveryInfoSingleText(text: 'м. Тернопіль'),
-                        const DeliveryInfoSingleText(text: 'УкрПошта'),
-                        const DeliveryInfoSingleText(
-                            text: '46003 Клопотенка 44'),
-                      ],
+                    SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const DeliveryInfoSingleText(
+                              text: 'Євгеній Михальський'),
+                          DeliveryInfoSingleText(
+                              text: user.phoneNumber.toString()),
+                          const DeliveryInfoSingleText(text: 'м. Тернопіль'),
+                          const DeliveryInfoSingleText(text: 'УкрПошта'),
+                          const DeliveryInfoSingleText(
+                              text: '46003 Клопотенка 44'),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 5),
                     const MyDivider(),
-                    const SizedBox(height: 30),
-                    const Text(
-                      'Мої замовлення:',
-                      style: TextStyle(
-                          color: AppColors.primaryColor,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 18),
+                    const Padding(
+                      padding: EdgeInsets.only(top: 25, bottom: 15),
+                      child: Text(
+                        'Мої замовлення:',
+                        style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 18),
+                      ),
+                    ),
+                    Expanded(
+                      child: StreamBuilder<List<Order>>(
+                        stream: _ordersStream,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          } else if (snapshot.hasError) {
+                            return Text(
+                                'Помилка отримання замовлень: ${snapshot.error}');
+                          } else if (!snapshot.hasData ||
+                              snapshot.data!.isEmpty) {
+                            return const Text('Немає замовлень');
+                          } else {
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, index) {
+                                return OrderCard(order: snapshot.data![index]);
+                              },
+                            );
+                          }
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -228,7 +320,11 @@ class ProfileInfoCardSingleRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, color: color ?? Colors.white),
+        Icon(
+          icon,
+          color: color ?? Colors.white,
+          size: 22,
+        ),
         const SizedBox(width: 10),
         Text(
           text,

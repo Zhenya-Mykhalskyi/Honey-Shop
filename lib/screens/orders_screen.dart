@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,11 +21,9 @@ class OrdersScreen extends StatefulWidget {
 
 class _OrdersScreenState extends State<OrdersScreen> {
   final _formkey = GlobalKey<FormState>();
-  final _lastNameController = TextEditingController();
-  final _firstNameController = TextEditingController();
+  final _fullNameController = TextEditingController();
   final _phoneNumberController = TextEditingController();
   final _addressController = TextEditingController();
-  final _patronymicController = TextEditingController();
   final _postOfficeNumberController = TextEditingController();
   final _commentController = TextEditingController();
 
@@ -35,14 +34,27 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   void _submitForm() {
     if (_formkey.currentState!.validate()) {
+      final cartProvider = Provider.of<CartProvider>(context, listen: false);
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        return;
+      }
+
+      final DateTime now = DateTime.now();
+      final String date =
+          '${now.day.toString().padLeft(2, '0')}.${now.month.toString().padLeft(2, '0')}.${now.year}';
+      final String time = '${now.hour}:${now.minute}';
+
       final Map<String, dynamic> orderData = {
-        'lastName': _lastNameController.text,
-        'firstName': _firstNameController.text,
+        'fullName': _fullNameController.text,
         'phoneNumber': '+380${_phoneNumberController.text}',
         'address': _addressController.text,
-        'patronymic': _patronymicController.text,
         'postOfficeNumber': _postOfficeNumberController.text,
         'comment': _commentController.text,
+        'userId': user.uid,
+        'totalAmount': cartProvider.totalAmountOfCart.toString(),
+        'date': date,
+        'time': time,
         'products': widget.cartData.map((productId, cartItem) {
           return MapEntry(productId, {
             'id': cartItem.id,
@@ -135,41 +147,15 @@ class _OrdersScreenState extends State<OrdersScreen> {
                       child: Column(
                         children: [
                           CustomTextField(
-                              hintText: 'Прізвище',
+                              hintText: 'Прізвище Імʼя по батькові (ПІБ)',
                               keyboardType: TextInputType.name,
-                              maxLength: 20,
-                              controller: _lastNameController,
+                              maxLength: 100,
+                              controller: _fullNameController,
                               validator: (value) {
                                 if (value == null ||
                                     value.isEmpty ||
-                                    value.length >= 20) {
-                                  return 'Введіть коректне прізвище';
-                                }
-                                return null;
-                              }),
-                          CustomTextField(
-                              hintText: 'Імʼя',
-                              keyboardType: TextInputType.name,
-                              maxLength: 25,
-                              controller: _firstNameController,
-                              validator: (value) {
-                                if (value == null ||
-                                    value.isEmpty ||
-                                    value.length >= 25) {
-                                  return 'Введіть коректне імʼя';
-                                }
-                                return null;
-                              }),
-                          CustomTextField(
-                              hintText: 'По батькові',
-                              keyboardType: TextInputType.name,
-                              maxLength: 20,
-                              controller: _patronymicController,
-                              validator: (value) {
-                                if (value == null ||
-                                    value.isEmpty ||
-                                    value.length >= 20) {
-                                  return 'По батькові введено невірно';
+                                    value.length >= 100) {
+                                  return 'Введіть коректне прізвище, імʼя та по батькові';
                                 }
                                 return null;
                               }),
