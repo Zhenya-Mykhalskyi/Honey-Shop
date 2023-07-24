@@ -43,7 +43,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
       final DateTime now = DateTime.now();
       final String date =
           '${now.day.toString().padLeft(2, '0')}.${now.month.toString().padLeft(2, '0')}.${now.year}';
-      final String time = '${now.hour}:${now.minute}';
+      final String time =
+          '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
 
       final Map<String, dynamic> orderData = {
         'fullName': _fullNameController.text,
