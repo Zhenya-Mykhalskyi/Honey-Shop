@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:honey/screens/user_profile_screen.dart';
+import 'package:honey/widgets/order_detail_dialog.dart';
 
 class OrderCard extends StatelessWidget {
   final Order order;
@@ -44,7 +45,13 @@ class OrderCard extends StatelessWidget {
                         fontSize: 18, fontWeight: FontWeight.w600),
                   ),
                   IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) =>
+                              OrderDetailsDialog(order: order),
+                        );
+                      },
                       icon: const Icon(
                         Icons.arrow_downward,
                         color: Colors.white,

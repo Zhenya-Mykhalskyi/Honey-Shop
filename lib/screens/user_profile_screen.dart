@@ -17,6 +17,7 @@ class Order {
   final double totalAmount;
   final String date;
   final String time;
+  final List<Map<String, dynamic>> products;
   Order({
     required this.fullName,
     required this.phoneNumber,
@@ -27,7 +28,7 @@ class Order {
     required this.orderId,
     required this.userId,
     required this.totalAmount,
-    required List<Map<String, dynamic>> products,
+    required this.products,
   });
 }
 
@@ -291,10 +292,10 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ],
                 ),
               ),
-              ElevatedButton(
-                onPressed: () => _logout(context),
-                child: const Text('Вийти з акаунту'),
-              ),
+              // ElevatedButton(
+              //   onPressed: () => _logout(context),
+              //   child: const Text('Вийти з акаунту'),
+              // ),
             ],
           ),
         ),
