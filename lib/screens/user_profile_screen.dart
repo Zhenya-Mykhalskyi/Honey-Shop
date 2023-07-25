@@ -41,32 +41,19 @@ class UserProfileScreen extends StatefulWidget {
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   String? userName;
-  String? fullName;
-  String? address;
-  String? selectedDelivery;
-  String? deliveryPhoneNumber;
   String? phoneNumber;
-  String? postOfficeNumber;
   late Stream<List<Order>> _ordersStream;
+  late Stream<Map<String, dynamic>?> _userDataStream;
 
   @override
   void initState() {
-    print('INIT STATE');
-    _fetchUserData();
+    _fetchUserRegistrationData();
     _ordersStream = _fetchOrdersStream();
+    _userDataStream = _fetchUserDeliveryStream();
     super.initState();
   }
 
-  @override
-  void didChangeDependencies() {
-    print('DID CHANGE');
-
-    _fetchUserData();
-
-    super.didChangeDependencies();
-  }
-
-  void _fetchUserData() async {
+  Future<void> _fetchUserRegistrationData() async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
@@ -78,21 +65,30 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           setState(() {
             userName = userDoc.data()?['name'];
             phoneNumber = user.phoneNumber;
-            fullName = userDoc.data()?['fullName'];
-            address = userDoc.data()?['address'];
-            selectedDelivery = userDoc.data()?['selectedDelivery'];
-            deliveryPhoneNumber = userDoc.data()?['deliveryPhoneNumber'];
-
-            postOfficeNumber = userDoc.data()?['postOfficeNumber'];
           });
-        } else {
-          print('User document does not exist for id: ${user.uid}');
         }
-      } else {
-        print('User is not logged in.');
       }
     } catch (e) {
       print("Error fetching user data: $e");
+    }
+  }
+
+  Stream<Map<String, dynamic>?> _fetchUserDeliveryStream() {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        return FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .snapshots()
+            .map((snapshot) => snapshot.data());
+      } else {
+        print('User is not logged in.');
+        return Stream.value(null);
+      }
+    } catch (e) {
+      print("Error fetching user data: $e");
+      return Stream.value(null);
     }
   }
 
@@ -143,7 +139,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
     return Scaffold(
       body: Center(
         child: Padding(
@@ -259,18 +254,48 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         )
                       ],
                     ),
-                    SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          DeliveryInfoSingleText(text: fullName ?? ''),
-                          DeliveryInfoSingleText(
-                              text: deliveryPhoneNumber ?? ''),
-                          DeliveryInfoSingleText(text: address ?? ''),
-                          DeliveryInfoSingleText(text: selectedDelivery ?? ''),
-                          DeliveryInfoSingleText(text: postOfficeNumber ?? ''),
-                        ],
-                      ),
+                    StreamBuilder<Map<String, dynamic>?>(
+                      stream: _userDataStream,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return Center(
+                              child: Text('Error: ${snapshot.error}'));
+                        } else if (snapshot.data!['fullName'] == null) {
+                          return const Center(
+                              child: Text(
+                                  'Зрробіть перше замовлення, або заповніть дані про доставку*'));
+                        }
+                        final userData = snapshot.data ?? {};
+                        final fullName = userData['fullName'] as String?;
+                        final address = userData['address'] as String?;
+                        final selectedDelivery =
+                            userData['selectedDelivery'] as String?;
+                        final deliveryPhoneNumber =
+                            userData['deliveryPhoneNumber'] as String?;
+                        final postOfficeNumber =
+                            userData['postOfficeNumber'] as String?;
+
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              DeliveryInfoSingleText(text: fullName ?? ''),
+                              DeliveryInfoSingleText(
+                                  text: deliveryPhoneNumber ?? ''),
+                              DeliveryInfoSingleText(text: address ?? ''),
+                              DeliveryInfoSingleText(
+                                  text: selectedDelivery ?? ''),
+                              DeliveryInfoSingleText(
+                                  text: postOfficeNumber ?? ''),
+                            ],
+                          ),
+                        );
+                      },
                     ),
                     const SizedBox(height: 5),
                     const MyDivider(),
