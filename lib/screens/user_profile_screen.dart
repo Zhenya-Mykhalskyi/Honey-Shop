@@ -41,13 +41,29 @@ class UserProfileScreen extends StatefulWidget {
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   String? userName;
+  String? fullName;
+  String? address;
+  String? selectedDelivery;
+  String? deliveryPhoneNumber;
+  String? phoneNumber;
+  String? postOfficeNumber;
   late Stream<List<Order>> _ordersStream;
 
   @override
   void initState() {
+    print('INIT STATE');
     _fetchUserData();
     _ordersStream = _fetchOrdersStream();
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    print('DID CHANGE');
+
+    _fetchUserData();
+
+    super.didChangeDependencies();
   }
 
   void _fetchUserData() async {
@@ -59,10 +75,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             .doc(user.uid)
             .get();
         if (userDoc.exists) {
-          final userNameData = userDoc.data()?['name'];
-          print('Fetched user name: $userNameData');
           setState(() {
-            userName = userNameData;
+            userName = userDoc.data()?['name'];
+            phoneNumber = user.phoneNumber;
+            fullName = userDoc.data()?['fullName'];
+            address = userDoc.data()?['address'];
+            selectedDelivery = userDoc.data()?['selectedDelivery'];
+            deliveryPhoneNumber = userDoc.data()?['deliveryPhoneNumber'];
+
+            postOfficeNumber = userDoc.data()?['postOfficeNumber'];
           });
         } else {
           print('User document does not exist for id: ${user.uid}');
@@ -71,7 +92,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         print('User is not logged in.');
       }
     } catch (e) {
-      print("Error fetching user name: $e");
+      print("Error fetching user data: $e");
     }
   }
 
@@ -185,7 +206,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   const SizedBox(height: 7),
                                   ProfileInfoCardSingleRow(
                                     icon: Icons.phone_outlined,
-                                    text: user!.phoneNumber.toString(),
+                                    text: phoneNumber.toString(),
                                   ),
                                 ],
                               ),
@@ -229,26 +250,25 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           ],
                         ),
                         IconButton(
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.edit,
-                              color: Color.fromARGB(255, 217, 217, 217),
-                              size: 25,
-                            ))
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.edit,
+                            color: Color.fromARGB(255, 217, 217, 217),
+                            size: 25,
+                          ),
+                        )
                       ],
                     ),
                     SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const DeliveryInfoSingleText(
-                              text: 'Євгеній Михальський'),
+                          DeliveryInfoSingleText(text: fullName ?? ''),
                           DeliveryInfoSingleText(
-                              text: user.phoneNumber.toString()),
-                          const DeliveryInfoSingleText(text: 'м. Тернопіль'),
-                          const DeliveryInfoSingleText(text: 'УкрПошта'),
-                          const DeliveryInfoSingleText(
-                              text: '46003 Клопотенка 44'),
+                              text: deliveryPhoneNumber ?? ''),
+                          DeliveryInfoSingleText(text: address ?? ''),
+                          DeliveryInfoSingleText(text: selectedDelivery ?? ''),
+                          DeliveryInfoSingleText(text: postOfficeNumber ?? ''),
                         ],
                       ),
                     ),

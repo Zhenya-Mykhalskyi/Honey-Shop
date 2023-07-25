@@ -31,147 +31,152 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         children: [
           Opacity(
             opacity: _isExpanded ? 0.2 : 1,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Center(
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.95,
-                          height: MediaQuery.of(context).size.height * 0.4,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.network(
-                              widget.product.imageUrl,
-                              fit: BoxFit.cover,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.95,
+                            height: MediaQuery.of(context).size.height * 0.4,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Image.network(
+                                widget.product.imageUrl,
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Flexible(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  widget.product.title,
-                                  style: const TextStyle(fontSize: 26),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  'Залишилось ${widget.product.litersLeft} л',
-                                  style: const TextStyle(
-                                      fontSize: 16, color: Color(0xFF929292)),
-                                ),
-                              ],
+                        const SizedBox(height: 20),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Flexible(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    widget.product.title,
+                                    style: const TextStyle(fontSize: 26),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    'Залишилось ${widget.product.litersLeft} л',
+                                    style: const TextStyle(
+                                        fontSize: 16, color: Color(0xFF929292)),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(right: 20),
-                                child: Text(
-                                  '₴ ${widget.product.price.toStringAsFixed(0)}',
-                                  style: const TextStyle(
-                                    fontSize: 24,
-                                    color: AppColors.primaryColor,
-                                    fontWeight: FontWeight.w600,
+                            Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 20),
+                                  child: Text(
+                                    '₴ ${widget.product.price.toStringAsFixed(0)}',
+                                    style: const TextStyle(
+                                      fontSize: 24,
+                                      color: AppColors.primaryColor,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
                                 ),
+                                const Padding(
+                                  padding: EdgeInsets.only(right: 25),
+                                  child: Text(
+                                    '₴ 199',
+                                    style: TextStyle(
+                                        decoration: TextDecoration.lineThrough,
+                                        decorationColor:
+                                            Color.fromARGB(255, 201, 76, 76),
+                                        color:
+                                            Color.fromARGB(255, 114, 114, 114),
+                                        fontSize: 18),
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        ),
+                        const SizedBox(height: 30),
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: widget.product.shortDescription.length <=
+                                        140
+                                    ? widget.product.shortDescription
+                                    : '${widget.product.shortDescription.substring(0, 140)}... ',
+                                style: const TextStyle(
+                                    height: 1.45,
+                                    fontSize: 16,
+                                    fontFamily: 'MA'),
                               ),
-                              const Padding(
-                                padding: EdgeInsets.only(right: 25),
-                                child: Text(
-                                  '₴ 199',
-                                  style: TextStyle(
-                                      decoration: TextDecoration.lineThrough,
-                                      decorationColor:
-                                          Color.fromARGB(255, 201, 76, 76),
-                                      color: Color.fromARGB(255, 114, 114, 114),
-                                      fontSize: 18),
+                              TextSpan(
+                                text: 'Детальніше',
+                                style: const TextStyle(
+                                  height: 1.45,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
                                 ),
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                      const SizedBox(height: 30),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: widget.product.shortDescription.length <=
-                                      140
-                                  ? widget.product.shortDescription
-                                  : '${widget.product.shortDescription.substring(0, 140)}... ',
-                              style: const TextStyle(
-                                  height: 1.45, fontSize: 16, fontFamily: 'MA'),
-                            ),
-                            TextSpan(
-                              text: 'Детальніше',
-                              style: const TextStyle(
-                                height: 1.45,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.underline,
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    setState(() {
+                                      _isExpanded = true;
+                                    });
+                                  },
                               ),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  setState(() {
-                                    _isExpanded = true;
-                                  });
-                                },
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 30),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              child: LitersCounter(
+                                product: widget.product,
+                              ),
+                            ),
+                            Container(
+                              height: MediaQuery.of(context).size.height * 0.04,
+                              width: MediaQuery.of(context).size.width * 0.25,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: const Color.fromARGB(255, 65, 65, 65),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  cartProvider
+                                      .getTotalAmountForProductById(
+                                          widget.product.id)
+                                      .toString(),
+                                  style: const TextStyle(fontSize: 20),
+                                ),
+                              ),
                             ),
                           ],
                         ),
-                      ),
-                      const SizedBox(height: 30),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.4,
-                            child: LitersCounter(
-                              product: widget.product,
-                            ),
-                          ),
-                          Container(
-                            height: MediaQuery.of(context).size.height * 0.04,
-                            width: MediaQuery.of(context).size.width * 0.25,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: const Color.fromARGB(255, 65, 65, 65),
-                            ),
-                            child: Center(
-                              child: Text(
-                                cartProvider
-                                    .getTotalAmountForProductById(
-                                        widget.product.id)
-                                    .toString(),
-                                style: const TextStyle(fontSize: 20),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child:
-                        CustomButton(action: () {}, text: 'Додати до кошика'),
-                  ),
-                ],
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child:
+                          CustomButton(action: () {}, text: 'Додати до кошика'),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
