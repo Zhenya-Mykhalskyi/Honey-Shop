@@ -37,7 +37,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   final List<String> _deliveries = ['Укрпошта', 'Нова пошта'];
   String? _selectedDelivery;
-  File? _pickedImage;
   String? _currentProfileImage;
 
   bool _isLoading = false;
@@ -87,7 +86,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
     }
   }
 
-  void _submitForm() async {
+  Future<void> _submitForm(BuildContext context) async {
+    final navigatorContext = Navigator.of(context);
     if (_formkey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
@@ -126,8 +126,16 @@ class _OrdersScreenState extends State<OrdersScreen> {
       if (!widget.isEditProfile) {
         _saveOrderToFirestore(orderData);
       }
+
       await _saveUserData();
       _resetProductsdata();
+
+      navigatorContext.push(
+        MaterialPageRoute(
+          builder: (context) =>
+              const UserMainScreen(selectedBottomNavBarIndex: 0),
+        ),
+      );
       setState(() {
         _isLoading = false;
       });
@@ -177,22 +185,21 @@ class _OrdersScreenState extends State<OrdersScreen> {
       await usersCollection
           .doc(user.uid)
           .set(userData, SetOptions(merge: true));
+      if (_pickedImage != null) {}
+      await _uploadProfileImageToStorageAndFirestore(_pickedImage!);
     } catch (e) {
       print('Error saving user data: $e');
     }
   }
 
+  File? _pickedImage;
   void _handleImagePicked(File? image) {
     setState(() {
       _pickedImage = image;
     });
-
-    if (_pickedImage != null) {
-      _uploadImageToStorageAndFirestore(_pickedImage!);
-    }
   }
 
-  Future<void> _uploadImageToStorageAndFirestore(File imageFile) async {
+  Future<void> _uploadProfileImageToStorageAndFirestore(File imageFile) async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) {
@@ -290,7 +297,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                     ),
                                   ],
                                 )
-                              //here
                               : Container(),
                           widget.isEditProfile
                               ? const Padding(
@@ -499,14 +505,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                         children: [
                                           TextButton(
                                             onPressed: () async {
-                                              // Navigator.of(context).pop();
-                                              Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          const UserMainScreen(
-                                                              selectedBottomNavBarIndex:
-                                                                  0)));
-                                              _submitForm();
+                                              Navigator.of(context).pop();
+                                              await _submitForm(context);
                                             },
                                             child: const Text(
                                               'Так',

@@ -49,12 +49,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   String? deliveryPhoneNumber;
   String? postOfficeNumber;
   String? imageUrl;
+  Key _profileImageKey = UniqueKey();
 
   late Stream<List<Order>> _ordersStream;
 
   @override
   void initState() {
     fetchUserData();
+    print('UserProfileScreen INITSTATE');
     _ordersStream = _fetchOrdersStream();
     super.initState();
   }
@@ -67,6 +69,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             .collection('users')
             .doc(user.uid)
             .get();
+
         if (userDoc.exists) {
           setState(() {
             userName = userDoc.data()?['name'];
@@ -76,6 +79,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             selectedDelivery = userDoc.data()?['selectedDelivery'];
             deliveryPhoneNumber = userDoc.data()?['deliveryPhoneNumber'];
             postOfficeNumber = userDoc.data()?['postOfficeNumber'];
+            _profileImageKey = UniqueKey();
             imageUrl = userDoc.data()?['profileImage'];
           });
         }
@@ -171,6 +175,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                     : AspectRatio(
                                         aspectRatio: 1,
                                         child: CachedNetworkImage(
+                                          key: _profileImageKey,
+                                          placeholder: (context, url) =>
+                                              const CircularProgressIndicator(
+                                            color: AppColors.primaryColor,
+                                          ),
                                           imageUrl: imageUrl!,
                                           fit: BoxFit.cover,
                                         ),
