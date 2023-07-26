@@ -1,9 +1,10 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:honey/screens/user_profile_screen.dart';
-import 'package:honey/widgets/edit_profile_info.dart';
 import 'package:provider/provider.dart';
 
 import 'package:honey/providers/cart.dart';
@@ -12,6 +13,8 @@ import 'package:honey/widgets/my_divider.dart';
 import 'package:honey/widgets/title_appbar.dart';
 import 'package:honey/widgets/custom_button.dart';
 import 'package:honey/widgets/total_amount.dart';
+import 'package:honey/widgets/edit_profile_image.dart';
+import 'user_main_screen.dart';
 
 class OrdersScreen extends StatefulWidget {
   final Map<String, CartItemModel>? cartData;
@@ -31,6 +34,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   final _addressController = TextEditingController();
   final _postOfficeNumberController = TextEditingController();
   final _commentController = TextEditingController();
+  String? _currentProfileImage;
 
   bool _isLoading = false;
 
@@ -45,6 +49,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   void _submitForm() async {
     if (_formkey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
       final cartProvider = Provider.of<CartProvider>(context, listen: false);
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) {
@@ -75,17 +82,20 @@ class _OrdersScreenState extends State<OrdersScreen> {
           });
         }),
       };
+
       if (!widget.isEditProfile) {
         _saveOrderToFirestore(orderData);
-        _resetProductsdata();
       }
       await _saveUserData();
-      UserProfileScreen.instance?.fetchUserData();
+      _resetProductsdata();
+      // UserProfileScreen.instance?.fetchUserData();
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
   Future<void> _saveOrderToFirestore(Map<String, dynamic> orderData) async {
-    final popContext = Navigator.of(context);
     final scaffoldContext = ScaffoldMessenger.of(context);
     final connectivityResult = await Connectivity().checkConnectivity();
 
@@ -99,26 +109,15 @@ class _OrdersScreenState extends State<OrdersScreen> {
       return;
     }
     try {
-      setState(() {
-        _isLoading = true;
-      });
-
       final CollectionReference ordersCollection =
           FirebaseFirestore.instance.collection('orders');
       await ordersCollection.add(orderData);
-
-      popContext.pop();
     } catch (e) {
       print('Error saving order: $e');
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
   Future<void> _saveUserData() async {
-    final popContext = Navigator.of(context);
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) {
@@ -139,10 +138,48 @@ class _OrdersScreenState extends State<OrdersScreen> {
       await usersCollection
           .doc(user.uid)
           .set(userData, SetOptions(merge: true));
-
-      popContext.pop();
     } catch (e) {
       print('Error saving user data: $e');
+    }
+  }
+
+  File? _pickedImage;
+  void _handleImagePicked(File? image) {
+    setState(() {
+      _pickedImage = image;
+    });
+
+    if (_pickedImage != null) {
+      _uploadImageToStorageAndFirestore(_pickedImage!);
+    }
+  }
+
+  Future<void> _uploadImageToStorageAndFirestore(File imageFile) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        return;
+      }
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child('user_profile_images')
+          .child('${user.uid}.jpg');
+      final uploadTask = storageRef.putFile(imageFile);
+      final TaskSnapshot taskSnapshot = await uploadTask;
+      final imageUrl = await taskSnapshot.ref.getDownloadURL();
+
+      final userData = {
+        'profileImage': imageUrl,
+      };
+
+      final CollectionReference usersCollection =
+          FirebaseFirestore.instance.collection('users');
+      await usersCollection
+          .doc(user.uid)
+          .set(userData, SetOptions(merge: true));
+      print('_uploadImageToStorageAndFirestore');
+    } catch (e) {
+      print('Error uploading image: $e');
     }
   }
 
@@ -151,6 +188,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
     if (user != null) {
       final userId = user.uid;
       try {
+        setState(() {
+          _isLoading = true;
+        });
+
         final userDoc = await FirebaseFirestore.instance
             .collection('users')
             .doc(userId)
@@ -166,12 +207,17 @@ class _OrdersScreenState extends State<OrdersScreen> {
             _postOfficeNumberController.text =
                 userData?['postOfficeNumber'] ?? '';
             _selectedDelivery = userData?['selectedDelivery'] ?? '';
+            _currentProfileImage = userData?['profileImage'];
           });
         } else {
           print('User document does not exist for id: $userId');
         }
       } catch (e) {
         print("Error fetching user data: $e");
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
       }
     }
   }
@@ -221,7 +267,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
                           widget.isEditProfile
                               ? Row(
                                   children: [
-                                    const EditProfileScreen(),
+                                    EditProfileImage(
+                                      onImagePicked: _handleImagePicked,
+                                      currentProfileImage: _currentProfileImage,
+                                    ),
                                     const SizedBox(width: 14),
                                     Expanded(
                                       child: CustomTextField(
@@ -451,7 +500,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                         children: [
                                           TextButton(
                                             onPressed: () async {
-                                              Navigator.of(context).pop();
+                                              // Navigator.of(context).pop();
+                                              Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const UserMainScreen()));
                                               _submitForm();
                                             },
                                             child: const Text(

@@ -146,7 +146,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     }
   }
 
-  Future<String?> pickAndUploadImage() async {
+  Future<String?> pickProductImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
@@ -281,7 +281,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                         .isAdd // додаємо чи редагуємо товар?
                                     ? _pickedImage == null
                                         ? InkWell(
-                                            onTap: pickAndUploadImage,
+                                            onTap: pickProductImage,
                                             child: Padding(
                                               padding:
                                                   const EdgeInsets.all(25.0),
@@ -290,7 +290,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                             ),
                                           )
                                         : InkWell(
-                                            onTap: pickAndUploadImage,
+                                            onTap: pickProductImage,
                                             child: ClipRRect(
                                               borderRadius:
                                                   BorderRadius.circular(8),
@@ -303,7 +303,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                     // редагуємо
                                     : _pickedImage != null
                                         ? InkWell(
-                                            onTap: pickAndUploadImage,
+                                            onTap: pickProductImage,
                                             child: ClipRRect(
                                               borderRadius:
                                                   BorderRadius.circular(8),
@@ -314,7 +314,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                             ),
                                           )
                                         : InkWell(
-                                            onTap: pickAndUploadImage,
+                                            onTap: pickProductImage,
                                             child: ClipRRect(
                                               borderRadius:
                                                   BorderRadius.circular(8),

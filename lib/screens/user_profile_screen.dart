@@ -36,13 +36,8 @@ class Order {
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({Key? key}) : super(key: key);
 
-//для виклику функції fetchUserData з класу OrdersScreen після заповнення форми
-  static _UserProfileScreenState? instance;
   @override
-  _UserProfileScreenState createState() {
-    instance = _UserProfileScreenState();
-    return instance!;
-  }
+  State<UserProfileScreen> createState() => _UserProfileScreenState();
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
@@ -53,12 +48,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   String? selectedDelivery;
   String? deliveryPhoneNumber;
   String? postOfficeNumber;
+  String? imageUrl;
 
   late Stream<List<Order>> _ordersStream;
 
   @override
   void initState() {
     fetchUserData();
+    print('UserProfileScreen INITSTATE');
     _ordersStream = _fetchOrdersStream();
     super.initState();
   }
@@ -80,6 +77,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             selectedDelivery = userDoc.data()?['selectedDelivery'];
             deliveryPhoneNumber = userDoc.data()?['deliveryPhoneNumber'];
             postOfficeNumber = userDoc.data()?['postOfficeNumber'];
+            imageUrl = userDoc.data()?['profileImage'];
           });
         }
       }
@@ -165,18 +163,19 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
-                                child: const Icon(
-                                  Icons.person_rounded,
-                                  color: Colors.white,
-                                  size: 85,
-                                ),
-                                // child: AspectRatio(
-                                //   aspectRatio: 1,
-                                //   child: CachedNetworkImage(
-                                //     imageUrl:
-                                //     fit: BoxFit.cover,
-                                //   ),
-                                // ),
+                                child: imageUrl == null
+                                    ? const Icon(
+                                        Icons.person_rounded,
+                                        color: Colors.white,
+                                        size: 85,
+                                      )
+                                    : AspectRatio(
+                                        aspectRatio: 1,
+                                        child: CachedNetworkImage(
+                                          imageUrl: imageUrl!,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
                               ),
                             ),
                           ),
