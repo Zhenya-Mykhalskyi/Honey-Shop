@@ -504,7 +504,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                               Navigator.of(context).push(
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          const UserMainScreen()));
+                                                          const UserMainScreen(
+                                                              selectedBottomNavBarIndex:
+                                                                  0)));
                                               _submitForm();
                                             },
                                             child: const Text(

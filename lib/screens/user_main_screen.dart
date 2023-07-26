@@ -11,7 +11,8 @@ import 'user_profile_screen.dart';
 import 'cart_screen.dart';
 
 class UserMainScreen extends StatefulWidget {
-  const UserMainScreen({super.key});
+  final int? selectedBottomNavBarIndex;
+  const UserMainScreen({super.key, this.selectedBottomNavBarIndex});
 
   @override
   State<UserMainScreen> createState() => _UserMainScreenState();
@@ -20,7 +21,15 @@ class UserMainScreen extends StatefulWidget {
 class _UserMainScreenState extends State<UserMainScreen>
     with SingleTickerProviderStateMixin {
   int _selectedTabIndex = 0;
-  int _selectedBottomNavBarIndex = 0;
+  int _selectedBottomNavBarIndex = 1;
+
+  @override
+  void initState() {
+    if (widget.selectedBottomNavBarIndex != null) {
+      _selectedBottomNavBarIndex = widget.selectedBottomNavBarIndex!;
+    }
+    super.initState();
+  }
 
   void _onBottomNavBarTapped(int index) {
     setState(() {
