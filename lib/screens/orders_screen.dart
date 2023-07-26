@@ -34,17 +34,57 @@ class _OrdersScreenState extends State<OrdersScreen> {
   final _addressController = TextEditingController();
   final _postOfficeNumberController = TextEditingController();
   final _commentController = TextEditingController();
-  String? _currentProfileImage;
-
-  bool _isLoading = false;
 
   final List<String> _deliveries = ['Укрпошта', 'Нова пошта'];
   String? _selectedDelivery;
+  File? _pickedImage;
+  String? _currentProfileImage;
+
+  bool _isLoading = false;
 
   @override
   void initState() {
     _fetchUserDataFromFirestore();
     super.initState();
+  }
+
+  Future<void> _fetchUserDataFromFirestore() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final userId = user.uid;
+      try {
+        setState(() {
+          _isLoading = true;
+        });
+
+        final userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId)
+            .get();
+        if (userDoc.exists) {
+          final userData = userDoc.data();
+          setState(() {
+            _usernameController.text = userData?['name'] ?? '';
+            _fullNameController.text = userData?['fullName'] ?? '';
+            _phoneNumberController.text =
+                userData?['phoneNumber']?.substring(4) ?? '';
+            _addressController.text = userData?['address'] ?? '';
+            _postOfficeNumberController.text =
+                userData?['postOfficeNumber'] ?? '';
+            _selectedDelivery = userData?['selectedDelivery'] ?? '';
+            _currentProfileImage = userData?['profileImage'];
+          });
+        } else {
+          print('User document does not exist for id: $userId');
+        }
+      } catch (e) {
+        print("Error fetching user data: $e");
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   void _submitForm() async {
@@ -88,7 +128,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
       }
       await _saveUserData();
       _resetProductsdata();
-      // UserProfileScreen.instance?.fetchUserData();
       setState(() {
         _isLoading = false;
       });
@@ -143,7 +182,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
     }
   }
 
-  File? _pickedImage;
   void _handleImagePicked(File? image) {
     setState(() {
       _pickedImage = image;
@@ -180,45 +218,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
       print('_uploadImageToStorageAndFirestore');
     } catch (e) {
       print('Error uploading image: $e');
-    }
-  }
-
-  Future<void> _fetchUserDataFromFirestore() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      final userId = user.uid;
-      try {
-        setState(() {
-          _isLoading = true;
-        });
-
-        final userDoc = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userId)
-            .get();
-        if (userDoc.exists) {
-          final userData = userDoc.data();
-          setState(() {
-            _usernameController.text = userData?['name'] ?? '';
-            _fullNameController.text = userData?['fullName'] ?? '';
-            _phoneNumberController.text =
-                userData?['phoneNumber']?.substring(4) ?? '';
-            _addressController.text = userData?['address'] ?? '';
-            _postOfficeNumberController.text =
-                userData?['postOfficeNumber'] ?? '';
-            _selectedDelivery = userData?['selectedDelivery'] ?? '';
-            _currentProfileImage = userData?['profileImage'];
-          });
-        } else {
-          print('User document does not exist for id: $userId');
-        }
-      } catch (e) {
-        print("Error fetching user data: $e");
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
-      }
     }
   }
 

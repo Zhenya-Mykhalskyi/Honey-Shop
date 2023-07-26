@@ -55,7 +55,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   void initState() {
     fetchUserData();
-    print('UserProfileScreen INITSTATE');
     _ordersStream = _fetchOrdersStream();
     super.initState();
   }
