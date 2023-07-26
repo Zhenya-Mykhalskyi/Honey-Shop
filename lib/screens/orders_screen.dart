@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:honey/screens/user_profile_screen.dart';
+import 'package:honey/widgets/edit_profile_info.dart';
 import 'package:provider/provider.dart';
 
 import 'package:honey/providers/cart.dart';
@@ -12,8 +14,10 @@ import 'package:honey/widgets/custom_button.dart';
 import 'package:honey/widgets/total_amount.dart';
 
 class OrdersScreen extends StatefulWidget {
-  final Map<String, CartItemModel> cartData;
-  const OrdersScreen({super.key, required this.cartData});
+  final Map<String, CartItemModel>? cartData;
+  final bool isEditProfile;
+
+  const OrdersScreen({super.key, this.cartData, required this.isEditProfile});
 
   @override
   State<OrdersScreen> createState() => _OrdersScreenState();
@@ -21,6 +25,7 @@ class OrdersScreen extends StatefulWidget {
 
 class _OrdersScreenState extends State<OrdersScreen> {
   final _formkey = GlobalKey<FormState>();
+  final _usernameController = TextEditingController();
   final _fullNameController = TextEditingController();
   final _phoneNumberController = TextEditingController();
   final _addressController = TextEditingController();
@@ -32,7 +37,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
   final List<String> _deliveries = ['Укрпошта', 'Нова пошта'];
   String? _selectedDelivery;
 
-  void _submitForm() {
+  @override
+  void initState() {
+    _fetchUserDataFromFirestore();
+    super.initState();
+  }
+
+  void _submitForm() async {
     if (_formkey.currentState!.validate()) {
       final cartProvider = Provider.of<CartProvider>(context, listen: false);
       final user = FirebaseAuth.instance.currentUser;
@@ -54,7 +65,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
         'totalAmount': cartProvider.totalAmountOfCart.toString(),
         'date': date,
         'time': time,
-        'products': widget.cartData.map((productId, cartItem) {
+        'products': widget.cartData?.map((productId, cartItem) {
           return MapEntry(productId, {
             'id': cartItem.id,
             'title': cartItem.title,
@@ -64,9 +75,12 @@ class _OrdersScreenState extends State<OrdersScreen> {
           });
         }),
       };
-      _saveOrderToFirestore(orderData);
-      _saveUserData();
-      _resetProductsdata();
+      if (!widget.isEditProfile) {
+        _saveOrderToFirestore(orderData);
+        _resetProductsdata();
+      }
+      await _saveUserData();
+      UserProfileScreen.instance?.fetchUserData();
     }
   }
 
@@ -94,7 +108,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
       await ordersCollection.add(orderData);
 
       popContext.pop();
-      popContext.pop();
     } catch (e) {
       print('Error saving order: $e');
     } finally {
@@ -105,6 +118,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
   Future<void> _saveUserData() async {
+    final popContext = Navigator.of(context);
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) {
@@ -112,6 +126,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
       }
 
       final userData = {
+        'name': _usernameController.text,
         'fullName': _fullNameController.text,
         'deliveryPhoneNumber': '+380${_phoneNumberController.text}',
         'address': _addressController.text,
@@ -124,8 +139,40 @@ class _OrdersScreenState extends State<OrdersScreen> {
       await usersCollection
           .doc(user.uid)
           .set(userData, SetOptions(merge: true));
+
+      popContext.pop();
     } catch (e) {
       print('Error saving user data: $e');
+    }
+  }
+
+  Future<void> _fetchUserDataFromFirestore() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final userId = user.uid;
+      try {
+        final userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId)
+            .get();
+        if (userDoc.exists) {
+          final userData = userDoc.data();
+          setState(() {
+            _usernameController.text = userData?['name'] ?? '';
+            _fullNameController.text = userData?['fullName'] ?? '';
+            _phoneNumberController.text =
+                userData?['phoneNumber']?.substring(4) ?? '';
+            _addressController.text = userData?['address'] ?? '';
+            _postOfficeNumberController.text =
+                userData?['postOfficeNumber'] ?? '';
+            _selectedDelivery = userData?['selectedDelivery'] ?? '';
+          });
+        } else {
+          print('User document does not exist for id: $userId');
+        }
+      } catch (e) {
+        print("Error fetching user data: $e");
+      }
     }
   }
 
@@ -137,7 +184,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const TitleAppBar(title: 'Оформлення замовлення'),
+      appBar: TitleAppBar(
+          title: widget.isEditProfile
+              ? 'Редагування профіля'
+              : 'Оформлення замовлення'),
       body: _isLoading
           ? const Center(
               child: CircularProgressIndicator(
@@ -145,34 +195,65 @@ class _OrdersScreenState extends State<OrdersScreen> {
             ))
           : SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(15.0),
+                padding: EdgeInsets.only(
+                    left: 15,
+                    right: 15,
+                    bottom: 15,
+                    top: !widget.isEditProfile ? 15 : 0),
                 child: Column(
                   children: [
-                    const Text(
-                      'Для здійснення покупки, будь ласка, заповніть форму на цій сторінці, і ми звʼяжемось з Вами в найкоротші терміни :)',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    const MyDivider(),
+                    !widget.isEditProfile
+                        ? const Text(
+                            'Для здійснення покупки, будь ласка, заповніть форму на цій сторінці, і ми звʼяжемось з Вами в найкоротші терміни :)',
+                            style: TextStyle(fontSize: 16),
+                          )
+                        : Container(),
+                    !widget.isEditProfile ? const MyDivider() : Container(),
                     const SizedBox(height: 30),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Image.asset('assets/img/appbar_title_left.png'),
-                        const Text(
-                          'Особиста інформація',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 17),
-                        ),
-                        Image.asset('assets/img/appbar_title_right.png'),
-                      ],
-                    ),
+                    !widget.isEditProfile
+                        ? const SectionTitle(text: 'Особиста інформація')
+                        : Container(),
                     Form(
                       key: _formkey,
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          widget.isEditProfile
+                              ? Row(
+                                  children: [
+                                    const EditProfileScreen(),
+                                    const SizedBox(width: 14),
+                                    Expanded(
+                                      child: CustomTextField(
+                                        hintText: 'Ваше імʼя',
+                                        maxLength: 20,
+                                        maxLines: 1,
+                                        controller: _usernameController,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'Будь ласка, введіть Ваше імʼя';
+                                          }
+                                          if (value.toString().length >= 20) {
+                                            return 'Імʼя повинне бути коротшим 20-ти символів';
+                                          }
+                                          return null;
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              //here
+                              : Container(),
+                          widget.isEditProfile
+                              ? const Padding(
+                                  padding: EdgeInsets.only(top: 30),
+                                  child:
+                                      SectionTitle(text: 'Інформація доставки'),
+                                )
+                              : Container(),
+                          const SizedBox(height: 15),
                           CustomTextField(
-                              hintText: 'Прізвище Імʼя по батькові (ПІБ)',
+                              hintText: 'Ваше повне імʼя (ПІБ)',
                               keyboardType: TextInputType.name,
                               maxLength: 100,
                               controller: _fullNameController,
@@ -185,7 +266,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                 return null;
                               }),
                           CustomTextField(
-                            hintText: 'Номер телефону',
+                            hintText: 'Номер телефону для доставки',
                             prefix: const Text('+380 '),
                             keyboardType: TextInputType.phone,
                             maxLength: 12,
@@ -200,20 +281,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
                               return null;
                             },
                           ),
-                          const SizedBox(height: 30),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Image.asset('assets/img/appbar_title_left.png'),
-                              const Text(
-                                'Інформація доставки',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 17),
-                              ),
-                              Image.asset('assets/img/appbar_title_right.png'),
-                            ],
-                          ),
+                          !widget.isEditProfile
+                              ? const Padding(
+                                  padding: EdgeInsets.only(top: 20),
+                                  child:
+                                      SectionTitle(text: 'Інформація доставки'),
+                                )
+                              : Container(),
                           const SizedBox(height: 10),
                           CustomTextField(
                               hintText: 'Місто / населений пункт',
@@ -229,75 +303,77 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                 return null;
                               }),
                           const SizedBox(height: 14),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.only(bottom: 5),
-                                child: Text(
-                                  'Спосіб доставки',
-                                  style: TextStyle(
-                                    color: Color.fromARGB(255, 169, 169, 169),
-                                    fontStyle: FontStyle.italic,
-                                  ),
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 5),
+                            child: Text(
+                              'Спосіб доставки',
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 169, 169, 169),
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: AppColors.primaryColor,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: DropdownButtonFormField<String>(
+                              focusColor: AppColors.primaryColor,
+                              dropdownColor:
+                                  const Color.fromARGB(255, 64, 64, 64),
+                              value: _selectedDelivery == ''
+                                  ? null
+                                  : _selectedDelivery,
+                              items: _deliveries.map((delivery) {
+                                return DropdownMenuItem<String>(
+                                  value: delivery,
+                                  child: Text(delivery),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedDelivery = value;
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Виберіть спосіб доставки';
+                                }
+                                return null;
+                              },
+                              decoration: const InputDecoration(
+                                contentPadding: EdgeInsets.all(8),
+                                counterText: '',
+                                border: InputBorder.none,
+                                prefixStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
                                 ),
                               ),
-                              Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: AppColors.primaryColor,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                child: DropdownButtonFormField<String>(
-                                  focusColor: AppColors.primaryColor,
-                                  dropdownColor:
-                                      const Color.fromARGB(255, 64, 64, 64),
-                                  value: _selectedDelivery,
-                                  items: _deliveries.map((delivery) {
-                                    return DropdownMenuItem<String>(
-                                      value: delivery,
-                                      child: Text(delivery),
-                                    );
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _selectedDelivery = value;
-                                    });
-                                  },
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Виберіть спосіб доставки';
-                                    }
-                                    return null;
-                                  },
-                                  decoration: const InputDecoration(
-                                    contentPadding: EdgeInsets.all(8),
-                                    counterText: '',
-                                    border: InputBorder.none,
-                                    prefixStyle: TextStyle(
-                                        color: Colors.white, fontSize: 16),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              CustomTextField(
-                                  hintText: _selectedDelivery == 'Нова пошта'
-                                      ? 'Номер відділення'
-                                      : 'Поштовий індекс та адреса відділення',
-                                  maxLength: 65,
-                                  maxLines:
-                                      _selectedDelivery == 'Нова пошта' ? 1 : 2,
-                                  controller: _postOfficeNumberController,
-                                  validator: (value) {
-                                    if (value == null ||
-                                        value.isEmpty ||
-                                        value.length >= 40) {
-                                      return 'Введіть номер поштового відділення або адресу з індексом';
-                                    }
-                                    return null;
-                                  }),
-                              CustomTextField(
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          CustomTextField(
+                              hintText: _selectedDelivery == 'Нова пошта'
+                                  ? 'Номер відділення'
+                                  : 'Поштовий індекс та адреса відділення',
+                              maxLength: 65,
+                              maxLines:
+                                  _selectedDelivery == 'Нова пошта' ? 1 : 2,
+                              controller: _postOfficeNumberController,
+                              validator: (value) {
+                                if (value == null ||
+                                    value.isEmpty ||
+                                    value.length >= 40) {
+                                  return 'Введіть номер поштового відділення або адресу з індексом';
+                                }
+                                return null;
+                              }),
+                          !widget.isEditProfile
+                              ? CustomTextField(
                                   hintText:
                                       'Коментар до замовленя (100 символів)',
                                   maxLength: 100,
@@ -308,101 +384,137 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                       return 'Коментар не повинен перевищувати 100 символів';
                                     }
                                     return null;
-                                  }),
-                            ],
-                          ),
+                                  })
+                              : Container(),
                         ],
                       ),
                     ),
-                    const SizedBox(height: 20),
-                    const MyDivider(),
-                    const SizedBox(height: 10),
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Загальна сума',
-                          style: TextStyle(
-                              color: AppColors.primaryColor,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 22),
-                        ),
-                        TotalAmountOfCart()
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    const MyDivider(),
+                    !widget.isEditProfile
+                        ? const Column(
+                            children: [
+                              SizedBox(height: 20),
+                              MyDivider(),
+                              SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Загальна сума',
+                                    style: TextStyle(
+                                        color: AppColors.primaryColor,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 22),
+                                  ),
+                                  TotalAmountOfCart()
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                              MyDivider(),
+                            ],
+                          )
+                        : Container(),
                     Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      padding: EdgeInsets.symmetric(
+                          vertical: !widget.isEditProfile ? 20 : 0),
                       child: CustomButton(
-                          action: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return Dialog(
-                                  backgroundColor:
-                                      const Color.fromARGB(255, 27, 27, 27),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(30.0),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        const SizedBox(height: 15),
-                                        const Text(
-                                          'Підтвердити замовлення?',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontFamily: 'MA',
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        const SizedBox(height: 15),
-                                        ButtonBar(
-                                          alignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            TextButton(
-                                              onPressed: () async {
-                                                Navigator.of(context).pop();
-                                                _submitForm();
-                                              },
-                                              child: const Text(
-                                                'Так',
-                                                style: TextStyle(
-                                                  fontFamily: 'MA',
+                        action: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Dialog(
+                                backgroundColor:
+                                    const Color.fromARGB(255, 27, 27, 27),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(30.0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const SizedBox(height: 15),
+                                      Text(
+                                        widget.isEditProfile
+                                            ? 'Зберегти зміни'
+                                            : 'Підтвердити замовлення?',
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontFamily: 'MA',
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      const SizedBox(height: 15),
+                                      ButtonBar(
+                                        alignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          TextButton(
+                                            onPressed: () async {
+                                              Navigator.of(context).pop();
+                                              _submitForm();
+                                            },
+                                            child: const Text(
+                                              'Так',
+                                              style: TextStyle(
+                                                fontFamily: 'MA',
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: const Text(
+                                              'Повернутися',
+                                              style: TextStyle(
                                                   color: Colors.white,
-                                                ),
-                                              ),
+                                                  fontFamily: 'MA'),
                                             ),
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text(
-                                                'Повернутися',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontFamily: 'MA'),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                );
-                              },
-                            );
-                          },
-                          text: 'Підтвердити замовлення'),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        text: widget.isEditProfile
+                            ? 'Зберегти зміни'
+                            : 'Підтвердити замовлення?',
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
+    );
+  }
+}
+
+class SectionTitle extends StatelessWidget {
+  final String text;
+  const SectionTitle({
+    super.key,
+    required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Image.asset('assets/img/appbar_title_left.png'),
+        Text(
+          text,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
+        ),
+        Image.asset('assets/img/appbar_title_right.png'),
+      ],
     );
   }
 }

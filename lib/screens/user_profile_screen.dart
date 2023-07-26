@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:honey/screens/orders_screen.dart';
 
 import 'package:honey/widgets/app_colors.dart';
 import 'package:honey/widgets/my_divider.dart';
@@ -35,25 +36,34 @@ class Order {
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({Key? key}) : super(key: key);
 
+//для виклику функції fetchUserData з класу OrdersScreen після заповнення форми
+  static _UserProfileScreenState? instance;
   @override
-  State<UserProfileScreen> createState() => _UserProfileScreenState();
+  _UserProfileScreenState createState() {
+    instance = _UserProfileScreenState();
+    return instance!;
+  }
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
   String? userName;
   String? phoneNumber;
+  String? fullName;
+  String? address;
+  String? selectedDelivery;
+  String? deliveryPhoneNumber;
+  String? postOfficeNumber;
+
   late Stream<List<Order>> _ordersStream;
-  late Stream<Map<String, dynamic>?> _userDataStream;
 
   @override
   void initState() {
-    _fetchUserRegistrationData();
+    fetchUserData();
     _ordersStream = _fetchOrdersStream();
-    _userDataStream = _fetchUserDeliveryStream();
     super.initState();
   }
 
-  Future<void> _fetchUserRegistrationData() async {
+  Future<void> fetchUserData() async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
@@ -65,30 +75,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           setState(() {
             userName = userDoc.data()?['name'];
             phoneNumber = user.phoneNumber;
+            fullName = userDoc.data()?['fullName'];
+            address = userDoc.data()?['address'];
+            selectedDelivery = userDoc.data()?['selectedDelivery'];
+            deliveryPhoneNumber = userDoc.data()?['deliveryPhoneNumber'];
+            postOfficeNumber = userDoc.data()?['postOfficeNumber'];
           });
         }
       }
     } catch (e) {
       print("Error fetching user data: $e");
-    }
-  }
-
-  Stream<Map<String, dynamic>?> _fetchUserDeliveryStream() {
-    try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        return FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .snapshots()
-            .map((snapshot) => snapshot.data());
-      } else {
-        print('User is not logged in.');
-        return Stream.value(null);
-      }
-    } catch (e) {
-      print("Error fetching user data: $e");
-      return Stream.value(null);
     }
   }
 
@@ -214,6 +210,25 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             ],
                           ),
                         ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => const OrdersScreen(
+                                    isEditProfile: true,
+                                  ),
+                                ));
+                              },
+                              icon: const Icon(
+                                Icons.edit,
+                                color: Color.fromARGB(255, 217, 217, 217),
+                                size: 22,
+                              ),
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   ),
@@ -244,58 +259,27 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             ),
                           ],
                         ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.edit,
-                            color: Color.fromARGB(255, 217, 217, 217),
-                            size: 25,
-                          ),
-                        )
                       ],
                     ),
-                    StreamBuilder<Map<String, dynamic>?>(
-                      stream: _userDataStream,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        } else if (snapshot.hasError) {
-                          return Center(
-                              child: Text('Error: ${snapshot.error}'));
-                        } else if (snapshot.data!['fullName'] == null) {
-                          return const Center(
-                              child: Text(
-                                  'Зрробіть перше замовлення, або заповніть дані про доставку*'));
-                        }
-                        final userData = snapshot.data ?? {};
-                        final fullName = userData['fullName'] as String?;
-                        final address = userData['address'] as String?;
-                        final selectedDelivery =
-                            userData['selectedDelivery'] as String?;
-                        final deliveryPhoneNumber =
-                            userData['deliveryPhoneNumber'] as String?;
-                        final postOfficeNumber =
-                            userData['postOfficeNumber'] as String?;
-
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              DeliveryInfoSingleText(text: fullName ?? ''),
-                              DeliveryInfoSingleText(
-                                  text: deliveryPhoneNumber ?? ''),
-                              DeliveryInfoSingleText(text: address ?? ''),
-                              DeliveryInfoSingleText(
-                                  text: selectedDelivery ?? ''),
-                              DeliveryInfoSingleText(
-                                  text: postOfficeNumber ?? ''),
-                            ],
-                          ),
-                        );
-                      },
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 5, vertical: 10),
+                      child: fullName == null
+                          ? const Text(
+                              'Будь ласка, зробіть перше замовлення, або заповніть дані про доставку')
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                DeliveryInfoSingleText(text: fullName ?? ''),
+                                DeliveryInfoSingleText(
+                                    text: deliveryPhoneNumber ?? ''),
+                                DeliveryInfoSingleText(text: address ?? ''),
+                                DeliveryInfoSingleText(
+                                    text: selectedDelivery ?? ''),
+                                DeliveryInfoSingleText(
+                                    text: 'Відділення: $postOfficeNumber'),
+                              ],
+                            ),
                     ),
                     const SizedBox(height: 5),
                     const MyDivider(),
