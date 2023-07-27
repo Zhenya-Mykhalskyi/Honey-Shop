@@ -48,10 +48,17 @@ class _AdminMainScreenState extends State<AdminMainScreen>
         ],
       ),
       appBar: AppBar(
+        toolbarHeight: _selectedBottomNavBarIndex != 2 ? 100 : 70,
+        elevation: 0,
+        leadingWidth: 93,
+        title: _selectedBottomNavBarIndex == 2
+            ? const Text('Замовлення',
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24))
+            : null,
         bottom: PreferredSize(
           preferredSize:
-              Size.fromHeight(_selectedBottomNavBarIndex == 2 ? 0 : 50),
-          child: Container(
+              Size.fromHeight(_selectedBottomNavBarIndex == 2 ? 0 : 30),
+          child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: _selectedBottomNavBarIndex != 2
                 ? Row(
@@ -80,26 +87,30 @@ class _AdminMainScreenState extends State<AdminMainScreen>
                 : const SizedBox.shrink(),
           ),
         ),
-        toolbarHeight: 100,
-        elevation: 0,
-        leading: Container(
-          margin: const EdgeInsets.only(left: 20, top: 20),
-          child: Image.asset('./assets/img/logo.png'),
-        ),
-        leadingWidth: 95,
+        leading: _selectedBottomNavBarIndex != 2
+            ? Padding(
+                padding: const EdgeInsets.only(left: 20, bottom: 10),
+                child: Image.asset('./assets/img/logo.png'),
+              )
+            : null,
         actions: [
-          Container(
-            margin: const EdgeInsets.only(top: 35, right: 10),
+          Padding(
+            padding: const EdgeInsets.only(right: 15),
             child: IconButton(
-              icon: const Icon(
-                Icons.person,
+              icon: Icon(
+                _selectedBottomNavBarIndex != 2
+                    ? Icons.person
+                    : Icons.ballot_outlined,
                 size: 35,
+                color: Colors.white,
               ),
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const AdminProfileScreen(),
-                ));
-              },
+              onPressed: _selectedBottomNavBarIndex != 2
+                  ? () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const AdminProfileScreen(),
+                      ));
+                    }
+                  : () {},
             ),
           )
         ],

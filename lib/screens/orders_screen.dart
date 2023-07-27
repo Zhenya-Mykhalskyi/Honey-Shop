@@ -430,9 +430,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                   maxLines: 4,
                                   controller: _commentController,
                                   validator: (value) {
-                                    if (value!.length >= 100) {
-                                      return 'Коментар не повинен перевищувати 100 символів';
-                                    }
                                     return null;
                                   })
                               : Container(),

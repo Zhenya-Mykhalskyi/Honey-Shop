@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:honey/widgets/title_appbar.dart';
 import 'package:provider/provider.dart';
 
 import 'package:honey/admin/admin_screens/admin_profile_screen.dart';
 import 'package:honey/providers/cart.dart';
 import 'package:honey/widgets/badge.dart';
 import 'package:honey/widgets/tab_button.dart';
-import '../widgets/products_grid.dart';
+import 'package:honey/widgets/products_grid.dart';
 import 'user_profile_screen.dart';
 import 'cart_screen.dart';
 
@@ -61,8 +60,11 @@ class _UserMainScreenState extends State<UserMainScreen>
       ),
       appBar: _selectedBottomNavBarIndex == 1
           ? AppBar(
+              toolbarHeight: 100,
+              elevation: 0,
+              leadingWidth: 93,
               bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(50),
+                preferredSize: const Size.fromHeight(30),
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: _selectedBottomNavBarIndex == 1
@@ -92,16 +94,13 @@ class _UserMainScreenState extends State<UserMainScreen>
                       : const SizedBox.shrink(),
                 ),
               ),
-              toolbarHeight: 100,
-              elevation: 0,
-              leading: Container(
-                margin: const EdgeInsets.only(left: 20, top: 20),
+              leading: Padding(
+                padding: const EdgeInsets.only(left: 20),
                 child: Image.asset('./assets/img/logo.png'),
               ),
-              leadingWidth: 95,
               actions: [
-                Container(
-                  margin: const EdgeInsets.only(top: 35, right: 10),
+                Padding(
+                  padding: const EdgeInsets.only(right: 15, top: 5),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -137,10 +136,7 @@ class _UserMainScreenState extends State<UserMainScreen>
                 )
               ],
             )
-          : TitleAppBar(
-              title: _selectedBottomNavBarIndex == 0
-                  ? 'Особистий кабінет'
-                  : 'Інформація про магазин'),
+          : null,
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false,

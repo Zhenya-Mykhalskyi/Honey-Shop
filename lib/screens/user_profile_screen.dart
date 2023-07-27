@@ -7,6 +7,7 @@ import 'package:honey/screens/orders_screen.dart';
 import 'package:honey/widgets/app_colors.dart';
 import 'package:honey/widgets/my_divider.dart';
 import 'package:honey/widgets/order_card.dart';
+import 'package:honey/widgets/title_appbar.dart';
 
 class Order {
   final String orderId;
@@ -137,6 +138,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const TitleAppBar(title: 'Особистий кабінет'),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
