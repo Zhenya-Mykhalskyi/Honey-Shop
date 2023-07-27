@@ -144,14 +144,13 @@ class _AuthScreenState extends State<AuthScreen> {
                         child: _authMode == AuthMode.Signup
                             ? TextFormField(
                                 decoration: const InputDecoration(
-                                  border: InputBorder
-                                      .none, // вимкнути ободок всередині текстового поля
+                                  border: InputBorder.none,
                                   hintText: 'Ваше імʼя',
-
                                   hintStyle: TextStyle(color: Colors.white),
                                   filled: true,
-                                  fillColor: Colors.transparent, // прозорий фон
+                                  fillColor: Colors.transparent,
                                 ),
+                                maxLength: 15,
                                 controller: _namecontroller,
                                 validator: (value) {
                                   if (value!.isEmpty || value.length < 2) {
@@ -174,11 +173,11 @@ class _AuthScreenState extends State<AuthScreen> {
                         child: TextFormField(
                           decoration: InputDecoration(
                             prefix: !isFocused ? null : const Text('+380 '),
-                            border: InputBorder.none, // вимкнути ободок
+                            border: InputBorder.none,
                             hintText: 'Номер телефону',
                             hintStyle: const TextStyle(color: Colors.white),
                             filled: true,
-                            fillColor: Colors.transparent, // прозорий фон
+                            fillColor: Colors.transparent,
                           ),
                           onTap: () {
                             setState(() {

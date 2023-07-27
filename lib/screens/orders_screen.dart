@@ -282,15 +282,12 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                     Expanded(
                                       child: CustomTextField(
                                         hintText: 'Ваше імʼя',
-                                        maxLength: 20,
+                                        maxLength: 15,
                                         maxLines: 1,
                                         controller: _usernameController,
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
                                             return 'Будь ласка, введіть Ваше імʼя';
-                                          }
-                                          if (value.toString().length >= 20) {
-                                            return 'Імʼя повинне бути коротшим 20-ти символів';
                                           }
                                           return null;
                                         },
@@ -415,14 +412,12 @@ class _OrdersScreenState extends State<OrdersScreen> {
                               hintText: _selectedDelivery == 'Нова пошта'
                                   ? 'Номер відділення'
                                   : 'Поштовий індекс та адреса відділення',
-                              maxLength: 65,
+                              maxLength: 50,
                               maxLines:
                                   _selectedDelivery == 'Нова пошта' ? 1 : 2,
                               controller: _postOfficeNumberController,
                               validator: (value) {
-                                if (value == null ||
-                                    value.isEmpty ||
-                                    value.length >= 40) {
+                                if (value == null || value.isEmpty) {
                                   return 'Введіть номер поштового відділення або адресу з індексом';
                                 }
                                 return null;

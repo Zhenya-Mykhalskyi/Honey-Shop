@@ -363,12 +363,14 @@ class ProfileInfoCardSingleRow extends StatelessWidget {
           size: 22,
         ),
         const SizedBox(width: 10),
-        Text(
-          text,
-          style: TextStyle(
-              fontSize: 17,
-              color: color ?? Colors.white,
-              fontWeight: fontWeight),
+        Flexible(
+          child: Text(
+            text,
+            style: TextStyle(
+                fontSize: 17,
+                color: color ?? Colors.white,
+                fontWeight: fontWeight),
+          ),
         ),
       ],
     );
