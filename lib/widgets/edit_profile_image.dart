@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -61,8 +62,12 @@ class _EditProfileImageState extends State<EditProfileImage> {
                   onTap: pickProfileImage,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.network(
-                      widget.currentProfileImage!,
+                    child: CachedNetworkImage(
+                      imageUrl: widget.currentProfileImage!,
+                      placeholder: (context, url) =>
+                          const CircularProgressIndicator(
+                        color: AppColors.primaryColor,
+                      ),
                       fit: BoxFit.cover,
                     ),
                   ),
