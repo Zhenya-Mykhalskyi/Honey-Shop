@@ -88,12 +88,25 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   Future<void> _submitForm(BuildContext context) async {
     final navigatorContext = Navigator.of(context);
+    final scaffoldContext = ScaffoldMessenger.of(context);
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
+    final user = FirebaseAuth.instance.currentUser;
+    final connectivityResult = await Connectivity().checkConnectivity();
     if (_formkey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
       });
-      final cartProvider = Provider.of<CartProvider>(context, listen: false);
-      final user = FirebaseAuth.instance.currentUser;
+
+      if (connectivityResult == ConnectivityResult.none) {
+        scaffoldContext.showSnackBar(
+          const SnackBar(
+            content: Text('Немає з\'єднання з Інтернетом'),
+            duration: Duration(seconds: 3),
+          ),
+        );
+        return;
+      }
+
       if (user == null) {
         return;
       }

@@ -27,7 +27,6 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
   final _priceController = TextEditingController();
   final _litersLeftController = TextEditingController();
   final _descriptionController = TextEditingController();
-  // final _longDescriptionController = TextEditingController();
   String? _imageUrl; //для загрузки на firestore
   File? _pickedImage;
   bool _isLoading = false;
