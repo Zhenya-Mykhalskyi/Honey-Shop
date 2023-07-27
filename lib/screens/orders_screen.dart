@@ -130,11 +130,12 @@ class _OrdersScreenState extends State<OrdersScreen> {
       await _saveUserData();
       _resetProductsdata();
 
-      navigatorContext.push(
+      navigatorContext.pushAndRemoveUntil(
         MaterialPageRoute(
           builder: (context) =>
               const UserMainScreen(selectedBottomNavBarIndex: 0),
         ),
+        (route) => false,
       );
       setState(() {
         _isLoading = false;
