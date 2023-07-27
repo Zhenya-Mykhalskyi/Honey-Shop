@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:honey/providers/product_model.dart';
 import 'package:honey/providers/products.dart';
 import 'package:honey/widgets/product_item.dart';
+import 'package:honey/widgets/app_colors.dart';
 
 class ProductsGrid extends StatelessWidget {
   final bool isHoney;
@@ -21,9 +22,11 @@ class ProductsGrid extends StatelessWidget {
             ? products.where((product) => product.isHoney).toList()
             : products.where((product) => !product.isHoney).toList();
 
-        if (filteredProducts.isEmpty) {
+        if (productProvider.items.isEmpty) {
           return const Center(
-              child: Text('Продуктів цієї категорії не знайдено'));
+              child: CircularProgressIndicator(
+            color: AppColors.primaryColor,
+          ));
         }
 
         return Padding(
