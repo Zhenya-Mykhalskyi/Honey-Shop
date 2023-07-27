@@ -154,7 +154,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     child: Row(
                       children: [
                         Expanded(
-                          flex: 3,
+                          flex: 4,
                           child: AspectRatio(
                             aspectRatio: 1,
                             child: Container(
