@@ -112,10 +112,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                text: widget.product.shortDescription.length <=
+                                text: widget.product.productDescription
+                                            .length <=
                                         140
-                                    ? widget.product.shortDescription
-                                    : '${widget.product.shortDescription.substring(0, 140)}... ',
+                                    ? widget.product.productDescription
+                                    : '${widget.product.productDescription.substring(0, 140)}... ',
                                 style: const TextStyle(
                                     height: 1.45,
                                     fontSize: 16,
@@ -224,7 +225,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               ),
                               const SizedBox(height: 15),
                               Text(
-                                widget.product.longDescription,
+                                widget.product.productDescription,
                                 style: const TextStyle(
                                   height: 1.45,
                                   color: Colors.white,

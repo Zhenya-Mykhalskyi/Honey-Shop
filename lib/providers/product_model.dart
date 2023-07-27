@@ -4,8 +4,8 @@ class Product {
   double price;
   String imageUrl;
   int litersLeft;
-  String shortDescription;
-  String longDescription;
+  String productDescription;
+
   bool isHoney;
   double liters;
 
@@ -15,8 +15,7 @@ class Product {
     required this.price,
     required this.imageUrl,
     required this.litersLeft,
-    required this.shortDescription,
-    required this.longDescription,
+    required this.productDescription,
     required this.isHoney,
     double? liters,
   }) : liters = liters ?? 0.0;

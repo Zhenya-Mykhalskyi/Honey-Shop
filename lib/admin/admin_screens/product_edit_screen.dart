@@ -12,9 +12,9 @@ import 'package:honey/widgets/custom_button.dart';
 
 class ProductEditScreen extends StatefulWidget {
   final String productId;
-  final bool isAdd;
+  final bool isAddProduct;
   const ProductEditScreen(
-      {Key? key, required this.productId, required this.isAdd})
+      {Key? key, required this.productId, required this.isAddProduct})
       : super(key: key);
 
   @override
@@ -26,8 +26,8 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
   final _titleController = TextEditingController();
   final _priceController = TextEditingController();
   final _litersLeftController = TextEditingController();
-  final _shortDescriptionController = TextEditingController();
-  final _longDescriptionController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  // final _longDescriptionController = TextEditingController();
   String? _imageUrl; //для загрузки на firestore
   File? _pickedImage;
   bool _isLoading = false;
@@ -38,8 +38,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     id: '',
     title: '',
     price: 0,
-    longDescription: '',
-    shortDescription: '',
+    productDescription: '',
     imageUrl: '',
     isHoney: false,
     litersLeft: 0,
@@ -79,8 +78,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
       _editedProduct.title = _titleController.text;
       _editedProduct.price = double.parse(_priceController.text);
       _editedProduct.litersLeft = int.parse(_litersLeftController.text);
-      _editedProduct.shortDescription = _shortDescriptionController.text;
-      _editedProduct.longDescription = _longDescriptionController.text;
+      _editedProduct.productDescription = _descriptionController.text;
       _editedProduct.isHoney = _isHoney;
       DocumentSnapshot productSnapshot = await FirebaseFirestore.instance
           .collection('products')
@@ -127,8 +125,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
           _priceController.text = product.price.toString();
           _titleController.text = product.title;
           _litersLeftController.text = product.litersLeft.toString();
-          _shortDescriptionController.text = product.shortDescription;
-          _longDescriptionController.text = product.longDescription;
+          _descriptionController.text = product.productDescription;
           _isHoney = product.isHoney;
           _imageUrl = product.imageUrl;
           setState(() {
@@ -277,8 +274,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                     color: AppColors.primaryColor,
                                   ),
                                 ),
-                                child: widget
-                                        .isAdd // додаємо чи редагуємо товар?
+                                child: widget.isAddProduct
                                     ? _pickedImage == null
                                         ? InkWell(
                                             onTap: pickProductImage,
@@ -331,15 +327,12 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                   children: [
                                     CustomTextField(
                                       hintText: 'Назва товару',
-                                      maxLength: 230,
+                                      maxLength: 30,
                                       maxLines: 1,
                                       controller: _titleController,
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
                                           return 'Будь ласка, введіть назву товару';
-                                        }
-                                        if (value.toString().length >= 30) {
-                                          return 'Повинна бути коротшою 30 символів';
                                         }
                                         return null;
                                       },
@@ -393,12 +386,12 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                               const Flexible(
                                 child: Text(
                                     'Поставте галочку, якщо товар являється медом*'),
-                              )
+                              ),
                             ],
                           ),
                           CustomTextField(
                             hintText: 'Кількість літрів',
-                            maxLength: 10,
+                            maxLength: 6,
                             maxLines: 1,
                             controller: _litersLeftController,
                             validator: (value) {
@@ -416,25 +409,13 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                             },
                           ),
                           CustomTextField(
-                            hintText: 'Короткий опис',
-                            maxLength: 400,
-                            maxLines: 4,
-                            controller: _shortDescriptionController,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Будь ласка, введіть короткий опис товару';
-                              }
-                              return null;
-                            },
-                          ),
-                          CustomTextField(
-                            hintText: 'Розгорнутий опис',
+                            hintText: 'Опис товару (розділяйте абзацами)',
                             maxLength: 1000,
-                            maxLines: 6,
-                            controller: _longDescriptionController,
+                            maxLines: 14,
+                            controller: _descriptionController,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Будь ласка, введіть розгорнутий опис товару';
+                                return 'Будь ласка, введіть опис товару';
                               }
                               return null;
                             },
@@ -463,13 +444,14 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String? Function(String?)? validator;
 
-  const CustomTextField(
-      {super.key,
-      required this.hintText,
-      required this.maxLength,
-      required this.maxLines,
-      required this.controller,
-      required this.validator});
+  const CustomTextField({
+    super.key,
+    required this.hintText,
+    required this.maxLength,
+    required this.maxLines,
+    required this.controller,
+    required this.validator,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -502,10 +484,10 @@ class CustomTextField extends StatelessWidget {
               validator: validator,
               style: const TextStyle(color: Colors.white),
               decoration: const InputDecoration(
-                contentPadding: EdgeInsets.all(8),
-                border: InputBorder.none,
-                counterText: '',
-              ),
+                  contentPadding: EdgeInsets.all(8),
+                  border: InputBorder.none,
+                  counterStyle:
+                      TextStyle(color: Color.fromARGB(255, 173, 173, 173))),
             ),
           ),
         ],

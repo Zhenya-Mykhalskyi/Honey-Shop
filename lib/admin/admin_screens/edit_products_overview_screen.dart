@@ -116,7 +116,7 @@ class EditProductsOverviewScreen extends StatelessWidget {
                                           MaterialPageRoute(
                                             builder: (context) =>
                                                 ProductEditScreen(
-                                              isAdd: false,
+                                              isAddProduct: false,
                                               productId:
                                                   filteredProducts[index].id,
                                             ),
@@ -145,7 +145,7 @@ class EditProductsOverviewScreen extends StatelessWidget {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => ProductEditScreen(
-                    isAdd: true,
+                    isAddProduct: true,
                     productId: FirebaseFirestore.instance
                         .collection('products')
                         .doc()

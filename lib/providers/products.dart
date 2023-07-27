@@ -26,8 +26,7 @@ class ProductsProvider with ChangeNotifier {
           id: data['id'],
           title: data['title'],
           price: data['price'],
-          shortDescription: data['shortDescription'],
-          longDescription: data['longDescription'],
+          productDescription: data['shortDescription'],
           imageUrl: data['imageUrl'],
           isHoney: data['isHoney'],
           litersLeft: data['litersLeft'],
@@ -61,11 +60,8 @@ class ProductsProvider with ChangeNotifier {
                   '',
           litersLeft:
               (productSnapshot.data() as Map<String, dynamic>)['litersLeft'],
-          shortDescription: (productSnapshot.data()
+          productDescription: (productSnapshot.data()
                   as Map<String, dynamic>)['shortDescription'] ??
-              '',
-          longDescription: (productSnapshot.data()
-                  as Map<String, dynamic>)['longDescription'] ??
               '',
           isHoney: (productSnapshot.data() as Map<String, dynamic>)['isHoney'],
         );
@@ -95,8 +91,7 @@ class ProductsProvider with ChangeNotifier {
         'price': product.price,
         'imageUrl': imageUrl,
         'litersLeft': product.litersLeft,
-        'shortDescription': product.shortDescription,
-        'longDescription': product.longDescription,
+        'shortDescription': product.productDescription,
         'isHoney': product.isHoney,
       });
       Product newProduct = Product(
@@ -105,8 +100,7 @@ class ProductsProvider with ChangeNotifier {
         price: product.price,
         imageUrl: imageUrl,
         litersLeft: product.litersLeft,
-        shortDescription: product.shortDescription,
-        longDescription: product.longDescription,
+        productDescription: product.productDescription,
         isHoney: product.isHoney,
       );
       _items.add(newProduct);
@@ -139,18 +133,9 @@ class ProductsProvider with ChangeNotifier {
         'price': product.price,
         'imageUrl': imageUrl,
         'litersLeft': product.litersLeft,
-        'shortDescription': product.shortDescription,
-        'longDescription': product.longDescription,
+        'shortDescription': product.productDescription,
         'isHoney': product.isHoney,
       });
-
-      product.title = product.title;
-      product.price = product.price;
-      product.imageUrl = imageUrl;
-      product.litersLeft = product.litersLeft;
-      product.shortDescription = product.shortDescription;
-      product.longDescription = product.longDescription;
-      product.isHoney = product.isHoney;
 
       int index = _items.indexWhere((item) => item.id == prodId);
       if (index != -1) {
@@ -160,6 +145,7 @@ class ProductsProvider with ChangeNotifier {
       } else {
         _items.add(product);
       }
+
       await getProductList();
       notifyListeners();
     } catch (e) {
@@ -178,7 +164,6 @@ class ProductsProvider with ChangeNotifier {
       await productRef.delete();
       _items.removeWhere((product) => product.id == productId);
       notifyListeners();
-      print('Продукт успішно видалений.');
     } catch (error) {
       print('Сталася помилка при видаленні продукту: $error');
     }
