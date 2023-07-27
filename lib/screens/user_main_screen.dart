@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:honey/widgets/title_appbar.dart';
 import 'package:provider/provider.dart';
 
-import 'package:honey/admin/admin_screens/about_admin_screen.dart';
+import 'package:honey/admin/admin_screens/admin_profile_screen.dart';
 import 'package:honey/providers/cart.dart';
 import 'package:honey/widgets/badge.dart';
 import 'package:honey/widgets/tab_button.dart';
@@ -50,10 +50,10 @@ class _UserMainScreenState extends State<UserMainScreen>
               children: [
                 if (_selectedTabIndex == 0) const UserProfileScreen(),
                 if (_selectedTabIndex == 0) const ProductsGrid(isHoney: true),
-                if (_selectedTabIndex == 0) const AboutAdminScreen(),
+                if (_selectedTabIndex == 0) const AdminProfileScreen(),
                 if (_selectedTabIndex == 1) const UserProfileScreen(),
                 if (_selectedTabIndex == 1) const ProductsGrid(isHoney: false),
-                if (_selectedTabIndex == 1) const AboutAdminScreen(),
+                if (_selectedTabIndex == 1) const AdminProfileScreen(),
               ],
             ),
           ),
@@ -121,7 +121,7 @@ class _UserMainScreenState extends State<UserMainScreen>
                           icon: const Icon(
                             Icons.shopping_bag_outlined,
                             color: Colors.white,
-                            size: 30,
+                            size: 35,
                           ),
                           onPressed: () {
                             Navigator.of(context).push(

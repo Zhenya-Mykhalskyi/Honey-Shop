@@ -1,10 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'package:honey/screens/cart_screen.dart';
 import 'package:honey/widgets/products_grid.dart';
 import 'package:honey/widgets/tab_button.dart';
-import 'edit_overview_screen.dart';
+import 'admin_profile_screen.dart';
+import 'admin_orders_screen.dart';
+import 'edit_products_overview_screen.dart';
 
 class AdminMainScreen extends StatefulWidget {
   const AdminMainScreen({super.key});
@@ -36,14 +36,12 @@ class _AdminMainScreenState extends State<AdminMainScreen>
               children: [
                 if (_selectedTabIndex == 0) const ProductsGrid(isHoney: true),
                 if (_selectedTabIndex == 0)
-                  const EditOverViewScreen(isHoney: true),
-                // if (_selectedTabIndex == 0) const AdminOrdersScreen(),
-                if (_selectedTabIndex == 0) const CartScreen(),
+                  const EditProductsOverviewScreen(isHoney: true),
+                if (_selectedTabIndex == 0) const AdminOrdersScreen(),
                 if (_selectedTabIndex == 1) const ProductsGrid(isHoney: false),
                 if (_selectedTabIndex == 1)
-                  const EditOverViewScreen(isHoney: false),
-                // if (_selectedTabIndex == 1) const AdminOrdersScreen(),
-                if (_selectedTabIndex == 1) const CartScreen(),
+                  const EditProductsOverviewScreen(isHoney: false),
+                if (_selectedTabIndex == 1) const AdminOrdersScreen(),
               ],
             ),
           ),
@@ -92,32 +90,15 @@ class _AdminMainScreenState extends State<AdminMainScreen>
         actions: [
           Container(
             margin: const EdgeInsets.only(top: 35, right: 10),
-            child: DropdownButton(
-              underline: Container(),
+            child: IconButton(
               icon: const Icon(
                 Icons.person,
-                color: Colors.white,
-                size: 40,
+                size: 35,
               ),
-              items: const [
-                DropdownMenuItem(
-                  value: 'logout',
-                  child: Row(
-                    children: [
-                      Icon(Icons.exit_to_app),
-                      SizedBox(width: 8),
-                      Text(
-                        'Logout',
-                        style: TextStyle(color: Colors.black),
-                      )
-                    ],
-                  ),
-                )
-              ],
-              onChanged: (itemIdentifier) {
-                if (itemIdentifier == 'logout') {
-                  FirebaseAuth.instance.signOut();
-                }
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const AdminProfileScreen(),
+                ));
               },
             ),
           )
@@ -152,3 +133,33 @@ class _AdminMainScreenState extends State<AdminMainScreen>
     );
   }
 }
+
+
+// child: DropdownButton(
+//               underline: Container(),
+//               icon: const Icon(
+//                 Icons.person,
+//                 color: Colors.white,
+//                 size: 40,
+//               ),
+//               items: const [
+//                 DropdownMenuItem(
+//                   value: 'logout',
+//                   child: Row(
+//                     children: [
+//                       Icon(Icons.exit_to_app),
+//                       SizedBox(width: 8),
+//                       Text(
+//                         'Logout',
+//                         style: TextStyle(color: Colors.black),
+//                       )
+//                     ],
+//                   ),
+//                 )
+//               ],
+//               onChanged: (itemIdentifier) {
+//                 if (itemIdentifier == 'logout') {
+//                   FirebaseAuth.instance.signOut();
+//                 }
+//               },
+//             ),

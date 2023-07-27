@@ -5,10 +5,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'product_edit_screen.dart';
 import 'package:honey/widgets/custom_button.dart';
 
-class EditOverViewScreen extends StatelessWidget {
+class EditProductsOverviewScreen extends StatelessWidget {
   final bool isHoney;
 
-  const EditOverViewScreen({
+  const EditProductsOverviewScreen({
     required this.isHoney,
     Key? key,
   }) : super(key: key);
