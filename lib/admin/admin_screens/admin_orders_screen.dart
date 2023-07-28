@@ -40,22 +40,6 @@ class AdminOrdersScreen extends StatelessWidget {
                 order: order,
                 orderProductData: productsList,
               );
-              // return Column(
-              //   children: productsList.map((product) {
-              //     final String productId = product['id'] as String;
-              //     final String productTitle = product['title'] as String;
-              //     final double productLiters = product['liters'] as double;
-              //     final double productPrice = product['price'] as double;
-              //     final String productImageUrl = product['imageUrl'] as String;
-
-              //     return ListTile(
-              //       title: Text(order['address']),
-              //       subtitle: Text(productLiters.toString()),
-              //       trailing: Text(productPrice.toString()),
-              //       onTap: () {},
-              //     );
-              //   }).toList(),
-              // );
             },
           );
         },

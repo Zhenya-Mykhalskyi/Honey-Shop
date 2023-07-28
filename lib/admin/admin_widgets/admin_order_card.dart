@@ -22,81 +22,79 @@ class AdminOrderCard extends StatelessWidget {
         ),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-          child: IntrinsicHeight(
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          order['fullName'],
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        order['fullName'],
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
                         ),
-                        const SizedBox(height: 5),
-                        Text(
-                          order['address'],
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        )
-                      ],
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AdminOrderDetailsDialog(
-                              order: order, orderProductData: orderProductData),
-                        );
-                      },
-                      icon: const Icon(
-                        Icons.arrow_downward,
-                        color: Colors.white,
                       ),
-                    )
-                  ],
-                ),
-                const Divider(color: Colors.white),
-                // MyDivider()
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.delete,
-                        color: Colors.white,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Switch(
-                          value: ok,
-                          onChanged: (value) {
-                            value = !value;
-                            print(value);
-                          },
+                      const SizedBox(height: 5),
+                      Text(
+                        order['address'],
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
                         ),
-                        Text(
-                          '₴${order['totalAmount']}',
-                          style: const TextStyle(
-                              color: AppColors.primaryColor,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600),
-                        )
-                      ],
-                    )
-                  ],
-                )
-              ],
-            ),
+                      )
+                    ],
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AdminOrderDetailsDialog(
+                            order: order, orderProductData: orderProductData),
+                      );
+                    },
+                    icon: const Icon(
+                      Icons.arrow_downward,
+                      color: Colors.white,
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(height: 7),
+              const MyDivider(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Switch(
+                        value: ok,
+                        onChanged: (value) {
+                          value = !value;
+                          print(value);
+                        },
+                      ),
+                      Text(
+                        '₴${order['totalAmount']}',
+                        style: const TextStyle(
+                            color: AppColors.primaryColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600),
+                      )
+                    ],
+                  )
+                ],
+              )
+            ],
           ),
         ),
       ),
