@@ -163,6 +163,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
       final String orderId = newOrderRef.id;
       orderData['orderId'] = orderId;
       orderData['isFinished'] = false;
+      orderData['isVisibleForAdmin'] = true;
       await newOrderRef.update(orderData);
     } catch (e) {
       print('Error saving order: $e');

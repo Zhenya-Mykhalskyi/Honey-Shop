@@ -28,30 +28,42 @@ class AdminOrdersScreen extends StatelessWidget {
             return const Center(child: Text('Немає замовлень'));
           }
 
-          orders.sort((a, b) {
-            final orderA = a.data();
-            final orderB = b.data();
-            final bool isFinishedA = orderA['isFinished'] ?? false;
-            final bool isFinishedB = orderB['isFinished'] ?? false;
+          orders.sort((order1, order2) {
+            final data1 = order1.data();
+            final data2 = order2.data();
+            final bool isFinished1 = data1['isFinished'] ?? false;
+            final bool isFinished2 = data2['isFinished'] ?? false;
 
-            if (isFinishedA == isFinishedB) {
-              return orderB['timestamp'].compareTo(orderA['timestamp']);
+            if (isFinished1 == isFinished2) {
+              return data2['timestamp'].compareTo(data1['timestamp']);
             } else {
-              return isFinishedA ? 1 : -1;
+              return isFinished1 ? 1 : -1;
             }
           });
 
+          final adminOrders = orders
+              .where((order) => (order.data()['isVisibleForAdmin'] ?? false))
+              .toList();
+
           return ListView.builder(
-            itemCount: orders.length,
+            itemCount: adminOrders.length,
             itemBuilder: (context, index) {
-              final order = orders[index].data();
+              final order = adminOrders[index].data();
               final Map<String, dynamic> productsData =
                   (order['products'] as Map<String, dynamic>);
 
               final List productsList = productsData.values.toList();
+
               return AdminOrderCard(
                 order: order,
                 orderProductsData: productsList,
+                onDelete: () {
+                  final String orderId = order['orderId'];
+                  FirebaseFirestore.instance
+                      .collection('orders')
+                      .doc(orderId)
+                      .update({'isVisibleForAdmin': false});
+                },
               );
             },
           );

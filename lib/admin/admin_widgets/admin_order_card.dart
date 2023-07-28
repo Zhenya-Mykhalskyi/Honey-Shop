@@ -9,8 +9,12 @@ import 'admin_order_dialog.dart';
 class AdminOrderCard extends StatelessWidget {
   final Map<String, dynamic> order;
   final List orderProductsData;
+  final VoidCallback onDelete;
   const AdminOrderCard(
-      {super.key, required this.order, required this.orderProductsData});
+      {super.key,
+      required this.order,
+      required this.orderProductsData,
+      required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +38,7 @@ class AdminOrderCard extends StatelessWidget {
       }
     }
 
-    Future<void> _showConfirmationDialog(BuildContext context) async {
+    Future<void> _showBonusesConfirmaDialog(BuildContext context) async {
       return showDialog<void>(
         context: context,
         builder: (BuildContext context) {
@@ -64,6 +68,58 @@ class AdminOrderCard extends StatelessWidget {
                       Navigator.of(context).pop();
                       isFinished = true;
                       _updateIsFinished(true);
+                    },
+                    child: const Text(
+                      'Так',
+                      style: TextStyle(color: Colors.red, fontFamily: 'MA'),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text(
+                      'Повернутися',
+                      style: TextStyle(color: Colors.white, fontFamily: 'MA'),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+    void _showDeleteConfirmaDialog(BuildContext context) async {
+      return showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: const Color.fromARGB(255, 27, 27, 27),
+            content: const Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Flexible(
+                  child: Text(
+                    'Впевнені, що хочете видалити замовлення? Видаляйте замовлення тільки після начислення бонусів клієнту. Цю дію неможливо відмінити!',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'MA',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      onDelete();
+                      Navigator.of(context).pop();
                     },
                     child: const Text(
                       'Так',
@@ -153,7 +209,9 @@ class AdminOrderCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      _showDeleteConfirmaDialog(context);
+                    },
                     icon: const Icon(
                       Icons.delete,
                       color: Colors.white,
@@ -165,7 +223,7 @@ class AdminOrderCard extends StatelessWidget {
                         value: isFinished,
                         onChanged: (value) async {
                           if (!isFinished) {
-                            await _showConfirmationDialog(context);
+                            await _showBonusesConfirmaDialog(context);
                           }
                         },
                       ),
