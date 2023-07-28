@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:honey/services/check_internet_connection.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -55,19 +56,15 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
         Provider.of<ProductsProvider>(context, listen: false);
     final popContext = Navigator.of(context);
     final scaffoldContext = ScaffoldMessenger.of(context);
-    final connectivityResult = await Connectivity().checkConnectivity();
+
     final isValid = _formkey.currentState?.validate();
     if (!isValid!) {
       return;
     }
 
-    if (connectivityResult == ConnectivityResult.none) {
-      scaffoldContext.showSnackBar(
-        const SnackBar(
-          content: Text('Немає з\'єднання з Інтернетом'),
-          duration: Duration(seconds: 3),
-        ),
-      );
+    final hasInternetConnection =
+        await CheckConnectivityUtil.checkInternetConnectivity(context);
+    if (!hasInternetConnection) {
       return;
     }
     try {
