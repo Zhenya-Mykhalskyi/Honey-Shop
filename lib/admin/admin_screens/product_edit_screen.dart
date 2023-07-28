@@ -1,11 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:honey/services/check_internet_connection.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:provider/provider.dart';
 
+import 'package:honey/services/check_internet_connection.dart';
 import 'package:honey/providers/product_model.dart';
 import 'package:honey/providers/products.dart';
 import 'package:honey/widgets/app_colors.dart';
@@ -67,6 +66,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     if (!hasInternetConnection) {
       return;
     }
+
     try {
       setState(() {
         _isLoading = true;
@@ -155,18 +155,14 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
       BuildContext context, productId, String imageUrl) async {
     ProductsProvider productProvider =
         Provider.of<ProductsProvider>(context, listen: false);
-    final scaffoldContext = ScaffoldMessenger.of(context);
-    final popContext = Navigator.of(context);
-    final connectivityResult = await Connectivity().checkConnectivity();
-    if (connectivityResult == ConnectivityResult.none) {
-      scaffoldContext.showSnackBar(
-        const SnackBar(
-          content: Text('Немає з\'єднання з Інтернетом'),
-          duration: Duration(seconds: 3),
-        ),
-      );
+
+    final hasInternetConnection =
+        await CheckConnectivityUtil.checkInternetConnectivity(context);
+    if (!hasInternetConnection) {
       return;
     }
+    final popContext = Navigator.of(context);
+
     setState(() {
       _isLoading = true;
     });
