@@ -16,7 +16,7 @@ class AdminMainScreen extends StatefulWidget {
 class _AdminMainScreenState extends State<AdminMainScreen>
     with SingleTickerProviderStateMixin {
   int _selectedTabIndex = 0;
-  int _selectedBottomNavBarIndex = 0;
+  int _selectedBottomNavBarIndex = 2;
 
   void _onBottomNavBarTapped(int index) {
     setState(() {
