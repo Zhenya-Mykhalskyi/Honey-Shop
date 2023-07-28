@@ -157,18 +157,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
   }
 
   Future<void> _saveOrderToFirestore(Map<String, dynamic> orderData) async {
-    final scaffoldContext = ScaffoldMessenger.of(context);
-    final connectivityResult = await Connectivity().checkConnectivity();
-
-    if (connectivityResult == ConnectivityResult.none) {
-      scaffoldContext.showSnackBar(
-        const SnackBar(
-          content: Text('Немає з\'єднання з Інтернетом'),
-          duration: Duration(seconds: 3),
-        ),
-      );
-      return;
-    }
     try {
       final CollectionReference ordersCollection =
           FirebaseFirestore.instance.collection('orders');
@@ -423,7 +411,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                           const SizedBox(height: 10),
                           CustomTextField(
                               hintText: _selectedDelivery == 'Нова пошта'
-                                  ? 'Номер відділення'
+                                  ? 'Номер відділення або поштомата'
                                   : 'Поштовий індекс та адреса відділення',
                               maxLength: 50,
                               maxLines:
@@ -544,7 +532,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                         },
                         text: widget.isEditProfile
                             ? 'Зберегти зміни'
-                            : 'Підтвердити замовлення?',
+                            : 'Підтвердити замовлення',
                       ),
                     ),
                   ],
