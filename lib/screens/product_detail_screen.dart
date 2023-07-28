@@ -82,7 +82,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 Padding(
                                   padding: const EdgeInsets.only(right: 20),
                                   child: Text(
-                                    '₴ ${widget.product.price.toStringAsFixed(0)}',
+                                    '₴ ${widget.product.price.toStringAsFixed(2)}',
                                     style: const TextStyle(
                                       fontSize: 24,
                                       color: AppColors.primaryColor,
