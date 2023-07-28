@@ -18,7 +18,7 @@ class TotalAmountOfCart extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
         child: Text(
-          '₴ ${cartProvider.totalAmountOfCart.toString()}',
+          '₴ ${cartProvider.totalAmountOfCart.toStringAsFixed(2)}',
           style: const TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 22,
