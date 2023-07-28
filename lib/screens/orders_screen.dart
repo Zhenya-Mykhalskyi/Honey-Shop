@@ -1,12 +1,12 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:honey/services/check_internet_connection.dart';
 import 'package:honey/providers/cart.dart';
 import 'package:honey/widgets/app_colors.dart';
 import 'package:honey/widgets/my_divider.dart';
@@ -88,22 +88,17 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
   Future<void> _submitForm(BuildContext context) async {
     final navigatorContext = Navigator.of(context);
-    final scaffoldContext = ScaffoldMessenger.of(context);
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
     final user = FirebaseAuth.instance.currentUser;
-    final connectivityResult = await Connectivity().checkConnectivity();
+
     if (_formkey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
       });
 
-      if (connectivityResult == ConnectivityResult.none) {
-        scaffoldContext.showSnackBar(
-          const SnackBar(
-            content: Text('Немає з\'єднання з Інтернетом'),
-            duration: Duration(seconds: 3),
-          ),
-        );
+      final hasInternetConnection =
+          await CheckConnectivityUtil.checkInternetConnectivity(context);
+      if (!hasInternetConnection) {
         return;
       }
 
@@ -162,7 +157,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
     try {
       final CollectionReference ordersCollection =
           FirebaseFirestore.instance.collection('orders');
-      await ordersCollection.add(orderData);
+      final DocumentReference newOrderRef =
+          await ordersCollection.add(orderData);
+
+      final String orderId = newOrderRef.id;
+      orderData['orderId'] = orderId;
+      orderData['isFinished'] = false;
+      await newOrderRef.update(orderData);
     } catch (e) {
       print('Error saving order: $e');
     }
@@ -377,8 +378,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             ),
                             child: DropdownButtonFormField<String>(
                               focusColor: AppColors.primaryColor,
-                              dropdownColor:
-                                  const Color.fromARGB(255, 64, 64, 64),
+                              dropdownColor: Color.fromARGB(255, 32, 32, 32),
                               value: _selectedDelivery == ''
                                   ? null
                                   : _selectedDelivery,

@@ -1,17 +1,39 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import 'package:honey/services/check_internet_connection.dart';
 import 'package:honey/widgets/app_colors.dart';
 import 'package:honey/widgets/my_divider.dart';
 import 'admin_order_dialog.dart';
 
 class AdminOrderCard extends StatelessWidget {
-  final order;
-  final orderProductData;
-  const AdminOrderCard({super.key, this.order, this.orderProductData});
+  final Map<String, dynamic> order;
+  final List orderProductsData;
+  const AdminOrderCard(
+      {super.key, required this.order, required this.orderProductsData});
 
   @override
   Widget build(BuildContext context) {
-    bool ok = false;
+    bool isFinished = order['isFinished'] ?? false;
+
+    void _updateIsFinished(bool newValue) async {
+      final hasInternetConnection =
+          await CheckConnectivityUtil.checkInternetConnectivity(context);
+      if (!hasInternetConnection) {
+        return;
+      }
+
+      try {
+        final String orderId = order['orderId'];
+        await FirebaseFirestore.instance
+            .collection('orders')
+            .doc(orderId)
+            .update({'isFinished': newValue});
+      } catch (e) {
+        print('Error updating isfinished field: $e');
+      }
+    }
+
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Card(
@@ -52,7 +74,7 @@ class AdminOrderCard extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (context) => AdminOrderDetailsDialog(
-                            order: order, orderProductData: orderProductData),
+                            order: order, orderProductData: orderProductsData),
                       );
                     },
                     icon: const Icon(
@@ -77,10 +99,10 @@ class AdminOrderCard extends StatelessWidget {
                   Row(
                     children: [
                       Switch(
-                        value: ok,
+                        value: isFinished,
                         onChanged: (value) {
-                          value = !value;
-                          print(value);
+                          isFinished = value;
+                          _updateIsFinished(value);
                         },
                       ),
                       Text(

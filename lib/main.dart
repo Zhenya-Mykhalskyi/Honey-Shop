@@ -63,7 +63,7 @@ class _MyAppState extends State<MyApp> {
               return const SplashScreen();
             }
             if (userSnapshot.hasData) {
-              return const UserMainScreen();
+              return const AdminMainScreen();
             }
             return const AuthScreen();
           },

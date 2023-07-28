@@ -38,7 +38,7 @@ class AdminOrdersScreen extends StatelessWidget {
               final List productsList = productsData.values.toList();
               return AdminOrderCard(
                 order: order,
-                orderProductData: productsList,
+                orderProductsData: productsList,
               );
             },
           );
