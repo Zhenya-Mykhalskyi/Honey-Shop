@@ -120,6 +120,7 @@ class AdminOrderDetailsDialog extends StatelessWidget {
                 DeliveryInfoText(text: order['fullName']),
                 DeliveryInfoText(text: order['phoneNumber']),
                 DeliveryInfoText(text: order['address']),
+                DeliveryInfoText(text: order['selectedDelivery']),
                 DeliveryInfoText(
                     text: 'Відділення: ${order['postOfficeNumber']}'),
                 const MyDivider(),
