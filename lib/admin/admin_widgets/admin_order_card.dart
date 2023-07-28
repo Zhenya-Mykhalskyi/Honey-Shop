@@ -220,6 +220,8 @@ class AdminOrderCard extends StatelessWidget {
                   Row(
                     children: [
                       Switch(
+                        activeColor: Colors.black.withOpacity(0.85),
+                        activeTrackColor: Color.fromARGB(255, 0, 0, 0),
                         value: isFinished,
                         onChanged: (value) async {
                           if (!isFinished) {
