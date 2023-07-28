@@ -125,6 +125,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
         'totalAmount': cartProvider.totalAmountOfCart.toString(),
         'date': date,
         'time': time,
+        'timestamp': now,
         'products': widget.cartData?.map((productId, cartItem) {
           return MapEntry(productId, {
             'id': cartItem.id,

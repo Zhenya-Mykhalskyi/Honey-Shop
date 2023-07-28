@@ -98,6 +98,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     return FirebaseFirestore.instance
         .collection('orders')
         .where('userId', isEqualTo: user.uid)
+        .orderBy('timestamp', descending: true)
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) {
               final data = doc.data();
