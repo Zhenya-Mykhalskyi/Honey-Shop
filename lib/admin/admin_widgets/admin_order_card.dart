@@ -147,7 +147,7 @@ class AdminOrderCard extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: Card(
         color: isFinished
-            ? Colors.white.withOpacity(0)
+            ? Colors.white.withOpacity(0.01)
             : Colors.white.withOpacity(0.1),
         elevation: 2,
         shape: RoundedRectangleBorder(
@@ -221,7 +221,7 @@ class AdminOrderCard extends StatelessWidget {
                     children: [
                       Switch(
                         activeColor: Colors.black.withOpacity(0.85),
-                        activeTrackColor: Color.fromARGB(255, 0, 0, 0),
+                        activeTrackColor: const Color.fromARGB(255, 0, 0, 0),
                         value: isFinished,
                         onChanged: (value) async {
                           if (!isFinished) {
@@ -231,8 +231,10 @@ class AdminOrderCard extends StatelessWidget {
                       ),
                       Text(
                         '₴${order['totalAmount']}',
-                        style: const TextStyle(
-                          color: AppColors.primaryColor,
+                        style: TextStyle(
+                          color: isFinished
+                              ? Colors.white.withOpacity(0.4)
+                              : AppColors.primaryColor,
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
