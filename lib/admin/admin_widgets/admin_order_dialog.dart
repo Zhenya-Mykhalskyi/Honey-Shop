@@ -123,18 +123,13 @@ class AdminOrderDetailsDialog extends StatelessWidget {
                 DeliveryInfoText(text: order['selectedDelivery']),
                 DeliveryInfoText(
                     text: 'Відділення: ${order['postOfficeNumber']}'),
-                const MyDivider(),
+                order['comment'] != '' ? const MyDivider() : Container(),
                 order['comment'] != ''
                     ? DeliveryInfoText(
                         text: 'Коментар до замовлення: ${order['comment']}')
                     : Container(),
               ],
             ),
-            // const Text(
-            //   'Замовлення в обробці...',
-            //   style: TextStyle(
-            //       color: AppColors.primaryColor, fontWeight: FontWeight.w600),
-            // ),
           ],
         ),
       ),
