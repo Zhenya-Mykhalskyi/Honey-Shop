@@ -19,6 +19,7 @@ class Order {
   final double totalAmount;
   final String date;
   final String time;
+
   final List<Map<String, dynamic>> products;
   Order({
     required this.fullName,
@@ -98,7 +99,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     return FirebaseFirestore.instance
         .collection('orders')
         .where('userId', isEqualTo: user.uid)
-        .orderBy('timestamp', descending: true)
+        // .orderBy('time')
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) {
               final data = doc.data();
@@ -294,7 +295,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     const SizedBox(height: 5),
                     const MyDivider(),
                     const Padding(
-                      padding: EdgeInsets.only(top: 25, bottom: 15),
+                      padding: EdgeInsets.only(top: 15, bottom: 15),
                       child: Text(
                         'Мої замовлення:',
                         style: TextStyle(
@@ -317,6 +318,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               snapshot.data!.isEmpty) {
                             return const Text('Немає замовлень');
                           } else {
+                            snapshot.data!
+                                .sort((a, b) => b.date.compareTo(a.date));
                             return ListView.builder(
                               shrinkWrap: true,
                               itemCount: snapshot.data!.length,
