@@ -34,10 +34,65 @@ class AdminOrderCard extends StatelessWidget {
       }
     }
 
+    Future<void> _showConfirmationDialog(BuildContext context) async {
+      return showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: const Color.fromARGB(255, 27, 27, 27),
+            content: const Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Flexible(
+                  child: Text(
+                    'Впевнені, що хочете завершити замовлення та начислити бонуси клієнту? Цю дію неможливо відмінити!',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'MA',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TextButton(
+                    onPressed: () async {
+                      Navigator.of(context).pop();
+                      isFinished = true;
+                      _updateIsFinished(true);
+                    },
+                    child: const Text(
+                      'Так',
+                      style: TextStyle(color: Colors.red, fontFamily: 'MA'),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text(
+                      'Повернутися',
+                      style: TextStyle(color: Colors.white, fontFamily: 'MA'),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Card(
-        color: Colors.white.withOpacity(0.1),
+        color: isFinished
+            ? Colors.white.withOpacity(0)
+            : Colors.white.withOpacity(0.1),
         elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(9),
@@ -108,9 +163,10 @@ class AdminOrderCard extends StatelessWidget {
                     children: [
                       Switch(
                         value: isFinished,
-                        onChanged: (value) {
-                          isFinished = value;
-                          _updateIsFinished(value);
+                        onChanged: (value) async {
+                          if (!isFinished) {
+                            await _showConfirmationDialog(context);
+                          }
                         },
                       ),
                       Text(

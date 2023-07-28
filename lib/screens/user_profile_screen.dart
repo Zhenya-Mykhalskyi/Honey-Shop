@@ -19,6 +19,7 @@ class Order {
   final double totalAmount;
   final String date;
   final String time;
+  final bool isFinished;
 
   final List<Map<String, dynamic>> products;
   Order({
@@ -32,6 +33,7 @@ class Order {
     required this.userId,
     required this.totalAmount,
     required this.products,
+    required this.isFinished,
   });
 }
 
@@ -99,7 +101,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     return FirebaseFirestore.instance
         .collection('orders')
         .where('userId', isEqualTo: user.uid)
-        // .orderBy('time')
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) {
               final data = doc.data();
@@ -125,6 +126,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 date: data['date'],
                 time: data['time'],
                 products: products,
+                isFinished: data['isFinished'],
               );
             }).toList());
   }

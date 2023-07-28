@@ -28,6 +28,19 @@ class AdminOrdersScreen extends StatelessWidget {
             return const Center(child: Text('Немає замовлень'));
           }
 
+          orders.sort((a, b) {
+            final orderA = a.data();
+            final orderB = b.data();
+            final bool isFinishedA = orderA['isFinished'] ?? false;
+            final bool isFinishedB = orderB['isFinished'] ?? false;
+
+            if (isFinishedA == isFinishedB) {
+              return orderB['timestamp'].compareTo(orderA['timestamp']);
+            } else {
+              return isFinishedA ? 1 : -1;
+            }
+          });
+
           return ListView.builder(
             itemCount: orders.length,
             itemBuilder: (context, index) {

@@ -136,9 +136,11 @@ class OrderDetailsDialog extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 30),
-                const Text(
-                  'Замовлення в обробці...',
-                  style: TextStyle(
+                Text(
+                  order.isFinished
+                      ? 'Замовлення виконане, бонуси начислені'
+                      : 'Замовлення в обробці...',
+                  style: const TextStyle(
                       color: AppColors.primaryColor,
                       fontWeight: FontWeight.w600),
                 ),
