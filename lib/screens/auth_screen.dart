@@ -30,7 +30,6 @@ class _AuthScreenState extends State<AuthScreen> {
     if (!hasInternetConnection) {
       return;
     }
-
     if (!_formKey.currentState!.validate()) {
       scaffoldContext.showSnackBar(
         const SnackBar(
@@ -40,7 +39,6 @@ class _AuthScreenState extends State<AuthScreen> {
       return;
     }
     final phoneNumber = '+380${_phonecontroller.text}';
-
     bool exists = await checkPhoneNumberExists(phoneNumber);
     if (_authMode == AuthMode.Login && !exists) {
       scaffoldContext.showSnackBar(
@@ -50,7 +48,6 @@ class _AuthScreenState extends State<AuthScreen> {
       );
       return;
     }
-
     if (_authMode == AuthMode.Signup && exists) {
       scaffoldContext.showSnackBar(
         const SnackBar(

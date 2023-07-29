@@ -98,27 +98,24 @@ class _AdminMainScreenState extends State<AdminMainScreen>
           Padding(
             padding: const EdgeInsets.only(right: 15),
             child: IconButton(
-              icon: Icon(
-                _selectedBottomNavBarIndex != 2
-                    ? Icons.person
-                    : Icons.ballot_outlined,
-                size: 35,
-                color: Colors.white,
-              ),
-              onPressed: _selectedBottomNavBarIndex == 1
-                  ? () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const AdminProfileScreen(),
-                      ));
-                    }
-                  : _selectedBottomNavBarIndex == 2
-                      ? () {
-                          showDialog(
-                              context: context,
-                              builder: (context) => const CashbackForm());
-                        }
-                      : () {},
-            ),
+                icon: Icon(
+                  _selectedBottomNavBarIndex != 2
+                      ? Icons.person
+                      : Icons.ballot_outlined,
+                  size: 35,
+                  color: Colors.white,
+                ),
+                onPressed: _selectedBottomNavBarIndex == 2
+                    ? () {
+                        showDialog(
+                            context: context,
+                            builder: (context) => const CashbackForm());
+                      }
+                    : () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const AdminProfileScreen(),
+                        ));
+                      }),
           )
         ],
       ),
