@@ -149,6 +149,7 @@ class _AuthScreenState extends State<AuthScreen> {
                             ? TextFormField(
                                 decoration: const InputDecoration(
                                   border: InputBorder.none,
+                                  counterText: '',
                                   hintText: 'Ваше імʼя',
                                   hintStyle: TextStyle(color: Colors.white),
                                   filled: true,
