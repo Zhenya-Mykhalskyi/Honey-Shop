@@ -70,8 +70,7 @@ class _CashbackFormState extends State<CashbackForm> {
         scaffoldContext.showSnackBar(
           const SnackBar(content: Text('Сітка кешбеку успішно збережена')),
         );
-        navContext.push(
-            MaterialPageRoute(builder: (context) => const AdminMainScreen()));
+        navContext.pop();
       }
     } catch (e) {
       print('Error fetching cashback values: $e');
