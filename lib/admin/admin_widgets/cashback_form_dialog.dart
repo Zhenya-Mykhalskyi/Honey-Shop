@@ -59,8 +59,8 @@ class _CashbackFormState extends State<CashbackForm> {
             _amountControllers.map((controller) => controller.text).toList();
 
         await FirebaseFirestore.instance
-            .collection('cashback')
-            .doc('values')
+            .collection('admin')
+            .doc('cashback')
             .set({
           'percentages': percentages,
           'amounts': amounts,

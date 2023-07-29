@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:honey/screens/user_profile_screen.dart';
 import 'package:honey/widgets/app_colors.dart';
-import 'package:honey/widgets/my_divider.dart';
 import 'package:honey/widgets/title_appbar.dart';
-import 'admin_profile_edit_screen.dart';
 
 class AdminProfileScreen extends StatefulWidget {
   const AdminProfileScreen({super.key});
