@@ -51,7 +51,7 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
           _adminEmailController.text = data['adminEmail'] ?? '';
           _adminPhoneNumberController.text =
               data['adminPhoneNumber'].substring(4) ?? '';
-          _currentProfileImage = data['profileImage'] ?? '';
+          _currentProfileImage = data['adminImageUrl'] ?? '';
         });
       }
     } catch (e) {
