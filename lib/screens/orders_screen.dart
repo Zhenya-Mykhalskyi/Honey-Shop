@@ -105,36 +105,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
       if (user == null) {
         return;
       }
-      final DateTime now = DateTime.now();
-      final String date =
-          '${now.day.toString().padLeft(2, '0')}.${now.month.toString().padLeft(2, '0')}.${now.year}';
-      final String time =
-          '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
-      final Map<String, dynamic> orderData = {
-        'fullName': _fullNameController.text,
-        'phoneNumber': '+380${_phoneNumberController.text}',
-        'address': _addressController.text,
-        'selectedDelivery': _selectedDelivery,
-        'postOfficeNumber': _postOfficeNumberController.text,
-        'comment': _commentController.text,
-        'userId': user.uid,
-        'totalAmount': cartProvider.totalAmountOfCart.toString(),
-        'date': date,
-        'time': time,
-        'timestamp': now,
-        'products': widget.cartData?.map((productId, cartItem) {
-          return MapEntry(productId, {
-            'id': cartItem.id,
-            'title': cartItem.title,
-            'liters': cartItem.liters,
-            'price': cartItem.price,
-            'imageUrl': cartItem.imageUrl,
-          });
-        }),
-      };
 
+      final orderData = _buildOrderData(cartProvider, user);
       if (!widget.isEditProfile) {
-        _saveOrderToFirestore(orderData);
+        await _saveOrderToFirestore(orderData);
       }
 
       await _saveUserData();
@@ -153,6 +127,41 @@ class _OrdersScreenState extends State<OrdersScreen> {
     }
   }
 
+  Map<String, dynamic> _buildOrderData(CartProvider cartProvider, User? user) {
+    final DateTime now = DateTime.now();
+    final String date =
+        '${now.day.toString().padLeft(2, '0')}.${now.month.toString().padLeft(2, '0')}.${now.year}';
+    final String time =
+        '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+
+    final orderData = {
+      'fullName': _fullNameController.text,
+      'phoneNumber': '+380${_phoneNumberController.text}',
+      'address': _addressController.text,
+      'selectedDelivery': _selectedDelivery,
+      'postOfficeNumber': _postOfficeNumberController.text,
+      'comment': _commentController.text,
+      'userId': user!.uid,
+      'totalAmount': cartProvider.totalAmountOfCart.toString(),
+      'date': date,
+      'time': time,
+      'timestamp': now,
+      'isFinished': false,
+      'isVisibleForAdmin': true,
+      'products': widget.cartData?.map((productId, cartItem) {
+        return MapEntry(productId, {
+          'id': cartItem.id,
+          'title': cartItem.title,
+          'liters': cartItem.liters,
+          'price': cartItem.price,
+          'imageUrl': cartItem.imageUrl,
+        });
+      }),
+    };
+
+    return orderData;
+  }
+
   Future<void> _saveOrderToFirestore(Map<String, dynamic> orderData) async {
     try {
       final CollectionReference ordersCollection =
@@ -162,8 +171,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
       final String orderId = newOrderRef.id;
       orderData['orderId'] = orderId;
-      orderData['isFinished'] = false;
-      orderData['isVisibleForAdmin'] = true;
       await newOrderRef.update(orderData);
     } catch (e) {
       print('Error saving order: $e');
