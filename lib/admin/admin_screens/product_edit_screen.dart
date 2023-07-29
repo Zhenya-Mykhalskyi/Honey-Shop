@@ -153,16 +153,14 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
 
   Future<void> deleteProductAndStorageImgage(
       BuildContext context, productId, String imageUrl) async {
+    final popContext = Navigator.of(context);
     ProductsProvider productProvider =
         Provider.of<ProductsProvider>(context, listen: false);
-
     final hasInternetConnection =
         await CheckConnectivityUtil.checkInternetConnectivity(context);
     if (!hasInternetConnection) {
       return;
     }
-    final popContext = Navigator.of(context);
-
     setState(() {
       _isLoading = true;
     });
