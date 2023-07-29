@@ -14,7 +14,7 @@ class AdminOrderDetailsDialog extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
       ),
       backgroundColor: const Color.fromARGB(255, 27, 27, 27),
-      child: Container(
+      child: Padding(
         padding: const EdgeInsets.only(right: 20, left: 20, bottom: 20),
         child: Column(
           mainAxisSize: MainAxisSize.min,

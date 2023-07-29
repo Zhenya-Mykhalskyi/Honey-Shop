@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:honey/admin/admin_screens/cashback_form_screen.dart';
+import 'package:honey/admin/admin_widgets/cashback_form.dart';
 
 import 'package:honey/widgets/products_grid.dart';
 import 'package:honey/widgets/tab_button.dart';
@@ -113,9 +113,9 @@ class _AdminMainScreenState extends State<AdminMainScreen>
                     }
                   : _selectedBottomNavBarIndex == 2
                       ? () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => CashbackScreen(),
-                          ));
+                          showDialog(
+                              context: context,
+                              builder: (context) => const CashbackForm());
                         }
                       : () {},
             ),
