@@ -111,7 +111,7 @@ class ProductsProvider with ChangeNotifier {
   }
 
   Future<void> updateProduct(String prodId, Product product,
-      {File? pickedImage, String? currentImgage}) async {
+      {File? pickedImage, String? currentImageUrl}) async {
     try {
       String imageUrl;
       Reference ref = FirebaseStorage.instance
@@ -123,7 +123,7 @@ class ProductsProvider with ChangeNotifier {
         await ref.putData(imageBytes);
         imageUrl = await ref.getDownloadURL();
       } else {
-        imageUrl = currentImgage!;
+        imageUrl = currentImageUrl!;
       }
       await FirebaseFirestore.instance
           .collection('products')

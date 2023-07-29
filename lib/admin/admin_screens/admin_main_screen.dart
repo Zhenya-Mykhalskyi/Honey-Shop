@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:honey/admin/admin_screens/admin_profile_edit_screen.dart';
 import 'package:honey/admin/admin_widgets/cashback_form_dialog.dart';
 
 import 'package:honey/widgets/products_grid.dart';
@@ -99,9 +100,11 @@ class _AdminMainScreenState extends State<AdminMainScreen>
             padding: const EdgeInsets.only(right: 15),
             child: IconButton(
                 icon: Icon(
-                  _selectedBottomNavBarIndex != 2
+                  _selectedBottomNavBarIndex == 0
                       ? Icons.person
-                      : Icons.ballot_outlined,
+                      : _selectedBottomNavBarIndex == 1
+                          ? Icons.edit_note_outlined
+                          : Icons.ballot_outlined,
                   size: 35,
                   color: Colors.white,
                 ),
@@ -111,11 +114,18 @@ class _AdminMainScreenState extends State<AdminMainScreen>
                             context: context,
                             builder: (context) => const CashbackForm());
                       }
-                    : () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const AdminProfileScreen(),
-                        ));
-                      }),
+                    : _selectedBottomNavBarIndex == 1
+                        ? () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  const AdminProfileEditScreen(),
+                            ));
+                          }
+                        : () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const AdminProfileScreen(),
+                            ));
+                          }),
           )
         ],
       ),

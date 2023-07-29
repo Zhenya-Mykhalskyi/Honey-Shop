@@ -27,7 +27,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
   final _priceController = TextEditingController();
   final _litersLeftController = TextEditingController();
   final _descriptionController = TextEditingController();
-  String? _imageUrl; //для загрузки на firestore
+  String? _imageUrl;
   File? _pickedImage;
   bool _isLoading = false;
   String? _currentImageUrl;
@@ -76,13 +76,15 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
       _editedProduct.litersLeft = int.parse(_litersLeftController.text);
       _editedProduct.productDescription = _descriptionController.text;
       _editedProduct.isHoney = _isHoney;
+
       DocumentSnapshot productSnapshot = await FirebaseFirestore.instance
           .collection('products')
           .doc(widget.productId)
           .get();
+
       if (productSnapshot.exists) {
         await productProvider.updateProduct(widget.productId, _editedProduct,
-            pickedImage: _pickedImage, currentImgage: _currentImageUrl);
+            pickedImage: _pickedImage, currentImageUrl: _currentImageUrl);
         popContext.pop();
       } else {
         if (_pickedImage != null) {
@@ -158,6 +160,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
         Provider.of<ProductsProvider>(context, listen: false);
     final hasInternetConnection =
         await CheckConnectivityUtil.checkInternetConnectivity(context);
+
     if (!hasInternetConnection) {
       return;
     }
