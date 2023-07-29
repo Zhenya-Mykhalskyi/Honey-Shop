@@ -38,6 +38,38 @@ class _CashbackFormState extends State<CashbackForm> {
     super.dispose();
   }
 
+  void _fetchCashbackValues() async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+      final docSnapshot = await FirebaseFirestore.instance
+          .collection('admin')
+          .doc('cashback')
+          .get();
+      final data = docSnapshot.data();
+      if (data != null) {
+        final List<String> percentages = (data['percentages'] as List<dynamic>)
+            .map((e) => e.toString())
+            .toList();
+        final List<String> amounts = (data['amounts'] as List<dynamic>)
+            .map((e) => e.toString())
+            .toList();
+
+        for (int i = 0; i < 4; i++) {
+          _percentageControllers[i].text = percentages[i];
+          _amountControllers[i].text = amounts[i];
+        }
+      }
+    } catch (e) {
+      print('Error fetching cashback values: $e');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   Future<void> _saveCashbackValues() async {
     final scaffoldContext = ScaffoldMessenger.of(context);
     final navContext = Navigator.of(context);
@@ -70,38 +102,6 @@ class _CashbackFormState extends State<CashbackForm> {
           const SnackBar(content: Text('Сітка кешбеку успішно збережена')),
         );
         navContext.pop();
-      }
-    } catch (e) {
-      print('Error fetching cashback values: $e');
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-  void _fetchCashbackValues() async {
-    try {
-      setState(() {
-        _isLoading = true;
-      });
-      final docSnapshot = await FirebaseFirestore.instance
-          .collection('cashback')
-          .doc('values')
-          .get();
-      final data = docSnapshot.data();
-      if (data != null) {
-        final List<String> percentages = (data['percentages'] as List<dynamic>)
-            .map((e) => e.toString())
-            .toList();
-        final List<String> amounts = (data['amounts'] as List<dynamic>)
-            .map((e) => e.toString())
-            .toList();
-
-        for (int i = 0; i < 4; i++) {
-          _percentageControllers[i].text = percentages[i];
-          _amountControllers[i].text = amounts[i];
-        }
       }
     } catch (e) {
       print('Error fetching cashback values: $e');
