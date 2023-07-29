@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:honey/screens/orders_screen.dart';
 import 'package:honey/services/check_internet_connection.dart';
 import 'package:honey/widgets/app_colors.dart';
 import 'package:honey/widgets/custom_button.dart';
+import 'package:honey/widgets/edit_profile_image.dart';
 
 class AdminProfileEditScreen extends StatefulWidget {
   const AdminProfileEditScreen({
@@ -21,6 +26,7 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
   final _adminNameController = TextEditingController();
   final _adminEmailController = TextEditingController();
   final _adminPhoneNumberController = TextEditingController();
+  String? _currentProfileImage;
   bool _isLoading = false;
 
   @override
@@ -45,6 +51,7 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
           _adminEmailController.text = data['adminEmail'] ?? '';
           _adminPhoneNumberController.text =
               data['adminPhoneNumber'].substring(4) ?? '';
+          _currentProfileImage = data['profileImage'] ?? '';
         });
       }
     } catch (e) {
@@ -80,9 +87,14 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
             .collection('admin')
             .doc('data')
             .set(adminData);
+
+        if (_pickedImage != null) {
+          await _uploadProfileImageToStorageAndFirestore(_pickedImage!);
+        }
         scaffoldContext.showSnackBar(
           const SnackBar(content: Text('Дані успішно збережені')),
         );
+
         navContext.pop();
       } catch (e) {
         print('Error saving admin data: $e');
@@ -94,6 +106,39 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
           _isLoading = false;
         });
       }
+    }
+  }
+
+  File? _pickedImage;
+  void _handleImagePicked(File? image) {
+    setState(() {
+      _pickedImage = image;
+    });
+  }
+
+  Future<void> _uploadProfileImageToStorageAndFirestore(File imageFile) async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        return;
+      }
+      final storageRef = FirebaseStorage.instance
+          .ref()
+          .child('user_profile_images')
+          .child('${user.uid}.jpg');
+      final uploadTask = storageRef.putFile(imageFile);
+      final TaskSnapshot taskSnapshot = await uploadTask;
+      final imageUrl = await taskSnapshot.ref.getDownloadURL();
+
+      final adminData = {
+        'adminImageUrl': imageUrl,
+      };
+
+      final CollectionReference usersCollection =
+          FirebaseFirestore.instance.collection('admin');
+      await usersCollection.doc('data').set(adminData, SetOptions(merge: true));
+    } catch (e) {
+      print('Error uploading image: $e');
     }
   }
 
@@ -116,17 +161,46 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
                     key: _formKey,
                     child: Column(
                       children: [
-                        CustomTextField(
-                          hintText: 'Імʼя',
-                          maxLength: 20,
-                          maxLines: 1,
-                          controller: _adminNameController,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Введіть імʼя';
-                            }
-                            return null;
-                          },
+                        Row(
+                          children: [
+                            EditProfileImage(
+                                onImagePicked: _handleImagePicked,
+                                currentProfileImage: _currentProfileImage),
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  CustomTextField(
+                                    hintText: 'Імʼя',
+                                    maxLength: 20,
+                                    maxLines: 1,
+                                    controller: _adminNameController,
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return 'Введіть імʼя';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                  CustomTextField(
+                                    keyboardType: TextInputType.phone,
+                                    prefix: const Text('+380 '),
+                                    hintText: 'Номер телефону',
+                                    maxLength: 12,
+                                    controller: _adminPhoneNumberController,
+                                    validator: (value) {
+                                      final regExp = RegExp(r'^\+380[0-9]{9}$');
+                                      if (value == null ||
+                                          value.isEmpty ||
+                                          !regExp.hasMatch('+380$value')) {
+                                        return 'Невірний номер телефону!';
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                         CustomTextField(
                           hintText: 'Електронна адреса',
@@ -139,22 +213,6 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
                             if (value!.isEmpty ||
                                 !emailRegExp.hasMatch(value)) {
                               return 'Невірно введений email';
-                            }
-                            return null;
-                          },
-                        ),
-                        CustomTextField(
-                          keyboardType: TextInputType.phone,
-                          prefix: const Text('+380 '),
-                          hintText: 'Номер телефону',
-                          maxLength: 12,
-                          controller: _adminPhoneNumberController,
-                          validator: (value) {
-                            final regExp = RegExp(r'^\+380[0-9]{9}$');
-                            if (value == null ||
-                                value.isEmpty ||
-                                !regExp.hasMatch('+380$value')) {
-                              return 'Невірний номер телефону!';
                             }
                             return null;
                           },

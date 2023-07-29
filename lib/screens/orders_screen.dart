@@ -235,7 +235,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
       await usersCollection
           .doc(user.uid)
           .set(userData, SetOptions(merge: true));
-      print('_uploadImageToStorageAndFirestore');
     } catch (e) {
       print('Error uploading image: $e');
     }
