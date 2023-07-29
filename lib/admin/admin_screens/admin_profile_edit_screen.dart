@@ -31,8 +31,8 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
 
   @override
   void initState() {
-    super.initState();
     _fetchAdminData();
+    super.initState();
   }
 
   Future<void> _fetchAdminData() async {
