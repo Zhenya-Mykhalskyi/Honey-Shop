@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:honey/admin/admin_widgets/cashback_form.dart';
+import 'package:honey/admin/admin_widgets/cashback_form_dialog.dart';
 
 import 'package:honey/widgets/products_grid.dart';
 import 'package:honey/widgets/tab_button.dart';

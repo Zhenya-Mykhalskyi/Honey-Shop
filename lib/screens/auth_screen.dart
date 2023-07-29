@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import 'package:honey/services/check_internet_connection.dart';
 import 'package:honey/widgets/app_colors.dart';
 import 'package:honey/widgets/custom_button.dart';
 import 'otp_screen.dart';
@@ -21,9 +22,17 @@ class _AuthScreenState extends State<AuthScreen> {
   bool isFocused = false;
   AuthMode _authMode = AuthMode.Signup;
 
-  Future<void> _submit() async {
+  Future<void> _submitForm() async {
+    final scaffoldContext = ScaffoldMessenger.of(context);
+    final navContext = Navigator.of(context);
+    final hasInternetConnection =
+        await CheckConnectivityUtil.checkInternetConnectivity(context);
+    if (!hasInternetConnection) {
+      return;
+    }
+
     if (!_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      scaffoldContext.showSnackBar(
         const SnackBar(
           content: Text('Номер телефону або імʼя введено невірено'),
         ),
@@ -31,30 +40,28 @@ class _AuthScreenState extends State<AuthScreen> {
       return;
     }
     final phoneNumber = '+380${_phonecontroller.text}';
-    print(phoneNumber);
+
     bool exists = await checkPhoneNumberExists(phoneNumber);
     if (_authMode == AuthMode.Login && !exists) {
-      print(exists);
-      ScaffoldMessenger.of(context).showSnackBar(
+      scaffoldContext.showSnackBar(
         const SnackBar(
-          content: Text('Такого користувача не існує. Зареєструйтеся.'),
+          content: Text('Такого користувача не існує.  Зареєструйтеся.'),
         ),
       );
       return;
     }
 
     if (_authMode == AuthMode.Signup && exists) {
-      print(exists);
-      ScaffoldMessenger.of(context).showSnackBar(
+      scaffoldContext.showSnackBar(
         const SnackBar(
-          content: Text('Такий користувач вже існує. Увійдіть в акаунт.'),
+          content: Text('Такий користувач вже існує.  Увійдіть в акаунт.'),
         ),
       );
       return;
     }
 
     _formKey.currentState!.save();
-    Navigator.of(context).push(
+    navContext.push(
       MaterialPageRoute(
         builder: (context) =>
             OTPScreen(_phonecontroller.text, _namecontroller.text, _authMode),
@@ -67,7 +74,7 @@ class _AuthScreenState extends State<AuthScreen> {
         FirebaseFirestore.instance.collection('users');
     QuerySnapshot querySnapshot =
         await userColection.where('phoneNumber', isEqualTo: phone).get();
-    return querySnapshot.docs.isNotEmpty; //true якщо є користувач
+    return querySnapshot.docs.isNotEmpty;
   }
 
   void _switchAuthMode() {
@@ -209,7 +216,9 @@ class _AuthScreenState extends State<AuthScreen> {
                 height: 30,
               ),
               CustomButton(
-                action: _submit,
+                action: () {
+                  _submitForm();
+                },
                 text:
                     _authMode == AuthMode.Signup ? 'Зареєструватися' : 'Увійти',
               ),

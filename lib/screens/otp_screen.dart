@@ -90,6 +90,7 @@ class _OTPScreenState extends State<OTPScreen> {
           print('Error saving user data: $error');
         }
       }
+      // ignore: use_build_context_synchronously
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const MyApp()),
