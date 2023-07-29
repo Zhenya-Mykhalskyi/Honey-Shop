@@ -333,7 +333,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             hintText: 'Номер телефону для доставки',
                             prefix: const Text('+380 '),
                             keyboardType: TextInputType.phone,
-                            maxLength: 12,
+                            maxLength: 9,
                             controller: _phoneNumberController,
                             validator: (value) {
                               final regExp = RegExp(r'^\+380[0-9]{9}$');

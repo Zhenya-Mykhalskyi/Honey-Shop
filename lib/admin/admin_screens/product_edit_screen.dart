@@ -318,7 +318,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                               Expanded(
                                 child: Column(
                                   children: [
-                                    CustomTextField(
+                                    ProductEditCustomTextField(
                                       hintText: 'Назва товару',
                                       maxLength: 30,
                                       maxLines: 1,
@@ -330,7 +330,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                         return null;
                                       },
                                     ),
-                                    CustomTextField(
+                                    ProductEditCustomTextField(
                                       hintText: 'Ціна за 0.5 л',
                                       maxLength: 7,
                                       maxLines: 1,
@@ -382,7 +382,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                               ),
                             ],
                           ),
-                          CustomTextField(
+                          ProductEditCustomTextField(
                             hintText: 'Кількість літрів',
                             maxLength: 6,
                             maxLines: 1,
@@ -401,7 +401,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                               return null;
                             },
                           ),
-                          CustomTextField(
+                          ProductEditCustomTextField(
                             hintText: 'Опис товару (розділяйте абзацами)',
                             maxLength: 1000,
                             maxLines: 14,
@@ -431,7 +431,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
   }
 }
 
-class CustomTextField extends StatelessWidget {
+class ProductEditCustomTextField extends StatelessWidget {
   final String hintText;
   final int maxLength;
   final int maxLines;
@@ -439,7 +439,7 @@ class CustomTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final bool showCounterText;
 
-  const CustomTextField({
+  const ProductEditCustomTextField({
     super.key,
     required this.hintText,
     required this.maxLength,
