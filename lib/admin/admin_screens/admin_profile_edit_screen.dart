@@ -27,6 +27,7 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
   final _adminEmailController = TextEditingController();
   final _adminPhoneNumberController = TextEditingController();
   String? _currentProfileImage;
+  File? _pickedImage;
   bool _isLoading = false;
 
   @override
@@ -77,6 +78,7 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
         'adminName': _adminNameController.text,
         'adminEmail': _adminEmailController.text,
         'adminPhoneNumber': '+380${_adminPhoneNumberController.text}',
+        'adminImageUrl': _currentProfileImage,
       };
 
       try {
@@ -109,7 +111,6 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
     }
   }
 
-  File? _pickedImage;
   void _handleImagePicked(File? image) {
     setState(() {
       _pickedImage = image;
@@ -126,6 +127,7 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
           .ref()
           .child('user_profile_images')
           .child('${user.uid}.jpg');
+
       final uploadTask = storageRef.putFile(imageFile);
       final TaskSnapshot taskSnapshot = await uploadTask;
       final imageUrl = await taskSnapshot.ref.getDownloadURL();
@@ -156,6 +158,7 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
           : Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Form(
                     key: _formKey,
@@ -185,7 +188,7 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
                                     keyboardType: TextInputType.phone,
                                     prefix: const Text('+380 '),
                                     hintText: 'Номер телефону',
-                                    maxLength: 12,
+                                    maxLength: 9,
                                     controller: _adminPhoneNumberController,
                                     validator: (value) {
                                       final regExp = RegExp(r'^\+380[0-9]{9}$');
@@ -219,6 +222,13 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
                         ),
                       ],
                     ),
+                  ),
+                  const Text(
+                    'Точки продажу:',
+                    style: TextStyle(
+                        color: AppColors.primaryColor,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18),
                   ),
                   CustomButton(action: _saveAdminData, text: 'Зберегти')
                 ],
