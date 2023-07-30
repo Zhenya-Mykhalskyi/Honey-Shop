@@ -10,6 +10,7 @@ import 'package:honey/services/check_internet_connection.dart';
 import 'package:honey/widgets/app_colors.dart';
 import 'package:honey/widgets/custom_button.dart';
 import 'package:honey/widgets/edit_profile_image.dart';
+import 'package:honey/widgets/my_divider.dart';
 
 class AdminProfileEditScreen extends StatefulWidget {
   const AdminProfileEditScreen({
@@ -21,14 +22,19 @@ class AdminProfileEditScreen extends StatefulWidget {
 }
 
 class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _infoFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _salesPointsFormKey = GlobalKey<FormState>();
 
   final _adminNameController = TextEditingController();
   final _adminEmailController = TextEditingController();
   final _adminPhoneNumberController = TextEditingController();
+  final List<TextEditingController> _salesPointsCityControllers = [];
+  final List<TextEditingController> _salesPointsAddressControllers = [];
+
   String? _currentProfileImage;
   File? _pickedImage;
   bool _isLoading = false;
+  final List<Map<String, String>> _salesPoints = [];
 
   @override
   void initState() {
@@ -41,19 +47,28 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
       setState(() {
         _isLoading = true;
       });
+
       final docSnapshot = await FirebaseFirestore.instance
           .collection('admin')
           .doc('data')
           .get();
+
       final data = docSnapshot.data();
       if (data != null) {
-        setState(() {
-          _adminNameController.text = data['adminName'] ?? '';
-          _adminEmailController.text = data['adminEmail'] ?? '';
-          _adminPhoneNumberController.text =
-              data['adminPhoneNumber'].substring(4) ?? '';
-          _currentProfileImage = data['adminImageUrl'] ?? '';
-        });
+        _adminNameController.text = data['adminName'] ?? '';
+        _adminEmailController.text = data['adminEmail'] ?? '';
+        _adminPhoneNumberController.text =
+            data['adminPhoneNumber'].substring(4) ?? '';
+        _currentProfileImage = data['adminImageUrl'] ?? '';
+
+        final salesPoints = data['salesPoints'] as List<dynamic>?;
+
+        if (salesPoints != null) {
+          _salesPoints.clear();
+          _salesPointsCityControllers.clear();
+          _salesPointsAddressControllers.clear();
+          _initializeSalesPoints(salesPoints);
+        }
       }
     } catch (e) {
       print('Error fetching admin data: $e');
@@ -62,6 +77,39 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
         _isLoading = false;
       });
     }
+  }
+
+  void _initializeSalesPoints(List<dynamic> salesPoints) {
+    final List<Map<String, String>> initializedSalesPoints = [];
+
+    for (var point in salesPoints) {
+      final String city = point['city'] ?? '';
+      final String address = point['address'] ?? '';
+
+      initializedSalesPoints.add({
+        'city': city,
+        'address': address,
+      });
+
+      final cityController = TextEditingController(text: city);
+      final addressController = TextEditingController(text: address);
+
+      cityController.addListener(() {
+        _updateSalesPointInList(cityController, addressController);
+      });
+
+      addressController.addListener(() {
+        _updateSalesPointInList(cityController, addressController);
+      });
+
+      _salesPointsCityControllers.add(cityController);
+      _salesPointsAddressControllers.add(addressController);
+    }
+
+    setState(() {
+      _salesPoints.clear();
+      _salesPoints.addAll(initializedSalesPoints);
+    });
   }
 
   Future<void> _saveAdminData() async {
@@ -73,7 +121,7 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
       return;
     }
 
-    if (_formKey.currentState!.validate()) {
+    if (_infoFormKey.currentState!.validate()) {
       final adminData = {
         'adminName': _adminNameController.text,
         'adminEmail': _adminEmailController.text,
@@ -85,6 +133,22 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
         setState(() {
           _isLoading = true;
         });
+
+        final List<Map<String, String?>> salesPoints = [];
+        for (int i = 0; i < _salesPoints.length; i++) {
+          String city = _salesPointsCityControllers[i].text;
+          String address = _salesPointsAddressControllers[i].text;
+
+          if (city.isEmpty) {
+            city = _salesPoints[i]['city'] ?? '';
+          }
+          if (address.isEmpty) {
+            address = _salesPoints[i]['address'] ?? '';
+          }
+
+          salesPoints.add({'city': city, 'address': address});
+        }
+
         await FirebaseFirestore.instance
             .collection('admin')
             .doc('data')
@@ -93,6 +157,7 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
         if (_pickedImage != null) {
           await _uploadProfileImageToStorageAndFirestore(_pickedImage!);
         }
+        await saveSalesPointsToFirestore(salesPoints);
         scaffoldContext.showSnackBar(
           const SnackBar(content: Text('Дані успішно збережені')),
         );
@@ -144,6 +209,75 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
     }
   }
 
+  Future<void> saveSalesPointsToFirestore(
+      List<Map<String, String?>> salesPoints) async {
+    try {
+      final DocumentReference adminDocRef =
+          FirebaseFirestore.instance.collection('admin').doc('data');
+
+      final List<Map<String, String>> formattedSalesPoints = [];
+      for (int i = 0; i < salesPoints.length; i++) {
+        final String city = salesPoints[i]['city'] ?? '';
+        final String address = salesPoints[i]['address'] ?? '';
+        formattedSalesPoints.add({
+          'city': city,
+          'address': address,
+        });
+      }
+
+      await adminDocRef.update({'salesPoints': formattedSalesPoints});
+    } catch (e) {
+      print('Error saving sales points data: $e');
+      rethrow;
+    }
+  }
+
+  void _addSalesPoint() {
+    final cityController = TextEditingController();
+    final addressController = TextEditingController();
+
+    cityController.addListener(() {
+      _updateSalesPointInList(cityController, addressController);
+    });
+
+    addressController.addListener(() {
+      _updateSalesPointInList(cityController, addressController);
+    });
+
+    setState(() {
+      _salesPointsCityControllers.add(cityController);
+      _salesPointsAddressControllers.add(addressController);
+      _salesPoints.add({
+        'city': cityController.text,
+        'address': addressController.text,
+      });
+    });
+  }
+
+  void _updateSalesPointInList(TextEditingController cityController,
+      TextEditingController addressController) {
+    final int index = _salesPointsCityControllers.indexOf(cityController);
+    if (index >= 0 && index < _salesPoints.length) {
+      final String newCity = cityController.text;
+      final String newAddress = addressController.text;
+
+      if (newCity.isNotEmpty) {
+        _salesPoints[index]['city'] = newCity;
+      }
+      if (newAddress.isNotEmpty) {
+        _salesPoints[index]['address'] = newAddress;
+      }
+    }
+  }
+
+  void _removeSalesPoint(int index) {
+    setState(() {
+      _salesPoints.removeAt(index);
+      _salesPointsCityControllers.removeAt(index);
+      _salesPointsAddressControllers.removeAt(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -158,79 +292,164 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
           : Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            EditProfileImage(
-                                onImagePicked: _handleImagePicked,
-                                currentProfileImage: _currentProfileImage),
-                            Expanded(
-                              child: Column(
-                                children: [
-                                  CustomTextField(
-                                    hintText: 'Імʼя',
-                                    maxLength: 20,
-                                    maxLines: 1,
-                                    controller: _adminNameController,
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return 'Введіть імʼя';
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                  CustomTextField(
-                                    keyboardType: TextInputType.phone,
-                                    prefix: const Text('+380 '),
-                                    hintText: 'Номер телефону',
-                                    maxLength: 9,
-                                    controller: _adminPhoneNumberController,
-                                    validator: (value) {
-                                      final regExp = RegExp(r'^\+380[0-9]{9}$');
-                                      if (value == null ||
-                                          value.isEmpty ||
-                                          !regExp.hasMatch('+380$value')) {
-                                        return 'Невірний номер телефону!';
-                                      }
-                                      return null;
-                                    },
-                                  ),
-                                ],
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            children: [
+                              Form(
+                                key: _infoFormKey,
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        EditProfileImage(
+                                            onImagePicked: _handleImagePicked,
+                                            currentProfileImage:
+                                                _currentProfileImage),
+                                        Expanded(
+                                          child: Column(
+                                            children: [
+                                              CustomTextField(
+                                                hintText: 'Імʼя',
+                                                maxLength: 20,
+                                                maxLines: 1,
+                                                controller:
+                                                    _adminNameController,
+                                                validator: (value) {
+                                                  if (value!.isEmpty) {
+                                                    return 'Введіть імʼя';
+                                                  }
+                                                  return null;
+                                                },
+                                              ),
+                                              CustomTextField(
+                                                keyboardType:
+                                                    TextInputType.phone,
+                                                prefix: const Text('+380 '),
+                                                hintText: 'Номер телефону',
+                                                maxLength: 9,
+                                                controller:
+                                                    _adminPhoneNumberController,
+                                                validator: (value) {
+                                                  final regExp = RegExp(
+                                                      r'^\+380[0-9]{9}$');
+                                                  if (value == null ||
+                                                      value.isEmpty ||
+                                                      !regExp.hasMatch(
+                                                          '+380$value')) {
+                                                    return 'Невірний номер телефону!';
+                                                  }
+                                                  return null;
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    CustomTextField(
+                                      hintText: 'Електронна адреса',
+                                      maxLength: 35,
+                                      maxLines: 1,
+                                      controller: _adminEmailController,
+                                      validator: (value) {
+                                        final emailRegExp = RegExp(
+                                            r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                                        if (value!.isEmpty ||
+                                            !emailRegExp.hasMatch(value)) {
+                                          return 'Невірно введений email';
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        CustomTextField(
-                          hintText: 'Електронна адреса',
-                          maxLength: 35,
-                          maxLines: 1,
-                          controller: _adminEmailController,
-                          validator: (value) {
-                            final emailRegExp =
-                                RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-                            if (value!.isEmpty ||
-                                !emailRegExp.hasMatch(value)) {
-                              return 'Невірно введений email';
-                            }
-                            return null;
-                          },
-                        ),
-                      ],
+                              const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 20),
+                                child: Text(
+                                  'Точки продажу:',
+                                  style: TextStyle(
+                                      color: AppColors.primaryColor,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 18),
+                                ),
+                              ),
+                              Form(
+                                key: _salesPointsFormKey,
+                                child: Column(
+                                  children: [
+                                    for (int i = 0;
+                                        i < _salesPoints.length;
+                                        i++)
+                                      Column(
+                                        children: [
+                                          CustomTextField(
+                                            hintText: 'Населений пункт',
+                                            maxLength: 20,
+                                            maxLines: 1,
+                                            controller:
+                                                _salesPointsCityControllers[i],
+                                            validator: (value) {
+                                              if (value!.isEmpty) {
+                                                return 'Введіть населений пункт';
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                          CustomTextField(
+                                            hintText: 'Адреса',
+                                            maxLength: 20,
+                                            maxLines: 1,
+                                            controller:
+                                                _salesPointsAddressControllers[
+                                                    i],
+                                            validator: (value) {
+                                              if (value!.isEmpty) {
+                                                return 'Введіть адресу';
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                          const MyDivider(),
+                                          if (i > 0)
+                                            TextButton(
+                                              onPressed: () =>
+                                                  _removeSalesPoint(i),
+                                              child: const Text(
+                                                  'Видалити точку',
+                                                  style: TextStyle(
+                                                      color: Colors.white)),
+                                            ),
+                                        ],
+                                      ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        TextButton(
+                                          onPressed: _addSalesPoint,
+                                          child: const Text(
+                                            'Додати точку',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  const Text(
-                    'Точки продажу:',
-                    style: TextStyle(
-                        color: AppColors.primaryColor,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18),
-                  ),
-                  CustomButton(action: _saveAdminData, text: 'Зберегти')
+                  CustomButton(action: _saveAdminData, text: 'Зберегти дані')
                 ],
               ),
             ),
