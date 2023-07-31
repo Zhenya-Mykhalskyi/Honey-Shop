@@ -395,7 +395,7 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
                                           ),
                                           CustomTextField(
                                             hintText: 'Адреса',
-                                            maxLength: 20,
+                                            maxLength: 40,
                                             maxLines: 1,
                                             controller:
                                                 _salesPointsAddressControllers[
@@ -426,8 +426,9 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
                                           onPressed: _addSalesPoint,
                                           child: const Text(
                                             'Додати точку',
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
                                           ),
                                         ),
                                       ],

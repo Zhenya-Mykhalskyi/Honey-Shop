@@ -2,9 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import 'package:honey/screens/user_profile_screen.dart';
 import 'package:honey/widgets/app_colors.dart';
+import 'package:honey/widgets/my_divider.dart';
 import 'package:honey/widgets/title_appbar.dart';
 
 class AdminProfileScreen extends StatefulWidget {
@@ -15,11 +17,13 @@ class AdminProfileScreen extends StatefulWidget {
 }
 
 class _AdminProfileScreenState extends State<AdminProfileScreen> {
-  String? adminName;
-  String? adminEmail;
-  String? adminPhoneNumber;
-  String? adminImageUrl;
+  String? _adminName;
+  String? _adminEmail;
+  String? _adminPhoneNumber;
+  String? _adminImageUrl;
+  String? _aboutStoreText;
   Key _profileImageKey = UniqueKey();
+  List<Map<String, String>> _salesPoints = [];
 
   @override
   initState() {
@@ -37,12 +41,28 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
             .get();
 
         if (userDoc.exists) {
+          final data = userDoc.data(); // Explicit type cast
+
           setState(() {
-            adminName = userDoc.data()?['adminName'] ?? '';
-            adminEmail = userDoc.data()?['adminEmail'] ?? '';
-            adminPhoneNumber = userDoc.data()?['adminPhoneNumber'] ?? '';
-            adminImageUrl = userDoc.data()?['adminImageUrl'];
+            _adminName = data?['adminName'] as String? ?? '';
+            _adminEmail = data?['adminEmail'] as String? ?? '';
+            _adminPhoneNumber = data?['adminPhoneNumber'] as String? ?? '';
+            _adminImageUrl = data?['adminImageUrl'] as String?;
+            _aboutStoreText = data?['aboutStoreText'] as String? ?? '';
             _profileImageKey = UniqueKey();
+
+            final salesPointsData = data?['salesPoints'] as List<dynamic>?;
+
+            if (salesPointsData != null) {
+              _salesPoints = List<Map<String, String>>.from(
+                salesPointsData.map((point) {
+                  return {
+                    'city': point['city'] as String? ?? '',
+                    'address': point['address'] as String? ?? '',
+                  };
+                }),
+              );
+            }
           });
         }
       }
@@ -92,7 +112,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
-                                child: adminImageUrl == null
+                                child: _adminImageUrl == null
                                     ? const Icon(
                                         Icons.person_rounded,
                                         color: Colors.white,
@@ -106,7 +126,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                                               const CircularProgressIndicator(
                                             color: AppColors.primaryColor,
                                           ),
-                                          imageUrl: adminImageUrl!,
+                                          imageUrl: _adminImageUrl!,
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -135,62 +155,102 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                                   ),
                                   ProfileInfoCardSingleRow(
                                     icon: Icons.person_2_outlined,
-                                    text: adminName.toString(),
+                                    text: _adminName.toString(),
                                   ),
                                   const SizedBox(height: 9),
                                   ProfileInfoCardSingleRow(
                                     icon: Icons.email_outlined,
-                                    text: adminEmail.toString(),
+                                    text: _adminEmail.toString(),
                                   ),
                                   const SizedBox(height: 9),
                                   ProfileInfoCardSingleRow(
                                     icon: Icons.phone_outlined,
-                                    text: adminPhoneNumber.toString(),
+                                    text: _adminPhoneNumber.toString(),
                                   ),
                                 ],
                               ),
                             ],
                           ),
                         ),
-                        // Column(
-                        //   mainAxisAlignment: MainAxisAlignment.start,
-                        //   children: [
-                        //     IconButton(
-                        //       onPressed: () {
-                        //         Navigator.of(context).push(MaterialPageRoute(
-                        //           builder: (context) =>
-                        //               const AdminProfileEditScreen(),
-                        //         ));
-                        //       },
-                        //       icon: const Icon(
-                        //         Icons.edit,
-                        //         color: Color.fromARGB(255, 217, 217, 217),
-                        //         size: 22,
-                        //       ),
-                        //     ),
-                        //   ],
-                        // )
                       ],
                     ),
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
               Expanded(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text(
-                      'Точки продажу',
-                      style: TextStyle(
-                          color: AppColors.primaryColor,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 18),
+                    const Padding(
+                      padding: EdgeInsets.all(20),
+                      child: Text(
+                        'Точки продажу',
+                        style: TextStyle(
+                            color: AppColors.primaryColor,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 18),
+                      ),
                     ),
-                    ElevatedButton(
-                      onPressed: () => _logout(context),
-                      child: const Text('Вийти з акаунту'),
+                    StaggeredGridView.countBuilder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisCount: 2, // Кількість елементів у рядку
+                      crossAxisSpacing: 8,
+                      mainAxisSpacing: 8,
+                      itemCount: _salesPoints.length,
+                      staggeredTileBuilder: (index) =>
+                          const StaggeredTile.fit(1),
+                      itemBuilder: (context, index) {
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(9)),
+                          color: Colors.white.withOpacity(0.1),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.location_on_outlined,
+                                  color: AppColors.primaryColor,
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        _salesPoints[index]['city'].toString(),
+                                        style: const TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      const SizedBox(
+                                        height: 2,
+                                      ),
+                                      Text(
+                                          _salesPoints[index]['address']
+                                              .toString(),
+                                          style: const TextStyle(
+                                            fontSize: 15,
+                                          )),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                     ),
+                    Text(_aboutStoreText == ''
+                        ? 'Опис магазину'
+                        : _aboutStoreText.toString()),
+                    const MyDivider(),
+                    // ElevatedButton(
+                    //   onPressed: () => _logout(context),
+                    //   child: const Text('Вийти з акаунту'),
+                    // ),
                   ],
                 ),
               ),
