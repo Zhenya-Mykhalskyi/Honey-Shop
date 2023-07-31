@@ -94,14 +94,6 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
       final cityController = TextEditingController(text: city);
       final addressController = TextEditingController(text: address);
 
-      cityController.addListener(() {
-        _updateSalesPointInList(cityController, addressController);
-      });
-
-      addressController.addListener(() {
-        _updateSalesPointInList(cityController, addressController);
-      });
-
       _salesPointsCityControllers.add(cityController);
       _salesPointsAddressControllers.add(addressController);
     }
@@ -415,16 +407,16 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
                                               return null;
                                             },
                                           ),
-                                          const MyDivider(),
                                           if (i > 0)
                                             TextButton(
                                               onPressed: () =>
                                                   _removeSalesPoint(i),
-                                              child: const Text(
-                                                  'Видалити точку',
+                                              child: Text('Видалити точку',
                                                   style: TextStyle(
-                                                      color: Colors.white)),
+                                                      color: Colors.red
+                                                          .withOpacity(0.7))),
                                             ),
+                                          const MyDivider(),
                                         ],
                                       ),
                                     Row(
