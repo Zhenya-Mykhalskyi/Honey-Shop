@@ -5,10 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
-import 'package:honey/screens/orders_screen.dart';
 import 'package:honey/services/check_internet_connection.dart';
 import 'package:honey/widgets/app_colors.dart';
 import 'package:honey/widgets/custom_button.dart';
+import 'package:honey/widgets/custom_text_field.dart';
 import 'package:honey/widgets/edit_profile_image.dart';
 import 'package:honey/widgets/my_divider.dart';
 
@@ -363,8 +363,9 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
                                     ),
                                     CustomTextField(
                                       hintText: 'Опис магазину',
-                                      maxLength: 300,
+                                      maxLength: 350,
                                       maxLines: 5,
+                                      showCounterText: true,
                                       controller: _aboutStoreTextController,
                                       validator: (value) {
                                         if (value!.isEmpty) {

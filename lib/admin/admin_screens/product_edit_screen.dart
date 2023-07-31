@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:honey/widgets/custom_text_field.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
@@ -321,7 +322,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                               Expanded(
                                 child: Column(
                                   children: [
-                                    ProductEditCustomTextField(
+                                    CustomTextField(
                                       hintText: 'Назва товару',
                                       maxLength: 30,
                                       maxLines: 1,
@@ -333,7 +334,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                         return null;
                                       },
                                     ),
-                                    ProductEditCustomTextField(
+                                    CustomTextField(
                                       hintText: 'Ціна за 0.5 л',
                                       maxLength: 7,
                                       maxLines: 1,
@@ -385,7 +386,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                               ),
                             ],
                           ),
-                          ProductEditCustomTextField(
+                          CustomTextField(
                             hintText: 'Кількість літрів',
                             maxLength: 6,
                             maxLines: 1,
@@ -404,7 +405,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                               return null;
                             },
                           ),
-                          ProductEditCustomTextField(
+                          CustomTextField(
                             hintText: 'Опис товару (розділяйте абзацами)',
                             maxLength: 1000,
                             maxLines: 14,
@@ -430,68 +431,6 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                 ),
               ),
             ),
-    );
-  }
-}
-
-class ProductEditCustomTextField extends StatelessWidget {
-  final String hintText;
-  final int maxLength;
-  final int maxLines;
-  final TextEditingController controller;
-  final String? Function(String?)? validator;
-  final bool showCounterText;
-
-  const ProductEditCustomTextField({
-    super.key,
-    required this.hintText,
-    required this.maxLength,
-    required this.maxLines,
-    required this.controller,
-    required this.validator,
-    this.showCounterText = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 5),
-            child: Text(
-              hintText,
-              style: const TextStyle(
-                color: Color.fromARGB(255, 169, 169, 169),
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: AppColors.primaryColor,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            child: TextFormField(
-              maxLines: maxLines,
-              controller: controller,
-              maxLength: maxLength,
-              validator: validator,
-              style: const TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                  counterText: showCounterText ? null : '',
-                  contentPadding: const EdgeInsets.all(8),
-                  border: InputBorder.none,
-                  counterStyle: const TextStyle(
-                      color: Color.fromARGB(255, 173, 173, 173))),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

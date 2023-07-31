@@ -13,6 +13,7 @@ import 'package:honey/widgets/my_divider.dart';
 import 'package:honey/widgets/title_appbar.dart';
 import 'package:honey/widgets/custom_button.dart';
 import 'package:honey/widgets/total_amount.dart';
+import 'package:honey/widgets/custom_text_field.dart';
 import 'package:honey/widgets/edit_profile_image.dart';
 import 'user_main_screen.dart';
 
@@ -567,73 +568,6 @@ class SectionTitle extends StatelessWidget {
         ),
         Image.asset('assets/img/appbar_title_right.png'),
       ],
-    );
-  }
-}
-
-class CustomTextField extends StatelessWidget {
-  final String hintText;
-  final Widget? prefix;
-  final TextInputType? keyboardType;
-  final int maxLength;
-  final int? maxLines;
-  final TextEditingController controller;
-  final String? Function(String?)? validator;
-
-  const CustomTextField({
-    super.key,
-    required this.hintText,
-    this.prefix,
-    this.keyboardType,
-    required this.maxLength,
-    this.maxLines,
-    required this.controller,
-    required this.validator,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 7),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 5),
-            child: Text(
-              hintText,
-              style: const TextStyle(
-                color: Color.fromARGB(255, 169, 169, 169),
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: AppColors.primaryColor,
-              ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            child: TextFormField(
-              validator: validator,
-              cursorColor: AppColors.primaryColor,
-              maxLines: maxLines ?? 1,
-              controller: controller,
-              maxLength: maxLength,
-              keyboardType: keyboardType,
-              style: const TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(8),
-                counterText: '',
-                border: InputBorder.none,
-                prefix: prefix,
-                prefixStyle: const TextStyle(color: Colors.white, fontSize: 16),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

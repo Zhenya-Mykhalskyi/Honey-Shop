@@ -83,7 +83,8 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const TitleAppBar(title: 'Інформація про нас'),
-      body: Center(
+      body: SingleChildScrollView(
+        primary: true,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
           child: Column(
@@ -177,7 +178,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                   ),
                 ),
               ),
-              Expanded(
+              SizedBox(
                 child: Column(
                   children: [
                     const Padding(
