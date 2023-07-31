@@ -28,6 +28,7 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
   final _adminNameController = TextEditingController();
   final _adminEmailController = TextEditingController();
   final _adminPhoneNumberController = TextEditingController();
+  final _aboutStoreTextController = TextEditingController();
   final List<TextEditingController> _salesPointsCityControllers = [];
   final List<TextEditingController> _salesPointsAddressControllers = [];
 
@@ -60,6 +61,7 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
         _adminPhoneNumberController.text =
             data['adminPhoneNumber'].substring(4) ?? '';
         _currentProfileImage = data['adminImageUrl'] ?? '';
+        _aboutStoreTextController.text = data['aboutStoreText'] ?? '';
 
         final salesPoints = data['salesPoints'] as List<dynamic>?;
 
@@ -119,6 +121,7 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
         'adminEmail': _adminEmailController.text,
         'adminPhoneNumber': '+380${_adminPhoneNumberController.text}',
         'adminImageUrl': _currentProfileImage,
+        'aboutStoreText': _aboutStoreTextController.text,
       };
 
       try {
@@ -358,11 +361,23 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
                                         return null;
                                       },
                                     ),
+                                    CustomTextField(
+                                      hintText: 'Опис магазину',
+                                      maxLength: 300,
+                                      maxLines: 5,
+                                      controller: _aboutStoreTextController,
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
+                                          return 'Введіть опис магазину';
+                                        }
+                                        return null;
+                                      },
+                                    ),
                                   ],
                                 ),
                               ),
                               const Padding(
-                                padding: EdgeInsets.symmetric(vertical: 20),
+                                padding: EdgeInsets.only(top: 25, bottom: 5),
                                 child: Text(
                                   'Точки продажу:',
                                   style: TextStyle(

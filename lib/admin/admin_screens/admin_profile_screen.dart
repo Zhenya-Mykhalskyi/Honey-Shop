@@ -243,9 +243,12 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                         );
                       },
                     ),
-                    Text(_aboutStoreText == ''
-                        ? 'Опис магазину'
-                        : _aboutStoreText.toString()),
+                    Text(
+                      _aboutStoreText == ''
+                          ? 'Опис магазину'
+                          : _aboutStoreText.toString(),
+                      style: const TextStyle(fontSize: 16),
+                    ),
                     const MyDivider(),
                     // ElevatedButton(
                     //   onPressed: () => _logout(context),
