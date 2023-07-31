@@ -364,7 +364,7 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
                                     CustomTextField(
                                       hintText: 'Опис магазину',
                                       maxLength: 350,
-                                      maxLines: 5,
+                                      maxLines: 9,
                                       showCounterText: true,
                                       controller: _aboutStoreTextController,
                                       validator: (value) {

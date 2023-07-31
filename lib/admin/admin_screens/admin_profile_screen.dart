@@ -251,10 +251,12 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                       style: const TextStyle(fontSize: 16),
                     ),
                     const MyDivider(),
-                    // ElevatedButton(
-                    //   onPressed: () => _logout(context),
-                    //   child: const Text('Вийти з акаунту'),
-                    // ),
+                    const Text('сертифікат'),
+                    const MyDivider(),
+                    ElevatedButton(
+                      onPressed: () => _logout(context),
+                      child: const Text('Вийти з акаунту'),
+                    ),
                   ],
                 ),
               ),
