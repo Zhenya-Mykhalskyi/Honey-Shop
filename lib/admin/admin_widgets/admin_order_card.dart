@@ -20,6 +20,28 @@ class AdminOrderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isFinished = order['isFinished'] ?? false;
 
+    Future<Map<String, dynamic>> getCashbackData() async {
+      final docSnapshot = await FirebaseFirestore.instance
+          .collection('admin')
+          .doc('cashback')
+          .get();
+      final data = docSnapshot.data();
+      if (data == null) {
+        return {};
+      }
+      final percentages = (data['percentages'] as List<dynamic>)
+          .map<int>((value) => int.parse(value))
+          .toList();
+      final amounts = (data['amounts'] as List<dynamic>)
+          .map<int>((value) => int.parse(value))
+          .toList();
+
+      return {
+        'percentages': percentages,
+        'amounts': amounts,
+      };
+    }
+
     void updateIsFinishedStatus(bool newValue) async {
       final hasInternetConnection =
           await CheckConnectivityUtil.checkInternetConnectivity(context);
@@ -38,26 +60,32 @@ class AdminOrderCard extends StatelessWidget {
       }
     }
 
-    void updateUserTotalAmount(String userId, double orderTotalAmount) async {
+    void updateUserTotalAmountAndBonuses(
+        String userId, double orderAmount, double bonusAmount) async {
       try {
         final hasInternetConnection =
             await CheckConnectivityUtil.checkInternetConnectivity(context);
         if (!hasInternetConnection) {
           return;
         }
+
         final userDoc = await FirebaseFirestore.instance
             .collection('users')
             .doc(userId)
             .get();
         if (userDoc.exists) {
-          final currentTotalAmount =
+          final currentOrdersTotalAmount =
               userDoc.data()?['ordersTotalAmount'] ?? 0.0;
-          final newTotalAmount = currentTotalAmount + orderTotalAmount;
+          final newOrdersTotalAmount = currentOrdersTotalAmount + orderAmount;
+          final currentBonuses = userDoc.data()?['bonuses'] ?? 0.0;
+          final newBonuses = currentBonuses + bonusAmount.toInt();
+
           await FirebaseFirestore.instance
               .collection('users')
               .doc(userId)
               .update({
-            'ordersTotalAmount': newTotalAmount,
+            'ordersTotalAmount': newOrdersTotalAmount,
+            'bonuses': newBonuses,
           });
         }
       } catch (e) {
@@ -66,6 +94,8 @@ class AdminOrderCard extends StatelessWidget {
     }
 
     Future<void> showBonusesConfirmDialog(BuildContext context) async {
+      final cashbackData = await getCashbackData();
+      // ignore: use_build_context_synchronously
       return showDialog<void>(
         context: context,
         builder: (BuildContext context) {
@@ -94,8 +124,32 @@ class AdminOrderCard extends StatelessWidget {
                     onPressed: () async {
                       isFinished = true;
                       final userId = order['userId'];
-                      final orderTotalAmount = order['totalAmount'];
-                      updateUserTotalAmount(userId, orderTotalAmount);
+                      final double orderAmount = order['totalAmount'];
+                      final userDoc = await FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(userId)
+                          .get();
+
+                      final userOrdersTotalAmount =
+                          userDoc.data()?['ordersTotalAmount'] ?? 0.0;
+
+                      int maxAmountIndex = -1;
+                      for (int i = 0; i < cashbackData['amounts'].length; i++) {
+                        if (cashbackData['amounts'][i] <=
+                            orderAmount + userOrdersTotalAmount) {
+                          maxAmountIndex = i;
+                        } else {
+                          break;
+                        }
+                      }
+                      int percentage = maxAmountIndex >= 0
+                          ? cashbackData['percentages'][maxAmountIndex]
+                          : 0;
+
+                      double bonusAmount = (percentage / 100) * orderAmount;
+                      updateUserTotalAmountAndBonuses(
+                          userId, orderAmount, bonusAmount);
+
                       updateIsFinishedStatus(true);
                       Navigator.of(context).pop();
                     },
