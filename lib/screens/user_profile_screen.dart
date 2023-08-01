@@ -122,7 +122,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 phoneNumber: data['phoneNumber'],
                 address: data['address'],
                 postOfficeNumber: data['postOfficeNumber'],
-                totalAmount: double.parse(data['totalAmount']),
+                totalAmount: data['totalAmount'],
                 date: data['date'],
                 time: data['time'],
                 products: products,

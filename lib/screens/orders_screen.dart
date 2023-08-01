@@ -134,6 +134,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
         '${now.day.toString().padLeft(2, '0')}.${now.month.toString().padLeft(2, '0')}.${now.year}';
     final String time =
         '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+    // final num totalAmount = cartProvider.totalAmountOfCart;
 
     final orderData = {
       'fullName': _fullNameController.text,
@@ -143,7 +144,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
       'postOfficeNumber': _postOfficeNumberController.text,
       'comment': _commentController.text,
       'userId': user!.uid,
-      'totalAmount': cartProvider.totalAmountOfCart.toString(),
+      'totalAmount': cartProvider.totalAmountOfCart,
       'date': date,
       'time': time,
       'timestamp': now,
