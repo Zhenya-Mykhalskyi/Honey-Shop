@@ -43,18 +43,16 @@ class _CashbackFormState extends State<CashbackForm> {
           .get();
       final data = docSnapshot.data();
       if (data != null) {
-        final List<double> percentages = (data['percentages'] as List<dynamic>)
+        final List<String> percentages = (data['percentages'])
             .map((e) => e.toString())
             .cast<double>()
             .toList();
-        final List<double> amounts = (data['amounts'] as List<dynamic>)
-            .map((e) => e.toString())
-            .cast<double>()
-            .toList();
+        final List<String> amounts =
+            (data['amounts']).map((e) => e.toString()).cast<double>().toList();
 
         for (int i = 0; i < 4; i++) {
-          _percentageControllers[i].text = percentages[i] as String;
-          _amountControllers[i].text = amounts[i] as String;
+          _percentageControllers[i].text = percentages[i];
+          _amountControllers[i].text = amounts[i];
         }
       }
     } catch (e) {
@@ -80,14 +78,11 @@ class _CashbackFormState extends State<CashbackForm> {
         _isLoading = true;
       });
       if (_formKey.currentState!.validate()) {
-        List<double> percentages = _percentageControllers
+        List<String> percentages = _percentageControllers
             .map((controller) => controller.text)
-            .cast<double>()
             .toList();
-        List<double> amounts = _amountControllers
-            .map((controller) => controller.text)
-            .cast<double>()
-            .toList();
+        List<String> amounts =
+            _amountControllers.map((controller) => controller.text).toList();
 
         await FirebaseFirestore.instance
             .collection('admin')
