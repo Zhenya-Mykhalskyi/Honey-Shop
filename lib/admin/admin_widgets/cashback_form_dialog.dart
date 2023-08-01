@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:honey/services/check_internet_connection.dart';
 import 'package:honey/widgets/app_colors.dart';
 import 'package:honey/widgets/custom_button.dart';
+import 'package:honey/widgets/custom_text_field.dart';
 
 class CashbackForm extends StatefulWidget {
   const CashbackForm({super.key});
@@ -27,15 +28,8 @@ class _CashbackFormState extends State<CashbackForm> {
 
   @override
   void initState() {
-    super.initState();
     _fetchCashbackValues();
-  }
-
-  @override
-  void dispose() {
-    _percentageControllers.forEach((controller) => controller.dispose());
-    _amountControllers.forEach((controller) => controller.dispose());
-    super.dispose();
+    super.initState();
   }
 
   void _fetchCashbackValues() async {
@@ -49,16 +43,18 @@ class _CashbackFormState extends State<CashbackForm> {
           .get();
       final data = docSnapshot.data();
       if (data != null) {
-        final List<String> percentages = (data['percentages'] as List<dynamic>)
+        final List<double> percentages = (data['percentages'] as List<dynamic>)
             .map((e) => e.toString())
+            .cast<double>()
             .toList();
-        final List<String> amounts = (data['amounts'] as List<dynamic>)
+        final List<double> amounts = (data['amounts'] as List<dynamic>)
             .map((e) => e.toString())
+            .cast<double>()
             .toList();
 
         for (int i = 0; i < 4; i++) {
-          _percentageControllers[i].text = percentages[i];
-          _amountControllers[i].text = amounts[i];
+          _percentageControllers[i].text = percentages[i] as String;
+          _amountControllers[i].text = amounts[i] as String;
         }
       }
     } catch (e) {
@@ -84,11 +80,14 @@ class _CashbackFormState extends State<CashbackForm> {
         _isLoading = true;
       });
       if (_formKey.currentState!.validate()) {
-        List<String> percentages = _percentageControllers
+        List<double> percentages = _percentageControllers
             .map((controller) => controller.text)
+            .cast<double>()
             .toList();
-        List<String> amounts =
-            _amountControllers.map((controller) => controller.text).toList();
+        List<double> amounts = _amountControllers
+            .map((controller) => controller.text)
+            .cast<double>()
+            .toList();
 
         await FirebaseFirestore.instance
             .collection('admin')
@@ -110,6 +109,17 @@ class _CashbackFormState extends State<CashbackForm> {
         _isLoading = false;
       });
     }
+  }
+
+  @override
+  void dispose() {
+    for (var controller in _percentageControllers) {
+      controller.dispose();
+    }
+    for (var controller in _amountControllers) {
+      controller.dispose();
+    }
+    super.dispose();
   }
 
   @override
@@ -159,45 +169,56 @@ class _CashbackFormState extends State<CashbackForm> {
                                       horizontal: 10),
                                   child: Row(
                                     children: [
-                                      CashbackTextField(
-                                        maxLength: 2,
-                                        sufixText: '%',
-                                        controller:
-                                            _percentageControllers[index],
-                                        validator: (value) {
-                                          if (value!.isEmpty) {
-                                            return 'Введіть відсотки';
-                                          }
-                                          if (int.tryParse(value) == null) {
-                                            return 'Повинні бути цілим числом';
-                                          }
-                                          int? percentage = int.tryParse(value);
-                                          if (percentage == null ||
-                                              percentage < 0 ||
-                                              percentage > 99) {
-                                            return '(0-99)%';
-                                          }
-                                          return null;
-                                        },
+                                      Expanded(
+                                        child: CustomTextField(
+                                          showHintText: false,
+                                          isTextAlignCenter: true,
+                                          maxLength: 2,
+                                          sufixText: '%',
+                                          controller:
+                                              _percentageControllers[index],
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return 'Введіть відсотки';
+                                            }
+                                            if (int.tryParse(value) == null) {
+                                              return 'Повинні бути цілим числом';
+                                            }
+                                            int? percentage =
+                                                int.tryParse(value);
+                                            if (percentage == null ||
+                                                percentage < 0 ||
+                                                percentage > 99) {
+                                              return '(0-99)%';
+                                            }
+                                            return null;
+                                          },
+                                        ),
                                       ),
-                                      CashbackTextField(
-                                        maxLength: 5,
-                                        sufixText: 'грн',
-                                        controller: _amountControllers[index],
-                                        validator: (value) {
-                                          if (value!.isEmpty) {
-                                            return 'Введіть суму';
-                                          }
-                                          if (int.tryParse(value) == null) {
-                                            return 'Повинна бути цілим числом';
-                                          }
-                                          int? percentage = int.tryParse(value);
-                                          if (percentage == null ||
-                                              percentage < 0) {
-                                            return 'Будь ласка, введіть коректну загальну суму покупок';
-                                          }
-                                          return null;
-                                        },
+                                      const SizedBox(width: 10),
+                                      Expanded(
+                                        child: CustomTextField(
+                                          showHintText: false,
+                                          isTextAlignCenter: true,
+                                          maxLength: 5,
+                                          sufixText: 'грн',
+                                          controller: _amountControllers[index],
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return 'Введіть суму';
+                                            }
+                                            if (int.tryParse(value) == null) {
+                                              return 'Повинна бути цілим числом';
+                                            }
+                                            int? percentage =
+                                                int.tryParse(value);
+                                            if (percentage == null ||
+                                                percentage < 0) {
+                                              return 'Будь ласка, введіть коректну загальну суму покупок';
+                                            }
+                                            return null;
+                                          },
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -219,52 +240,52 @@ class _CashbackFormState extends State<CashbackForm> {
   }
 }
 
-class CashbackTextField extends StatelessWidget {
-  final TextEditingController controller;
-  final String? Function(String?)? validator;
-  final int maxLength;
-  final String sufixText;
-  const CashbackTextField(
-      {super.key,
-      required this.controller,
-      this.validator,
-      required this.maxLength,
-      required this.sufixText});
+// class CashbackTextField extends StatelessWidget {
+//   final TextEditingController controller;
+//   final String? Function(String?)? validator;
+//   final int maxLength;
+//   final String sufixText;
+//   const CashbackTextField(
+//       {super.key,
+//       required this.controller,
+//       this.validator,
+//       required this.maxLength,
+//       required this.sufixText});
 
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: AppColors.primaryColor,
-            ),
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          child: TextFormField(
-            textAlign: TextAlign.center,
-            controller: controller,
-            style: const TextStyle(
-                color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.all(8),
-              border: InputBorder.none,
-              counterText: '',
-              suffixText: sufixText,
-              suffixStyle: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500),
-            ),
-            keyboardType: TextInputType.number,
-            cursorColor: AppColors.primaryColor,
-            validator: validator,
-            maxLength: maxLength,
-          ),
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Expanded(
+//       child: Padding(
+//         padding: const EdgeInsets.all(8.0),
+//         child: Container(
+//           decoration: BoxDecoration(
+//             border: Border.all(
+//               color: AppColors.primaryColor,
+//             ),
+//             borderRadius: BorderRadius.circular(8.0),
+//           ),
+//           child: TextFormField(
+//             textAlign: TextAlign.center,
+//             controller: controller,
+//             style: const TextStyle(
+//                 color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
+//             decoration: InputDecoration(
+//               contentPadding: const EdgeInsets.all(8),
+//               border: InputBorder.none,
+//               counterText: '',
+//               suffixText: sufixText,
+//               suffixStyle: const TextStyle(
+//                   color: Colors.white,
+//                   fontSize: 20,
+//                   fontWeight: FontWeight.w500),
+//             ),
+//             keyboardType: TextInputType.number,
+//             cursorColor: AppColors.primaryColor,
+//             validator: validator,
+//             maxLength: maxLength,
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
