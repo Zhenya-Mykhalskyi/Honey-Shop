@@ -43,12 +43,12 @@ class _CashbackFormState extends State<CashbackForm> {
           .get();
       final data = docSnapshot.data();
       if (data != null) {
-        final List<String> percentages = (data['percentages'])
+        final List<String> percentages = (data['percentages'] as List<dynamic>)
             .map((e) => e.toString())
-            .cast<double>()
             .toList();
-        final List<String> amounts =
-            (data['amounts']).map((e) => e.toString()).cast<double>().toList();
+        final List<String> amounts = (data['amounts'] as List<dynamic>)
+            .map((e) => e.toString())
+            .toList();
 
         for (int i = 0; i < 4; i++) {
           _percentageControllers[i].text = percentages[i];
