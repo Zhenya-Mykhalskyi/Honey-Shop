@@ -41,7 +41,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
             .get();
 
         if (userDoc.exists) {
-          final data = userDoc.data(); // Explicit type cast
+          final data = userDoc.data();
 
           setState(() {
             _adminName = data?['adminName'] as String? ?? '';
@@ -194,7 +194,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                     StaggeredGridView.countBuilder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      crossAxisCount: 2, // Кількість елементів у рядку
+                      crossAxisCount: 2,
                       crossAxisSpacing: 8,
                       mainAxisSpacing: 8,
                       itemCount: _salesPoints.length,
@@ -248,7 +248,9 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                       _aboutStoreText == ''
                           ? 'Опис магазину'
                           : _aboutStoreText.toString(),
-                      style: const TextStyle(fontSize: 16),
+                      style: const TextStyle(
+                        fontSize: 16,
+                      ),
                     ),
                     const MyDivider(),
                     const Text('сертифікат'),

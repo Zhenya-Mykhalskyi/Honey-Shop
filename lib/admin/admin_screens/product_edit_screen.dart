@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+
 import 'package:honey/widgets/custom_text_field.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,6 +11,7 @@ import 'package:honey/providers/product_model.dart';
 import 'package:honey/providers/products.dart';
 import 'package:honey/widgets/app_colors.dart';
 import 'package:honey/widgets/custom_button.dart';
+import 'discount_screen.dart';
 
 class ProductEditScreen extends StatefulWidget {
   final String productId;
@@ -180,7 +182,8 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     return Scaffold(
       appBar: AppBar(
           elevation: 0,
-          title: const Text('Редагування товару'),
+          title: Text(
+              widget.isAddProduct ? 'Додання товару' : 'Редагування товару'),
           actions: [
             IconButton(
               icon: const Icon(Icons.delete),
@@ -343,9 +346,6 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                         if (value == null || value.isEmpty) {
                                           return 'Будь ласка, введіть ціну за товар';
                                         }
-                                        if (value.isEmpty) {
-                                          return 'Ціна товару не може бути порожньою';
-                                        }
                                         if (double.tryParse(value) == null) {
                                           return 'Повинна бути числом';
                                         }
@@ -374,15 +374,16 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                   value: _isHoney,
                                   onChanged: (bool? value) {
                                     setState(() {
-                                      _isHoney = value ??
-                                          false; //Якщо value не є null, то воно присвоюється змінній _isHoney. Якщо value є null, то присвоюється значення false.
+                                      _isHoney = value ?? false;
                                     });
                                   },
                                 ),
                               ),
                               const Flexible(
                                 child: Text(
-                                    'Поставте галочку, якщо товар являється медом*'),
+                                  'Поставте галочку, якщо товар являється медом*',
+                                  style: TextStyle(fontSize: 16),
+                                ),
                               ),
                             ],
                           ),
@@ -418,6 +419,31 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                               return null;
                             },
                           ),
+                          TextButton(
+                              onPressed: () {
+                                if (_formkey.currentState!.validate()) {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => DiscountScreen(
+                                      price:
+                                          double.parse(_priceController.text),
+                                      productTitle: _titleController.text,
+                                    ),
+                                  ));
+                                } else {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(const SnackBar(
+                                    content: Text(
+                                        'Заповніть поля корекними даними для переходу на сторінку застосування акції'),
+                                  ));
+                                }
+                              },
+                              child: const Text(
+                                'Застосувати акцію',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    decoration: TextDecoration.underline,
+                                    fontSize: 16),
+                              ))
                         ],
                       ),
                     ),

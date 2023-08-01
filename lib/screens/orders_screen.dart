@@ -386,7 +386,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             ),
                             child: DropdownButtonFormField<String>(
                               focusColor: AppColors.primaryColor,
-                              dropdownColor: Color.fromARGB(255, 32, 32, 32),
+                              dropdownColor:
+                                  const Color.fromARGB(255, 32, 32, 32),
                               value: _selectedDelivery == ''
                                   ? null
                                   : _selectedDelivery,
