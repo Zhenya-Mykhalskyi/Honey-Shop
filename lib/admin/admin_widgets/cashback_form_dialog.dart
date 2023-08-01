@@ -125,110 +125,117 @@ class _CashbackFormState extends State<CashbackForm> {
         ),
         backgroundColor: const Color.fromARGB(255, 27, 27, 27),
         child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.5,
+          height: MediaQuery.of(context).size.height * 0.48,
           child: _isLoading
               ? const Center(
                   child:
                       CircularProgressIndicator(color: AppColors.primaryColor),
                 )
-              : SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            IconButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                icon: const Icon(
-                                  Icons.close,
-                                  color: Colors.white,
-                                  size: 28,
-                                ))
-                          ],
-                        ),
-                        Form(
-                          key: _formKey,
-                          child: Expanded(
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: 4,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: CustomTextField(
-                                          showHintText: false,
-                                          isTextAlignCenter: true,
-                                          maxLength: 2,
-                                          sufixText: '%',
-                                          controller:
-                                              _percentageControllers[index],
-                                          validator: (value) {
-                                            if (value!.isEmpty) {
-                                              return 'Введіть відсотки';
-                                            }
-                                            if (int.tryParse(value) == null) {
-                                              return 'Повинні бути цілим числом';
-                                            }
-                                            int? percentage =
-                                                int.tryParse(value);
-                                            if (percentage == null ||
-                                                percentage < 0 ||
-                                                percentage > 99) {
-                                              return '(0-99)%';
-                                            }
-                                            return null;
-                                          },
-                                        ),
+              : Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Tooltip(
+                            decoration: BoxDecoration(
+                                color: Colors.black,
+                                borderRadius: BorderRadius.circular(10)),
+                            margin: const EdgeInsets.symmetric(horizontal: 20),
+                            textStyle: const TextStyle(fontSize: 16),
+                            triggerMode: TooltipTriggerMode.tap,
+                            showDuration: const Duration(seconds: 10),
+                            message:
+                                'Заповніть таблицю у порядку зростання. Тобто зверху повинні бути менші пари значень (наприклад, 5% - 500 грн), і зростати донизу (наприклад, 15% - 3000 грн)',
+                            child: const Icon(Icons.info_outline,
+                                color: Colors.white, size: 28),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            icon: const Icon(Icons.close,
+                                color: Colors.white, size: 28),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Form(
+                        key: _formKey,
+                        child: Expanded(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: 4,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: CustomTextField(
+                                        showHintText: false,
+                                        isTextAlignCenter: true,
+                                        maxLength: 2,
+                                        sufixText: '%',
+                                        controller:
+                                            _percentageControllers[index],
+                                        validator: (value) {
+                                          if (value!.isEmpty) {
+                                            return 'Введіть відсотки';
+                                          }
+                                          if (int.tryParse(value) == null) {
+                                            return 'Повинні бути цілим числом';
+                                          }
+                                          int? percentage = int.tryParse(value);
+                                          if (percentage == null ||
+                                              percentage < 0 ||
+                                              percentage > 99) {
+                                            return '(0-99)%';
+                                          }
+                                          return null;
+                                        },
                                       ),
-                                      const SizedBox(width: 10),
-                                      Expanded(
-                                        child: CustomTextField(
-                                          showHintText: false,
-                                          isTextAlignCenter: true,
-                                          maxLength: 5,
-                                          sufixText: 'грн',
-                                          controller: _amountControllers[index],
-                                          validator: (value) {
-                                            if (value!.isEmpty) {
-                                              return 'Введіть суму';
-                                            }
-                                            if (int.tryParse(value) == null) {
-                                              return 'Повинна бути цілим числом';
-                                            }
-                                            int? percentage =
-                                                int.tryParse(value);
-                                            if (percentage == null ||
-                                                percentage < 0) {
-                                              return 'Будь ласка, введіть коректну загальну суму покупок';
-                                            }
-                                            return null;
-                                          },
-                                        ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: CustomTextField(
+                                        showHintText: false,
+                                        isTextAlignCenter: true,
+                                        maxLength: 5,
+                                        sufixText: 'грн',
+                                        controller: _amountControllers[index],
+                                        validator: (value) {
+                                          if (value!.isEmpty) {
+                                            return 'Введіть суму';
+                                          }
+                                          if (int.tryParse(value) == null) {
+                                            return 'Повинна бути цілим числом';
+                                          }
+                                          int? percentage = int.tryParse(value);
+                                          if (percentage == null ||
+                                              percentage < 0) {
+                                            return 'Будь ласка, введіть коректну загальну суму покупок';
+                                          }
+                                          return null;
+                                        },
                                       ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
                         ),
-                        CustomButton(
-                            action: () async {
-                              await _saveCashbackValues();
-                            },
-                            text: 'Зберегти')
-                      ],
-                    ),
+                      ),
+                      CustomButton(
+                          action: () async {
+                            await _saveCashbackValues();
+                          },
+                          text: 'Зберегти')
+                    ],
                   ),
                 ),
         ));
