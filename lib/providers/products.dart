@@ -35,7 +35,6 @@ class ProductsProvider with ChangeNotifier {
       _items = productList;
 
       notifyListeners();
-      print('Кількість продуктів в _items: ${items.length}');
     } catch (e) {
       print(e);
     }

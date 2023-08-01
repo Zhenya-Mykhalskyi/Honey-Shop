@@ -20,7 +20,7 @@ class AdminOrderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isFinished = order['isFinished'] ?? false;
 
-    void _updateIsFinished(bool newValue) async {
+    void updateIsFinishedStatus(bool newValue) async {
       final hasInternetConnection =
           await CheckConnectivityUtil.checkInternetConnectivity(context);
       if (!hasInternetConnection) {
@@ -38,7 +38,34 @@ class AdminOrderCard extends StatelessWidget {
       }
     }
 
-    Future<void> _showBonusesConfirmaDialog(BuildContext context) async {
+    void updateUserTotalAmount(String userId, double orderTotalAmount) async {
+      try {
+        final hasInternetConnection =
+            await CheckConnectivityUtil.checkInternetConnectivity(context);
+        if (!hasInternetConnection) {
+          return;
+        }
+        final userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId)
+            .get();
+        if (userDoc.exists) {
+          final currentTotalAmount =
+              userDoc.data()?['ordersTotalAmount'] ?? 0.0;
+          final newTotalAmount = currentTotalAmount + orderTotalAmount;
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .update({
+            'ordersTotalAmount': newTotalAmount,
+          });
+        }
+      } catch (e) {
+        print('Error updating user totalAmount: $e');
+      }
+    }
+
+    Future<void> showBonusesConfirmDialog(BuildContext context) async {
       return showDialog<void>(
         context: context,
         builder: (BuildContext context) {
@@ -65,9 +92,12 @@ class AdminOrderCard extends StatelessWidget {
                 children: [
                   TextButton(
                     onPressed: () async {
-                      Navigator.of(context).pop();
                       isFinished = true;
-                      _updateIsFinished(true);
+                      final userId = order['userId'];
+                      final orderTotalAmount = order['totalAmount'];
+                      updateUserTotalAmount(userId, orderTotalAmount);
+                      updateIsFinishedStatus(true);
+                      Navigator.of(context).pop();
                     },
                     child: const Text(
                       'Так',
@@ -91,7 +121,7 @@ class AdminOrderCard extends StatelessWidget {
       );
     }
 
-    void _showDeleteConfirmaDialog(BuildContext context) async {
+    void showDeleteConfirmDialog(BuildContext context) async {
       return showDialog<void>(
         context: context,
         builder: (BuildContext context) {
@@ -210,7 +240,7 @@ class AdminOrderCard extends StatelessWidget {
                 children: [
                   IconButton(
                     onPressed: () {
-                      _showDeleteConfirmaDialog(context);
+                      showDeleteConfirmDialog(context);
                     },
                     icon: const Icon(
                       Icons.delete,
@@ -225,7 +255,7 @@ class AdminOrderCard extends StatelessWidget {
                         value: isFinished,
                         onChanged: (value) async {
                           if (!isFinished) {
-                            await _showBonusesConfirmaDialog(context);
+                            await showBonusesConfirmDialog(context);
                           }
                         },
                       ),

@@ -134,7 +134,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
         '${now.day.toString().padLeft(2, '0')}.${now.month.toString().padLeft(2, '0')}.${now.year}';
     final String time =
         '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
-    // final num totalAmount = cartProvider.totalAmountOfCart;
 
     final orderData = {
       'fullName': _fullNameController.text,
