@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:honey/widgets/title_appbar.dart';
 
 class DiscountScreen extends StatelessWidget {
   final double productPrice;
@@ -9,14 +10,26 @@ class DiscountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Застосування акції'),
-        elevation: 0,
+      appBar: const TitleAppBar(
+        title: 'Застосування акції',
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [Text(productPrice.toString())],
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+        child: Center(
+          child: Column(
+            children: [
+              // Text(
+              //   productTitle,
+              //   style:
+              //       const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              // ),
+              // Text(
+              //   productPrice.toString(),
+              //   style:
+              //       const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              // ),
+            ],
+          ),
         ),
       ),
     );
