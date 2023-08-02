@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:honey/widgets/custom_text_field.dart';
+import 'package:honey/widgets/edit_profile_image.dart';
 import 'package:honey/widgets/title_appbar.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
@@ -145,16 +145,10 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     }
   }
 
-  Future<String?> pickProductImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      setState(() {
-        _pickedImage = File(pickedFile.path);
-      });
-    }
-    return null;
+  void _handleImagePicked(File? image) {
+    setState(() {
+      _pickedImage = image;
+    });
   }
 
   Future<void> deleteProductAndStorageImage(
@@ -260,63 +254,9 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                         children: [
                           Row(
                             children: [
-                              Container(
-                                width: 150,
-                                height: 150,
-                                margin:
-                                    const EdgeInsets.only(top: 8, right: 10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                    color: AppColors.primaryColor,
-                                  ),
-                                ),
-                                child: widget.isAddProduct
-                                    ? _pickedImage == null
-                                        ? InkWell(
-                                            onTap: pickProductImage,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(25.0),
-                                              child: Image.asset(
-                                                  'assets/img/add_photo.png'),
-                                            ),
-                                          )
-                                        : InkWell(
-                                            onTap: pickProductImage,
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              child: Image.file(
-                                                _pickedImage!,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          )
-                                    // редагуємо
-                                    : _pickedImage != null
-                                        ? InkWell(
-                                            onTap: pickProductImage,
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              child: Image.file(
-                                                _pickedImage!,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          )
-                                        : InkWell(
-                                            onTap: pickProductImage,
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              child: Image.network(
-                                                _currentImageUrl!,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          ),
+                              EditProfileImage(
+                                onImagePicked: _handleImagePicked,
+                                currentProfileImage: _currentImageUrl,
                               ),
                               const SizedBox(width: 14),
                               Expanded(
@@ -465,7 +405,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
   //   final popContext = Navigator.of(context);
   //   final scaffoldContext = ScaffoldMessenger.of(context);
   //   final isValid = _formkey.currentState
-  //       ?.validate(); //викликає всі валідатори та вертає значення true, якщо всі валідатори return null (всі дані пройшли провірку)
+  //       ?.validate();
   //   if (!isValid! || _pickedImage == null) {
   //     return; // пририває виконання функії, код нище не буде виконуватись
   //   }
@@ -478,7 +418,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
   //         duration: Duration(seconds: 3), // Тривалість показу SnackBar
   //       ),
   //     );
-  //     return; // Перериваємо виконання функції
+  //     return; 
   //   }
 
   //   try {
@@ -540,7 +480,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
   //     return;
   //   }
   //   final isValid = _formkey.currentState
-  //       ?.validate(); //викликає всі валідатори та вертає значення true, якщо всі валідатори return null (всі дані пройшли провірку)
+  //       ?.validate(); 
   //   if (!isValid! || _currentImageUrl == null) {
   //     return;
   //   }
