@@ -157,7 +157,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     return null;
   }
 
-  Future<void> deleteProductAndStorageImgage(
+  Future<void> deleteProductAndStorageImage(
       BuildContext context, productId, String imageUrl) async {
     final popContext = Navigator.of(context);
     ProductsProvider productProvider =
@@ -182,135 +182,68 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: TitleAppBar(
-          showIconButton: widget.isAddProduct ? false : true,
-          icon: Icons.delete,
-          action: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return Dialog(
-                  backgroundColor: const Color.fromARGB(255, 27, 27, 27),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(30.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(height: 15),
-                        const Text(
-                          'Впевнені, що хочете видалити товар?',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontFamily: 'MA',
+        title: widget.isAddProduct ? 'Додання товару' : 'Редагування товару',
+        showIconButton: widget.isAddProduct ? false : true,
+        icon: Icons.delete,
+        action: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return Dialog(
+                backgroundColor: const Color.fromARGB(255, 27, 27, 27),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(30.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const SizedBox(height: 15),
+                      const Text(
+                        'Впевнені, що хочете видалити товар?',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'MA',
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+                      ButtonBar(
+                        alignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          TextButton(
+                            onPressed: () async {
+                              Navigator.of(context).pop();
+                              deleteProductAndStorageImage(
+                                  context, widget.productId, _currentImageUrl!);
+                            },
+                            child: const Text(
+                              'Так',
+                              style: TextStyle(
+                                  color: Colors.red, fontFamily: 'MA'),
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 15),
-                        ButtonBar(
-                          alignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            TextButton(
-                              onPressed: () async {
-                                Navigator.of(context).pop();
-                                deleteProductAndStorageImgage(context,
-                                    widget.productId, _currentImageUrl!);
-                              },
-                              child: const Text(
-                                'Так',
-                                style: TextStyle(
-                                    color: Colors.red, fontFamily: 'MA'),
-                              ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text(
+                              'Скасувати',
+                              style: TextStyle(
+                                  color: Colors.white, fontFamily: 'MA'),
                             ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text(
-                                'Скасувати',
-                                style: TextStyle(
-                                    color: Colors.white, fontFamily: 'MA'),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                );
-              },
-            );
-          },
-          title: widget.isAddProduct ? 'Додання товару' : 'Редагування товару'),
-
-      // appBar: AppBar(
-      //     elevation: 0,
-      //     title: Text(
-      //         widget.isAddProduct ? 'Додання товару' : 'Редагування товару'),
-      //     actions: [
-      //       IconButton(
-      //         icon: const Icon(Icons.delete),
-      //         onPressed: () {
-      // showDialog(
-      //   context: context,
-      //   builder: (BuildContext context) {
-      //     return Dialog(
-      //       backgroundColor: const Color.fromARGB(255, 27, 27, 27),
-      //       shape: RoundedRectangleBorder(
-      //         borderRadius: BorderRadius.circular(15),
-      //       ),
-      //       child: Padding(
-      //         padding: const EdgeInsets.all(30.0),
-      //         child: Column(
-      //           mainAxisSize: MainAxisSize.min,
-      //           children: [
-      //             const SizedBox(height: 15),
-      //             const Text(
-      //               'Впевнені, що хочете видалити товар?',
-      //               textAlign: TextAlign.center,
-      //               style: TextStyle(
-      //                 fontSize: 16,
-      //                 fontFamily: 'MA',
-      //               ),
-      //             ),
-      //             const SizedBox(height: 15),
-      //             ButtonBar(
-      //               alignment: MainAxisAlignment.spaceAround,
-      //               children: [
-      //                 TextButton(
-      //                   onPressed: () async {
-      //                     Navigator.of(context).pop();
-      //                     deleteProductAndStorageImgage(context,
-      //                         widget.productId, _currentImageUrl!);
-      //                   },
-      //                   child: const Text(
-      //                     'Так',
-      //                     style: TextStyle(
-      //                         color: Colors.red, fontFamily: 'MA'),
-      //                   ),
-      //                 ),
-      //                 TextButton(
-      //                   onPressed: () {
-      //                     Navigator.of(context).pop();
-      //                   },
-      //                   child: const Text(
-      //                     'Скасувати',
-      //                     style: TextStyle(
-      //                         color: Colors.white, fontFamily: 'MA'),
-      //                   ),
-      //                 ),
-      //               ],
-      //             ),
-      //           ],
-      //         ),
-      //       ),
-      //     );
-      //   },
-      // );
-      //     },
-      //   )
-      // ]),
+                ),
+              );
+            },
+          );
+        },
+      ),
       body: _isLoading
           ? const Center(
               child: CircularProgressIndicator(
