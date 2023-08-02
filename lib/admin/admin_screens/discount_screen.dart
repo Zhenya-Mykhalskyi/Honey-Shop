@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class DiscountScreen extends StatelessWidget {
-  final double price;
+  final double productPrice;
   final String productTitle;
   const DiscountScreen(
-      {super.key, required this.price, required this.productTitle});
+      {super.key, required this.productPrice, required this.productTitle});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class DiscountScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
-          children: [Text(price.toString())],
+          children: [Text(productPrice.toString())],
         ),
       ),
     );

@@ -2,7 +2,17 @@ import 'package:flutter/material.dart';
 
 class TitleAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  const TitleAppBar({Key? key, required this.title}) : super(key: key);
+  final bool showIconButton;
+  final IconData? icon;
+  final Function? action;
+
+  const TitleAppBar(
+      {Key? key,
+      required this.title,
+      this.showIconButton = false,
+      this.icon,
+      this.action})
+      : super(key: key);
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -16,6 +26,17 @@ class TitleAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       elevation: 0,
       centerTitle: true,
+      actions: [
+        if (showIconButton)
+          IconButton(
+            onPressed: () {
+              if (action != null) {
+                action!();
+              }
+            },
+            icon: Icon(icon),
+          ),
+      ],
     );
   }
 }

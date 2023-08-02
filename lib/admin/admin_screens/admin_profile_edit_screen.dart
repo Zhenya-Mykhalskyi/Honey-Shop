@@ -11,6 +11,7 @@ import 'package:honey/widgets/custom_button.dart';
 import 'package:honey/widgets/custom_text_field.dart';
 import 'package:honey/widgets/edit_profile_image.dart';
 import 'package:honey/widgets/my_divider.dart';
+import 'package:honey/widgets/title_appbar.dart';
 
 class AdminProfileEditScreen extends StatefulWidget {
   const AdminProfileEditScreen({
@@ -276,10 +277,7 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Редагування профіля'),
-        elevation: 0,
-      ),
+      appBar: const TitleAppBar(title: 'Редагування профіля'),
       body: _isLoading
           ? const Center(
               child: CircularProgressIndicator(color: AppColors.primaryColor),
