@@ -34,7 +34,10 @@ class TitleAppBar extends StatelessWidget implements PreferredSizeWidget {
                 action!();
               }
             },
-            icon: Icon(icon),
+            icon: Icon(
+              icon,
+              size: 28,
+            ),
           ),
       ],
     );

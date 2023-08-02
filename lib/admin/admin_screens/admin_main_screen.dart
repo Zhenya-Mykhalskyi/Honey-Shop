@@ -4,6 +4,7 @@ import 'package:honey/admin/admin_widgets/cashback_form_dialog.dart';
 
 import 'package:honey/widgets/products_grid.dart';
 import 'package:honey/widgets/tab_button.dart';
+import 'package:honey/widgets/title_appbar.dart';
 import 'admin_profile_screen.dart';
 import 'admin_orders_screen.dart';
 import 'edit_products_overview_screen.dart';
@@ -49,86 +50,80 @@ class _AdminMainScreenState extends State<AdminMainScreen>
           ),
         ],
       ),
-      appBar: AppBar(
-        toolbarHeight: _selectedBottomNavBarIndex != 2 ? 100 : 70,
-        elevation: 0,
-        leadingWidth: 93,
-        title: _selectedBottomNavBarIndex == 2
-            ? const Text('Замовлення',
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24))
-            : null,
-        bottom: PreferredSize(
-          preferredSize:
-              Size.fromHeight(_selectedBottomNavBarIndex == 2 ? 0 : 30),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: _selectedBottomNavBarIndex != 2
-                ? Row(
-                    children: [
-                      TabButton(
-                        text: 'мед',
-                        isActive: _selectedTabIndex == 0,
-                        onPressed: () {
-                          setState(() {
-                            _selectedTabIndex = 0;
-                          });
-                        },
-                      ),
-                      const SizedBox(width: 10),
-                      TabButton(
-                        text: 'інше',
-                        isActive: _selectedTabIndex == 1,
-                        onPressed: () {
-                          setState(() {
-                            _selectedTabIndex = 1;
-                          });
-                        },
-                      ),
-                    ],
-                  )
-                : const SizedBox.shrink(),
-          ),
-        ),
-        leading: _selectedBottomNavBarIndex != 2
-            ? Padding(
+      appBar: _selectedBottomNavBarIndex == 2
+          ? TitleAppBar(
+              title: 'Замовлення',
+              showIconButton: true,
+              icon: Icons.ballot_outlined,
+              action: () {
+                showDialog(
+                    context: context,
+                    builder: (context) => const CashbackForm());
+              },
+            )
+          : AppBar(
+              toolbarHeight: 100,
+              elevation: 0,
+              leadingWidth: 93,
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(30),
+                child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Row(
+                      children: [
+                        TabButton(
+                          text: 'мед',
+                          isActive: _selectedTabIndex == 0,
+                          onPressed: () {
+                            setState(() {
+                              _selectedTabIndex = 0;
+                            });
+                          },
+                        ),
+                        const SizedBox(width: 10),
+                        TabButton(
+                          text: 'інше',
+                          isActive: _selectedTabIndex == 1,
+                          onPressed: () {
+                            setState(() {
+                              _selectedTabIndex = 1;
+                            });
+                          },
+                        ),
+                      ],
+                    )),
+              ),
+              leading: Padding(
                 padding: const EdgeInsets.only(left: 20, bottom: 10),
                 child: Image.asset('./assets/img/logo.png'),
-              )
-            : null,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 15),
-            child: IconButton(
-                icon: Icon(
-                  _selectedBottomNavBarIndex == 0
-                      ? Icons.person
-                      : _selectedBottomNavBarIndex == 1
-                          ? Icons.edit_note_outlined
-                          : Icons.ballot_outlined,
-                  size: 35,
-                  color: Colors.white,
-                ),
-                onPressed: _selectedBottomNavBarIndex == 2
-                    ? () {
-                        showDialog(
-                            context: context,
-                            builder: (context) => const CashbackForm());
-                      }
-                    : _selectedBottomNavBarIndex == 1
-                        ? () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  const AdminProfileEditScreen(),
-                            ));
-                          }
-                        : () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => const AdminProfileScreen(),
-                            ));
-                          }),
-          )
-        ],
-      ),
+              ),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 15),
+                  child: IconButton(
+                      icon: Icon(
+                        _selectedBottomNavBarIndex == 0
+                            ? Icons.person
+                            : Icons.edit_note_outlined,
+                        size: 35,
+                        color: Colors.white,
+                      ),
+                      onPressed: _selectedBottomNavBarIndex == 1
+                          ? () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    const AdminProfileEditScreen(),
+                              ));
+                            }
+                          : () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    const AdminProfileScreen(),
+                              ));
+                            }),
+                )
+              ],
+            ),
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false,
@@ -158,33 +153,3 @@ class _AdminMainScreenState extends State<AdminMainScreen>
     );
   }
 }
-
-
-// child: DropdownButton(
-//               underline: Container(),
-//               icon: const Icon(
-//                 Icons.person,
-//                 color: Colors.white,
-//                 size: 40,
-//               ),
-//               items: const [
-//                 DropdownMenuItem(
-//                   value: 'logout',
-//                   child: Row(
-//                     children: [
-//                       Icon(Icons.exit_to_app),
-//                       SizedBox(width: 8),
-//                       Text(
-//                         'Logout',
-//                         style: TextStyle(color: Colors.black),
-//                       )
-//                     ],
-//                   ),
-//                 )
-//               ],
-//               onChanged: (itemIdentifier) {
-//                 if (itemIdentifier == 'logout') {
-//                   FirebaseAuth.instance.signOut();
-//                 }
-//               },
-//             ),
