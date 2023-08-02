@@ -6,10 +6,12 @@ import 'package:honey/admin/admin_screens/product_edit_screen.dart';
 class AdminProductEditCard extends StatelessWidget {
   final Map<String, dynamic> productData;
   final String? productId;
+  final bool? isDiscountScreen;
   const AdminProductEditCard({
     super.key,
     required this.productData,
-    required this.productId,
+    this.productId,
+    this.isDiscountScreen = false,
   });
 
   @override
@@ -33,7 +35,7 @@ class AdminProductEditCard extends StatelessWidget {
                 Expanded(
                   flex: 1,
                   child: Padding(
-                    padding: const EdgeInsets.only(right: 10),
+                    padding: const EdgeInsets.only(right: 17),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: AspectRatio(
@@ -77,23 +79,24 @@ class AdminProductEditCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 50),
-                  child: IconButton(
-                    icon: const Icon(Icons.edit),
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => ProductEditScreen(
-                            isAddProduct: false,
-                            productId: productId!,
+                if (!isDiscountScreen!)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 50),
+                    child: IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ProductEditScreen(
+                              isAddProduct: false,
+                              productId: productId!,
+                            ),
                           ),
-                        ),
-                      );
-                    },
-                    color: const Color.fromARGB(255, 217, 217, 217),
+                        );
+                      },
+                      color: const Color.fromARGB(255, 217, 217, 217),
+                    ),
                   ),
-                ),
               ],
             ),
           ),

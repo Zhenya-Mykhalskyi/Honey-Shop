@@ -1,11 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:honey/admin/admin_widgets/admin_product_edit_card.dart';
 import 'package:honey/widgets/title_appbar.dart';
 
 class DiscountScreen extends StatelessWidget {
-  final double productPrice;
-  final String productTitle;
+  final double price;
+  final String title;
+  final double litersLeft;
+  final String? imageUrl;
   const DiscountScreen(
-      {super.key, required this.productPrice, required this.productTitle});
+      {super.key,
+      required this.price,
+      required this.title,
+      required this.litersLeft,
+      this.imageUrl});
+
+  get productData => {
+        'price': price,
+        'title': title,
+        'litersLeft': litersLeft,
+        'imageUrl': imageUrl,
+      };
 
   @override
   Widget build(BuildContext context) {
@@ -18,16 +32,10 @@ class DiscountScreen extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
-              // Text(
-              //   productTitle,
-              //   style:
-              //       const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-              // ),
-              // Text(
-              //   productPrice.toString(),
-              //   style:
-              //       const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-              // ),
+              AdminProductEditCard(
+                productData: productData,
+                isDiscountScreen: true,
+              )
             ],
           ),
         ),

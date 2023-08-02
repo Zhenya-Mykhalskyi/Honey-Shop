@@ -421,9 +421,12 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                 if (_formkey.currentState!.validate()) {
                                   Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => DiscountScreen(
-                                      productPrice:
+                                      price:
                                           double.parse(_priceController.text),
-                                      productTitle: _titleController.text,
+                                      title: _titleController.text,
+                                      litersLeft: double.parse(
+                                          _litersLeftController.text),
+                                      imageUrl: _currentImageUrl,
                                     ),
                                   ));
                                 } else {
