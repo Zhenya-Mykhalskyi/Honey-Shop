@@ -67,9 +67,6 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
         final salesPoints = data['salesPoints'] as List<dynamic>?;
 
         if (salesPoints != null) {
-          _salesPoints.clear();
-          _salesPointsCityControllers.clear();
-          _salesPointsAddressControllers.clear();
           _initializeSalesPoints(salesPoints);
         }
       }
@@ -107,7 +104,7 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
     });
   }
 
-  Future<void> _saveAdminData() async {
+  Future<void> _submitForm() async {
     final scaffoldContext = ScaffoldMessenger.of(context);
     final navContext = Navigator.of(context);
     final hasInternetConnection =
@@ -117,43 +114,14 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
     }
 
     if (_infoFormKey.currentState!.validate()) {
-      final adminData = {
-        'adminName': _adminNameController.text,
-        'adminEmail': _adminEmailController.text,
-        'adminPhoneNumber': '+380${_adminPhoneNumberController.text}',
-        'adminImageUrl': _currentProfileImage,
-        'aboutStoreText': _aboutStoreTextController.text,
-      };
-
       try {
         setState(() {
           _isLoading = true;
         });
 
-        final List<Map<String, String?>> salesPoints = [];
-        for (int i = 0; i < _salesPoints.length; i++) {
-          String city = _salesPointsCityControllers[i].text;
-          String address = _salesPointsAddressControllers[i].text;
+        await _saveAdminDataToFirestore();
+        await _saveSalesPointsToFirestore();
 
-          if (city.isEmpty) {
-            city = _salesPoints[i]['city'] ?? '';
-          }
-          if (address.isEmpty) {
-            address = _salesPoints[i]['address'] ?? '';
-          }
-
-          salesPoints.add({'city': city, 'address': address});
-        }
-
-        await FirebaseFirestore.instance
-            .collection('admin')
-            .doc('data')
-            .set(adminData);
-
-        if (_pickedImage != null) {
-          await _uploadProfileImageToStorageAndFirestore(_pickedImage!);
-        }
-        await saveSalesPointsToFirestore(salesPoints);
         scaffoldContext.showSnackBar(
           const SnackBar(content: Text('Дані успішно збережені')),
         );
@@ -172,10 +140,38 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
     }
   }
 
-  void _handleImagePicked(File? image) {
-    setState(() {
-      _pickedImage = image;
-    });
+  Future<void> _saveAdminDataToFirestore() async {
+    final adminData = {
+      'adminName': _adminNameController.text,
+      'adminEmail': _adminEmailController.text,
+      'adminPhoneNumber': '+380${_adminPhoneNumberController.text}',
+      'adminImageUrl': _currentProfileImage,
+      'aboutStoreText': _aboutStoreTextController.text,
+    };
+
+    final adminDocRef =
+        FirebaseFirestore.instance.collection('admin').doc('data');
+    await adminDocRef.set(adminData);
+
+    if (_pickedImage != null) {
+      await _uploadProfileImageToStorageAndFirestore(_pickedImage!);
+    }
+  }
+
+  Future<void> _saveSalesPointsToFirestore() async {
+    final DocumentReference adminDocRef =
+        FirebaseFirestore.instance.collection('admin').doc('data');
+
+    final List<Map<String, String>> formattedSalesPoints = [];
+    for (int i = 0; i < _salesPoints.length; i++) {
+      final String city = _salesPointsCityControllers[i].text;
+      final String address = _salesPointsAddressControllers[i].text;
+      formattedSalesPoints.add({
+        'city': city.isEmpty ? _salesPoints[i]['city'] ?? '' : city,
+        'address': address.isEmpty ? _salesPoints[i]['address'] ?? '' : address,
+      });
+    }
+    await adminDocRef.update({'salesPoints': formattedSalesPoints});
   }
 
   Future<void> _uploadProfileImageToStorageAndFirestore(File imageFile) async {
@@ -205,27 +201,10 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
     }
   }
 
-  Future<void> saveSalesPointsToFirestore(
-      List<Map<String, String?>> salesPoints) async {
-    try {
-      final DocumentReference adminDocRef =
-          FirebaseFirestore.instance.collection('admin').doc('data');
-
-      final List<Map<String, String>> formattedSalesPoints = [];
-      for (int i = 0; i < salesPoints.length; i++) {
-        final String city = salesPoints[i]['city'] ?? '';
-        final String address = salesPoints[i]['address'] ?? '';
-        formattedSalesPoints.add({
-          'city': city,
-          'address': address,
-        });
-      }
-
-      await adminDocRef.update({'salesPoints': formattedSalesPoints});
-    } catch (e) {
-      print('Error saving sales points data: $e');
-      rethrow;
-    }
+  void _handleImagePicked(File? image) {
+    setState(() {
+      _pickedImage = image;
+    });
   }
 
   void _addSalesPoint() {
@@ -456,7 +435,7 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
                       ),
                     ),
                   ),
-                  CustomButton(action: _saveAdminData, text: 'Зберегти дані')
+                  CustomButton(action: _submitForm, text: 'Зберегти дані')
                 ],
               ),
             ),
