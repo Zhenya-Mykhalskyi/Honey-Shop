@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
+
 import 'package:provider/provider.dart';
 
+import 'package:honey/widgets/custom_confirm_dialog.dart';
 import 'package:honey/services/check_internet_connection.dart';
 import 'package:honey/providers/cart.dart';
 import 'package:honey/widgets/app_colors.dart';
@@ -478,61 +480,17 @@ class _OrdersScreenState extends State<OrdersScreen> {
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
-                            return Dialog(
-                              backgroundColor:
-                                  const Color.fromARGB(255, 27, 27, 27),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(30.0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const SizedBox(height: 15),
-                                    Text(
-                                      widget.isEditProfile
-                                          ? 'Зберегти зміни'
-                                          : 'Підтвердити замовлення?',
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                          fontSize: 16,
-                                          fontFamily: 'MA',
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    const SizedBox(height: 15),
-                                    ButtonBar(
-                                      alignment: MainAxisAlignment.spaceAround,
-                                      children: [
-                                        TextButton(
-                                          onPressed: () async {
-                                            Navigator.of(context).pop();
-                                            await _submitForm(context);
-                                          },
-                                          child: const Text(
-                                            'Так',
-                                            style: TextStyle(
-                                              fontFamily: 'MA',
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: const Text(
-                                            'Повернутися',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontFamily: 'MA'),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
+                            return ConfirmationDialog(
+                              title: widget.isEditProfile
+                                  ? 'Зберегти зміни?'
+                                  : 'Підтвердити замовлення?',
+                              confirmButtonText: 'Так',
+                              confirmButtonColor: Colors.white,
+                              cancelButtonText: 'Повернутися',
+                              onConfirm: () async {
+                                Navigator.of(context).pop();
+                                await _submitForm(context);
+                              },
                             );
                           },
                         );

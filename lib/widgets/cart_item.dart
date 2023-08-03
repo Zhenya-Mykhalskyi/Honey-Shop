@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:honey/providers/cart.dart';
 import 'package:honey/providers/product_model.dart';
 import 'liters_counter.dart';
+import 'custom_confirm_dialog.dart';
 
 class CartItem extends StatefulWidget {
   final Product? product;
@@ -102,63 +103,16 @@ class _CartItemState extends State<CartItem> {
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return Dialog(
-                                      backgroundColor:
-                                          const Color.fromARGB(255, 27, 27, 27),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(30.0),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            const SizedBox(height: 15),
-                                            const Text(
-                                              'Впевнені, що хочете видалити товар з корзини?',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontFamily: 'MA',
-                                              ),
-                                            ),
-                                            const SizedBox(height: 15),
-                                            ButtonBar(
-                                              alignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: [
-                                                TextButton(
-                                                  onPressed: () async {
-                                                    Navigator.of(context).pop();
-                                                    cartProvider
-                                                        .removeItemFromCart(
-                                                            widget.product!.id);
-                                                    // productProvider.resetLiters(
-                                                    //     widget.product);
-                                                  },
-                                                  child: const Text(
-                                                    'Так',
-                                                    style: TextStyle(
-                                                        color: Colors.red,
-                                                        fontFamily: 'MA'),
-                                                  ),
-                                                ),
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: const Text(
-                                                    'Скасувати',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontFamily: 'MA'),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
+                                    return ConfirmationDialog(
+                                      title:
+                                          'Впевнені, що хочете видалити товар з корзини?',
+                                      confirmButtonText: 'Так',
+                                      cancelButtonText: 'Повернутися',
+                                      onConfirm: () async {
+                                        Navigator.of(context).pop();
+                                        cartProvider.removeItemFromCart(
+                                            widget.product!.id);
+                                      },
                                     );
                                   },
                                 );

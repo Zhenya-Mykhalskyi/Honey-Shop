@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:honey/services/check_internet_connection.dart';
 import 'package:honey/widgets/app_colors.dart';
+import 'package:honey/widgets/custom_confirm_dialog.dart';
 import 'package:honey/widgets/my_divider.dart';
 import 'admin_order_dialog.dart';
 
@@ -93,140 +94,6 @@ class AdminOrderCard extends StatelessWidget {
       }
     }
 
-    Future<void> showBonusesConfirmDialog(BuildContext context) async {
-      final cashbackData = await getCashbackData();
-      // ignore: use_build_context_synchronously
-      return showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            backgroundColor: const Color.fromARGB(255, 27, 27, 27),
-            content: const Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Flexible(
-                  child: Text(
-                    'Впевнені, що хочете завершити замовлення та начислити бонуси клієнту? Цю дію неможливо відмінити!',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontFamily: 'MA',
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            actions: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  TextButton(
-                    onPressed: () async {
-                      isFinished = true;
-                      final userId = order['userId'];
-                      final double orderAmount = order['totalAmount'];
-                      final userDoc = await FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(userId)
-                          .get();
-
-                      final userOrdersTotalAmount =
-                          userDoc.data()?['ordersTotalAmount'] ?? 0.0;
-
-                      int maxAmountIndex = -1;
-                      for (int i = 0; i < cashbackData['amounts'].length; i++) {
-                        if (cashbackData['amounts'][i] <=
-                            orderAmount + userOrdersTotalAmount) {
-                          maxAmountIndex = i;
-                        } else {
-                          break;
-                        }
-                      }
-                      int percentage = maxAmountIndex >= 0
-                          ? cashbackData['percentages'][maxAmountIndex]
-                          : 0;
-
-                      double bonusAmount = (percentage / 100) * orderAmount;
-                      updateUserTotalAmountAndBonuses(
-                          userId, orderAmount, bonusAmount);
-
-                      updateIsFinishedStatus(true);
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text(
-                      'Так',
-                      style: TextStyle(color: Colors.red, fontFamily: 'MA'),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text(
-                      'Повернутися',
-                      style: TextStyle(color: Colors.white, fontFamily: 'MA'),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          );
-        },
-      );
-    }
-
-    void showDeleteConfirmDialog(BuildContext context) async {
-      return showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            backgroundColor: const Color.fromARGB(255, 27, 27, 27),
-            content: const Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Flexible(
-                  child: Text(
-                    'Впевнені, що хочете видалити замовлення? Видаляйте замовлення тільки після начислення бонусів клієнту. Цю дію неможливо відмінити!',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontFamily: 'MA',
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            actions: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      onDelete();
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text(
-                      'Так',
-                      style: TextStyle(color: Colors.red, fontFamily: 'MA'),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text(
-                      'Повернутися',
-                      style: TextStyle(color: Colors.white, fontFamily: 'MA'),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          );
-        },
-      );
-    }
-
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Card(
@@ -294,7 +161,22 @@ class AdminOrderCard extends StatelessWidget {
                 children: [
                   IconButton(
                     onPressed: () {
-                      showDeleteConfirmDialog(context);
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return ConfirmationDialog(
+                            title:
+                                'Впевнені, що хочете видалити замовлення? Видаляйте замовлення тільки після начислення бонусів клієнту. Цю дію неможливо відмінити!',
+                            confirmButtonText: 'Так',
+                            cancelButtonText: 'Повернутися',
+                            onConfirm: () {
+                              Navigator.of(context).pop();
+
+                              onDelete();
+                            },
+                          );
+                        },
+                      );
                     },
                     icon: const Icon(
                       Icons.delete,
@@ -307,9 +189,62 @@ class AdminOrderCard extends StatelessWidget {
                         activeColor: Colors.black.withOpacity(0.85),
                         activeTrackColor: const Color.fromARGB(255, 0, 0, 0),
                         value: isFinished,
-                        onChanged: (value) async {
+                        onChanged: (value) {
                           if (!isFinished) {
-                            await showBonusesConfirmDialog(context);
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return ConfirmationDialog(
+                                  title:
+                                      'Впевнені, що хочете завершити замовлення та начислити бонуси клієнту? Цю дію неможливо відмінити!',
+                                  confirmButtonText: 'Так',
+                                  cancelButtonText: 'Повернутися',
+                                  onConfirm: () async {
+                                    final navContext = Navigator.of(context);
+                                    final cashbackData =
+                                        await getCashbackData();
+
+                                    isFinished = true;
+                                    final userId = order['userId'];
+                                    final double orderAmount =
+                                        order['totalAmount'];
+                                    final userDoc = await FirebaseFirestore
+                                        .instance
+                                        .collection('users')
+                                        .doc(userId)
+                                        .get();
+
+                                    final userOrdersTotalAmount =
+                                        userDoc.data()?['ordersTotalAmount'] ??
+                                            0.0;
+
+                                    int maxAmountIndex = -1;
+                                    for (int i = 0;
+                                        i < cashbackData['amounts'].length;
+                                        i++) {
+                                      if (cashbackData['amounts'][i] <=
+                                          orderAmount + userOrdersTotalAmount) {
+                                        maxAmountIndex = i;
+                                      } else {
+                                        break;
+                                      }
+                                    }
+                                    int percentage = maxAmountIndex >= 0
+                                        ? cashbackData['percentages']
+                                            [maxAmountIndex]
+                                        : 0;
+
+                                    double bonusAmount =
+                                        (percentage / 100) * orderAmount;
+                                    updateUserTotalAmountAndBonuses(
+                                        userId, orderAmount, bonusAmount);
+
+                                    updateIsFinishedStatus(true);
+                                    navContext.pop();
+                                  },
+                                );
+                              },
+                            );
                           }
                         },
                       ),
