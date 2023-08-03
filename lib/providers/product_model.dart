@@ -5,9 +5,11 @@ class Product {
   String imageUrl;
   int litersLeft;
   String productDescription;
-
   bool isHoney;
-  double liters;
+
+  bool? isDiscount;
+  double? discountPrice;
+  int? discountPercentage;
 
   Product({
     required this.id,
@@ -17,6 +19,8 @@ class Product {
     required this.litersLeft,
     required this.productDescription,
     required this.isHoney,
-    double? liters,
-  }) : liters = liters ?? 0.0;
+    this.isDiscount,
+    this.discountPrice,
+    this.discountPercentage,
+  });
 }

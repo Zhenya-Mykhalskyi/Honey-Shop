@@ -23,14 +23,16 @@ class ProductsProvider with ChangeNotifier {
       List<Product> productList = querySnapshot.docs.map((doc) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         return Product(
-          id: data['id'],
-          title: data['title'],
-          price: data['price'],
-          productDescription: data['shortDescription'],
-          imageUrl: data['imageUrl'],
-          isHoney: data['isHoney'],
-          litersLeft: data['litersLeft'],
-        );
+            id: data['id'],
+            title: data['title'],
+            price: data['price'],
+            productDescription: data['shortDescription'],
+            imageUrl: data['imageUrl'],
+            isHoney: data['isHoney'],
+            litersLeft: data['litersLeft'],
+            isDiscount: data['isDiscount'] ?? false,
+            discountPrice: data['discountPrice'] ?? 0,
+            discountPercentage: data['discountPercentage'] ?? 0);
       }).toList();
       _items = productList;
 
@@ -63,6 +65,12 @@ class ProductsProvider with ChangeNotifier {
                   as Map<String, dynamic>)['shortDescription'] ??
               '',
           isHoney: (productSnapshot.data() as Map<String, dynamic>)['isHoney'],
+          isDiscount:
+              (productSnapshot.data() as Map<String, dynamic>)['isDiscount'],
+          discountPrice:
+              (productSnapshot.data() as Map<String, dynamic>)['discountPrice'],
+          discountPercentage: (productSnapshot.data()
+              as Map<String, dynamic>)['discountPercentage'],
         );
       } else {
         return null;
@@ -92,6 +100,9 @@ class ProductsProvider with ChangeNotifier {
         'litersLeft': product.litersLeft,
         'shortDescription': product.productDescription,
         'isHoney': product.isHoney,
+        'isDiscount': product.isDiscount ?? false,
+        'discountPrice': product.discountPrice ?? 0,
+        'discountPercentage': product.discountPercentage ?? 0,
       });
       Product newProduct = Product(
         id: docRef.id,
@@ -101,6 +112,9 @@ class ProductsProvider with ChangeNotifier {
         litersLeft: product.litersLeft,
         productDescription: product.productDescription,
         isHoney: product.isHoney,
+        isDiscount: product.isDiscount,
+        discountPrice: product.discountPrice,
+        discountPercentage: product.discountPercentage,
       );
       _items.add(newProduct);
       notifyListeners();
@@ -109,8 +123,15 @@ class ProductsProvider with ChangeNotifier {
     }
   }
 
-  Future<void> updateProduct(String prodId, Product product,
-      {File? pickedImage, String? currentImageUrl}) async {
+  Future<void> updateProduct(
+    String prodId,
+    Product product, {
+    File? pickedImage,
+    String? currentImageUrl,
+    // bool isDiscount = false,
+    // int discountPercentage = 0,
+    // double priceWithDiscount = 0.0,
+  }) async {
     try {
       String imageUrl;
       Reference ref = FirebaseStorage.instance
@@ -134,6 +155,9 @@ class ProductsProvider with ChangeNotifier {
         'litersLeft': product.litersLeft,
         'shortDescription': product.productDescription,
         'isHoney': product.isHoney,
+        // 'isDiscount': isDiscount,
+        // 'discountPrice': priceWithDiscount,
+        // 'discountPercentage': discountPercentage,
       });
 
       int index = _items.indexWhere((item) => item.id == prodId);
@@ -165,6 +189,30 @@ class ProductsProvider with ChangeNotifier {
       notifyListeners();
     } catch (error) {
       print('Сталася помилка при видаленні продукту: $error');
+    }
+  }
+
+  Future<void> applyDiscount(
+      String productId, int discountPercentage, double discountPrice) async {
+    try {
+      int index = _items.indexWhere((item) => item.id == productId);
+      if (index != -1) {
+        _items[index].isDiscount = true;
+        _items[index].discountPercentage = discountPercentage;
+        _items[index].discountPrice = discountPrice;
+
+        await FirebaseFirestore.instance
+            .collection('products')
+            .doc(productId)
+            .update({
+          'isDiscount': true,
+          'discountPrice': discountPrice,
+          'discountPercentage': discountPercentage,
+        });
+        notifyListeners();
+      }
+    } catch (e) {
+      print('Error applying discount: $e');
     }
   }
 }

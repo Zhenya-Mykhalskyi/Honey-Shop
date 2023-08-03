@@ -1,20 +1,20 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:honey/admin/admin_widgets/admin_product_edit_card.dart';
-import 'package:honey/widgets/app_colors.dart';
+import 'package:provider/provider.dart';
+
 import 'package:honey/widgets/title_appbar.dart';
+import 'package:honey/widgets/app_colors.dart';
+import 'package:honey/widgets/custom_button.dart';
+import 'package:honey/providers/product_model.dart';
+import 'package:honey/providers/products.dart';
+import 'package:honey/admin/admin_widgets/admin_product_edit_card.dart';
 
 class DiscountScreen extends StatefulWidget {
-  final double price;
-  final String title;
-  final double litersLeft;
-  final String? imageUrl;
+  final Product product;
 
   const DiscountScreen({
     Key? key,
-    required this.price,
-    required this.title,
-    required this.litersLeft,
-    this.imageUrl,
+    required this.product,
   }) : super(key: key);
 
   @override
@@ -22,19 +22,64 @@ class DiscountScreen extends StatefulWidget {
 }
 
 class _DiscountScreenState extends State<DiscountScreen> {
+  int _discountPercentage = 0;
+  @override
+  void initState() {
+    super.initState();
+    _fetchDiscountPercentage();
+  }
+
+  void _fetchDiscountPercentage() async {
+    try {
+      DocumentSnapshot productSnapshot = await FirebaseFirestore.instance
+          .collection('products')
+          .doc(widget.product.id)
+          .get();
+
+      if (productSnapshot.exists) {
+        Map<String, dynamic> data =
+            productSnapshot.data() as Map<String, dynamic>;
+        setState(() {
+          _discountPercentage = data['discountPercentage'] ?? 0;
+        });
+      }
+    } catch (e) {
+      print('Error fetching discount percentage: $e');
+    }
+  }
+
   get productData => {
-        'price': widget.price,
-        'title': widget.title,
-        'litersLeft': widget.litersLeft,
-        'imageUrl': widget.imageUrl,
+        'price': widget.product.price,
+        'title': widget.product.title,
+        'litersLeft': widget.product.litersLeft,
+        'imageUrl': widget.product.imageUrl,
       };
 
-  double _discountPercentage = 0.0;
-
-  void _applyDiscount(double percentage) {
+  void _applyDiscount(int percentage) {
     setState(() {
       _discountPercentage = percentage;
     });
+  }
+
+  double calculateDiscountedPrice() {
+    double discountAmount = widget.product.price * (_discountPercentage / 100);
+    double discountedPrice = widget.product.price - discountAmount;
+    return discountedPrice;
+  }
+
+  Future<void> saveDiscount() async {
+    final navContext = Navigator.of(context);
+    double discountedPrice = calculateDiscountedPrice();
+    try {
+      await Provider.of<ProductsProvider>(context, listen: false).applyDiscount(
+        widget.product.id,
+        _discountPercentage,
+        discountedPrice,
+      );
+      navContext.pop();
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -47,35 +92,41 @@ class _DiscountScreenState extends State<DiscountScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
         child: Center(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              AdminProductEditCard(
-                productData: productData,
-                isDiscountScreen: true,
-              ),
-              const SizedBox(height: 20),
               Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildDiscountButton(10),
-                  _buildDiscountButton(15),
-                  _buildDiscountButton(20),
-                  _buildDiscountButton(30),
-                  _buildDiscountButton(50),
+                  AdminProductEditCard(
+                    productData: productData,
+                    isDiscountScreen: true,
+                  ),
+                  const SizedBox(height: 35),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _buildDiscountButton(10),
+                      _buildDiscountButton(15),
+                      _buildDiscountButton(20),
+                      _buildDiscountButton(30),
+                      _buildDiscountButton(50),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Ціна з урахуванням акції:',
+                    style: TextStyle(
+                      fontSize: 18,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    '${calculateDiscountedPrice().toStringAsFixed(2)} грн',
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
-              const SizedBox(height: 20),
-              const Text(
-                'Ціна з урахуванням акції:',
-                style: TextStyle(
-                  fontSize: 18,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                '${calculateDiscountedPrice().toStringAsFixed(2)} грн',
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
+              CustomButton(action: saveDiscount, text: 'Зберегти')
             ],
           ),
         ),
@@ -83,7 +134,7 @@ class _DiscountScreenState extends State<DiscountScreen> {
     );
   }
 
-  Widget _buildDiscountButton(double percentage) {
+  Widget _buildDiscountButton(int percentage) {
     bool isActive = percentage == _discountPercentage;
     return Padding(
       padding: const EdgeInsets.all(7),
@@ -112,11 +163,5 @@ class _DiscountScreenState extends State<DiscountScreen> {
         ),
       ),
     );
-  }
-
-  double calculateDiscountedPrice() {
-    double discountAmount = widget.price * (_discountPercentage / 100);
-    double discountedPrice = widget.price - discountAmount;
-    return discountedPrice;
   }
 }

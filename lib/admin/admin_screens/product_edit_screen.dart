@@ -1,11 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:provider/provider.dart';
 
 import 'package:honey/widgets/custom_text_field.dart';
 import 'package:honey/widgets/edit_form_image.dart';
 import 'package:honey/widgets/title_appbar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
+
 import 'package:honey/services/check_internet_connection.dart';
 import 'package:honey/providers/product_model.dart';
 import 'package:honey/providers/products.dart';
@@ -32,9 +33,11 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
   final _descriptionController = TextEditingController();
   String? _imageUrl;
   File? _pickedImage;
+
   bool _isLoading = false;
   String? _currentImageUrl;
   bool _isHoney = false;
+  Product? _fetchedProduct;
 
   final _editedProduct = Product(
     id: '',
@@ -44,13 +47,43 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     imageUrl: '',
     isHoney: false,
     litersLeft: 0,
-    liters: 0,
   );
 
   @override
   void initState() {
     fetchProductDataAndSetValues();
     super.initState();
+  }
+
+  Future<void> fetchProductDataAndSetValues() async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+      ProductsProvider productProvider =
+          Provider.of<ProductsProvider>(context, listen: false);
+      Product? product =
+          await productProvider.getProductByIdFromFirestore(widget.productId);
+      if (product != null) {
+        _fetchedProduct = product;
+        _priceController.text = product.price.toString();
+        _titleController.text = product.title;
+        _litersLeftController.text = product.litersLeft.toString();
+        _descriptionController.text = product.productDescription;
+        _isHoney = product.isHoney;
+        _imageUrl = product.imageUrl;
+        setState(() {
+          _currentImageUrl = _imageUrl;
+          _isHoney;
+        });
+      }
+    } catch (error) {
+      print('Error: $error');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   Future<void> submitProductForm(BuildContext context) async {
@@ -103,38 +136,6 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
         }
         popContext.pop();
       }
-    } catch (error) {
-      print('Error: $error');
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-  Future<void> fetchProductDataAndSetValues() async {
-    try {
-      setState(() {
-        _isLoading = true;
-      });
-      ProductsProvider productProvider =
-          Provider.of<ProductsProvider>(context, listen: false);
-      await productProvider
-          .getProductByIdFromFirestore(widget.productId)
-          .then((product) {
-        if (product != null) {
-          _priceController.text = product.price.toString();
-          _titleController.text = product.title;
-          _litersLeftController.text = product.litersLeft.toString();
-          _descriptionController.text = product.productDescription;
-          _isHoney = product.isHoney;
-          _imageUrl = product.imageUrl;
-          setState(() {
-            _currentImageUrl = _imageUrl;
-            _isHoney;
-          });
-        }
-      });
     } catch (error) {
       print('Error: $error');
     } finally {
@@ -355,34 +356,25 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                               return null;
                             },
                           ),
-                          TextButton(
-                              onPressed: () {
-                                if (_formkey.currentState!.validate()) {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => DiscountScreen(
-                                      price:
-                                          double.parse(_priceController.text),
-                                      title: _titleController.text,
-                                      litersLeft: double.parse(
-                                          _litersLeftController.text),
-                                      imageUrl: _currentImageUrl,
-                                    ),
-                                  ));
-                                } else {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(const SnackBar(
-                                    content: Text(
-                                        'Заповніть поля корекними даними для переходу на сторінку застосування акції'),
-                                  ));
-                                }
-                              },
-                              child: const Text(
-                                'Застосувати акцію',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    decoration: TextDecoration.underline,
-                                    fontSize: 16),
-                              ))
+                          if (!widget.isAddProduct)
+                            TextButton(
+                                onPressed: () {
+                                  if (_formkey.currentState!.validate()) {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                      builder: (context) => DiscountScreen(
+                                        product: _fetchedProduct!,
+                                      ),
+                                    ));
+                                  }
+                                },
+                                child: const Text(
+                                  'Застосувати акцію',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      decoration: TextDecoration.underline,
+                                      fontSize: 16),
+                                ))
                         ],
                       ),
                     ),
