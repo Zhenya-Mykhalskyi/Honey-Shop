@@ -10,7 +10,7 @@ class CashbackForm extends StatefulWidget {
   const CashbackForm({super.key});
 
   @override
-  _CashbackFormState createState() => _CashbackFormState();
+  State<CashbackForm> createState() => _CashbackFormState();
 }
 
 class _CashbackFormState extends State<CashbackForm> {

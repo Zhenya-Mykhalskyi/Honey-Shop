@@ -80,14 +80,11 @@ class _OTPScreenState extends State<OTPScreen> {
       final CollectionReference usersCollection =
           FirebaseFirestore.instance.collection('users');
       if (widget._authMode == AuthMode.Signup) {
-        print('authmode == signup');
         try {
           await usersCollection.doc(uid).set({
             'phoneNumber': '+380$phone',
             'name': name,
           });
-
-          print('User data saved successfully!');
         } catch (error) {
           print('Error saving user data: $error');
         }
