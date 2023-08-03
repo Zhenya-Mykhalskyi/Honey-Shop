@@ -1,12 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-
-import 'package:honey/widgets/custom_text_field.dart';
-import 'package:honey/widgets/edit_profile_image.dart';
-import 'package:honey/widgets/title_appbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
+import 'package:honey/widgets/custom_text_field.dart';
+import 'package:honey/widgets/edit_form_image.dart';
+import 'package:honey/widgets/title_appbar.dart';
 import 'package:honey/services/check_internet_connection.dart';
 import 'package:honey/providers/product_model.dart';
 import 'package:honey/providers/products.dart';
@@ -254,7 +253,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                         children: [
                           Row(
                             children: [
-                              EditProfileImage(
+                              EditFormImage(
                                 onImagePicked: _handleImagePicked,
                                 currentProfileImage: _currentImageUrl,
                               ),

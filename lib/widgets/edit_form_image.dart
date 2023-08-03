@@ -5,19 +5,19 @@ import 'package:image_picker/image_picker.dart';
 
 import 'package:honey/widgets/app_colors.dart';
 
-class EditProfileImage extends StatefulWidget {
+class EditFormImage extends StatefulWidget {
   final String? currentProfileImage;
   final void Function(File? image) onImagePicked;
-  const EditProfileImage(
+  const EditFormImage(
       {super.key,
       required this.onImagePicked,
       required this.currentProfileImage});
 
   @override
-  State<EditProfileImage> createState() => _EditProfileImageState();
+  State<EditFormImage> createState() => _EditFormImageState();
 }
 
-class _EditProfileImageState extends State<EditProfileImage> {
+class _EditFormImageState extends State<EditFormImage> {
   File? _pickedImage;
 
   Future<String?> pickProfileImage() async {

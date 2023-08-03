@@ -9,7 +9,7 @@ import 'package:honey/services/check_internet_connection.dart';
 import 'package:honey/widgets/app_colors.dart';
 import 'package:honey/widgets/custom_button.dart';
 import 'package:honey/widgets/custom_text_field.dart';
-import 'package:honey/widgets/edit_profile_image.dart';
+import 'package:honey/widgets/edit_form_image.dart';
 import 'package:honey/widgets/my_divider.dart';
 import 'package:honey/widgets/title_appbar.dart';
 
@@ -278,7 +278,7 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
                                   children: [
                                     Row(
                                       children: [
-                                        EditProfileImage(
+                                        EditFormImage(
                                             onImagePicked: _handleImagePicked,
                                             currentProfileImage:
                                                 _currentProfileImage),

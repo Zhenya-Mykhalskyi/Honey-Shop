@@ -14,7 +14,7 @@ import 'package:honey/widgets/title_appbar.dart';
 import 'package:honey/widgets/custom_button.dart';
 import 'package:honey/widgets/total_amount.dart';
 import 'package:honey/widgets/custom_text_field.dart';
-import 'package:honey/widgets/edit_profile_image.dart';
+import 'package:honey/widgets/edit_form_image.dart';
 import 'user_main_screen.dart';
 
 class OrdersScreen extends StatefulWidget {
@@ -286,7 +286,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                           widget.isEditProfile
                               ? Row(
                                   children: [
-                                    EditProfileImage(
+                                    EditFormImage(
                                       onImagePicked: _handleImagePicked,
                                       currentProfileImage: _currentProfileImage,
                                     ),
