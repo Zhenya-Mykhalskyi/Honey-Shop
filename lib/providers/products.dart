@@ -215,4 +215,27 @@ class ProductsProvider with ChangeNotifier {
       print('Error applying discount: $e');
     }
   }
+
+  Future<void> deleteDiscount(String productId) async {
+    try {
+      int index = _items.indexWhere((item) => item.id == productId);
+      if (index != -1) {
+        _items[index].isDiscount = false;
+        _items[index].discountPercentage = 0;
+        _items[index].discountPrice = 0.0;
+
+        await FirebaseFirestore.instance
+            .collection('products')
+            .doc(productId)
+            .update({
+          'isDiscount': false,
+          'discountPercentage': 0,
+          'discountPrice': 0.0,
+        });
+        notifyListeners();
+      }
+    } catch (e) {
+      print('Error applying discount: $e');
+    }
+  }
 }
