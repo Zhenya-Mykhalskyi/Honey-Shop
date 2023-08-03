@@ -173,8 +173,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 20),
-                      child:
-                          CustomButton(action: () {}, text: 'Додати до кошика'),
+                      child: CustomButton(
+                          action: () {
+                            Navigator.of(context).pop();
+                          },
+                          text: 'Продовжити покупки'),
                     ),
                   ],
                 ),

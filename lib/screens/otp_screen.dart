@@ -14,7 +14,7 @@ class OTPScreen extends StatefulWidget {
   final AuthMode _authMode;
   const OTPScreen(this.phone, this.name, this._authMode, {super.key});
   @override
-  _OTPScreenState createState() => _OTPScreenState();
+  State<OTPScreen> createState() => _OTPScreenState();
 }
 
 class _OTPScreenState extends State<OTPScreen> {
