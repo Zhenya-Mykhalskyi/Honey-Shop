@@ -171,7 +171,6 @@ class AdminOrderCard extends StatelessWidget {
                             cancelButtonText: 'Повернутися',
                             onConfirm: () {
                               Navigator.of(context).pop();
-
                               onDelete();
                             },
                           );
@@ -249,7 +248,7 @@ class AdminOrderCard extends StatelessWidget {
                         },
                       ),
                       Text(
-                        '₴${order['totalAmount']}',
+                        '₴${order['totalAmount'].toStringAsFixed(2)}',
                         style: TextStyle(
                           color: isFinished
                               ? Colors.white.withOpacity(0.4)
