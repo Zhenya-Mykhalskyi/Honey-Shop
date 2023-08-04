@@ -45,14 +45,15 @@ class UserProfileScreen extends StatefulWidget {
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
-  String? userName;
-  String? phoneNumber;
-  String? fullName;
-  String? address;
-  String? selectedDelivery;
-  String? deliveryPhoneNumber;
-  String? postOfficeNumber;
-  String? imageUrl;
+  String? _userName;
+  String? _phoneNumber;
+  String? _fullName;
+  String? _address;
+  String? _selectedDelivery;
+  String? _deliveryPhoneNumber;
+  String? _postOfficeNumber;
+  String? _imageUrl;
+  double? _bonuses;
   Key _profileImageKey = UniqueKey();
 
   late Stream<List<Order>> _ordersStream;
@@ -60,7 +61,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   void initState() {
     fetchUserData();
-    print('UserProfileScreen INITSTATE');
     _ordersStream = _fetchOrdersStream();
     super.initState();
   }
@@ -76,15 +76,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
         if (userDoc.exists) {
           setState(() {
-            userName = userDoc.data()?['name'];
-            phoneNumber = user.phoneNumber;
-            fullName = userDoc.data()?['fullName'];
-            address = userDoc.data()?['address'];
-            selectedDelivery = userDoc.data()?['selectedDelivery'];
-            deliveryPhoneNumber = userDoc.data()?['deliveryPhoneNumber'];
-            postOfficeNumber = userDoc.data()?['postOfficeNumber'];
+            _userName = userDoc.data()?['name'];
+            _phoneNumber = user.phoneNumber;
+            _fullName = userDoc.data()?['fullName'];
+            _address = userDoc.data()?['address'];
+            _selectedDelivery = userDoc.data()?['selectedDelivery'];
+            _deliveryPhoneNumber = userDoc.data()?['deliveryPhoneNumber'];
+            _postOfficeNumber = userDoc.data()?['postOfficeNumber'];
             _profileImageKey = UniqueKey();
-            imageUrl = userDoc.data()?['profileImage'];
+            _imageUrl = userDoc.data()?['profileImage'];
+            _bonuses = userDoc.data()?['bonuses'] ?? 0;
           });
         }
       }
@@ -172,7 +173,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
-                                child: imageUrl == null
+                                child: _imageUrl == null
                                     ? const Icon(
                                         Icons.person_rounded,
                                         color: Colors.white,
@@ -186,7 +187,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                               const CircularProgressIndicator(
                                             color: AppColors.primaryColor,
                                           ),
-                                          imageUrl: imageUrl!,
+                                          imageUrl: _imageUrl!,
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -205,18 +206,19 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 children: [
                                   ProfileInfoCardSingleRow(
                                     icon: Icons.person_2_outlined,
-                                    text: userName.toString(),
+                                    text: _userName.toString(),
                                   ),
                                   const SizedBox(height: 7),
                                   ProfileInfoCardSingleRow(
                                     icon: Icons.phone_outlined,
-                                    text: phoneNumber.toString(),
+                                    text: _phoneNumber.toString(),
                                   ),
                                 ],
                               ),
-                              const ProfileInfoCardSingleRow(
+                              ProfileInfoCardSingleRow(
                                 icon: Icons.star_border_sharp,
-                                text: 'Мої бонуси:',
+                                text:
+                                    'Мої бонуси: ${_bonuses?.toStringAsFixed(0)}',
                                 color: AppColors.primaryColor,
                                 fontWeight: FontWeight.w700,
                               ),
@@ -277,20 +279,20 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 5, vertical: 10),
-                      child: fullName == null
+                      child: _fullName == null
                           ? const Text(
                               'Будь ласка, зробіть перше замовлення, або заповніть дані про доставку')
                           : Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                DeliveryInfoSingleText(text: fullName ?? ''),
+                                DeliveryInfoSingleText(text: _fullName ?? ''),
                                 DeliveryInfoSingleText(
-                                    text: deliveryPhoneNumber ?? ''),
-                                DeliveryInfoSingleText(text: address ?? ''),
+                                    text: _deliveryPhoneNumber ?? ''),
+                                DeliveryInfoSingleText(text: _address ?? ''),
                                 DeliveryInfoSingleText(
-                                    text: selectedDelivery ?? ''),
+                                    text: _selectedDelivery ?? ''),
                                 DeliveryInfoSingleText(
-                                    text: 'Відділення: $postOfficeNumber'),
+                                    text: 'Відділення: $_postOfficeNumber'),
                               ],
                             ),
                     ),
