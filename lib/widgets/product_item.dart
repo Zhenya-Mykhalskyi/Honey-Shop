@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:honey/providers/product_model.dart';
 import 'package:honey/screens/product_detail_screen.dart';
+import 'package:honey/widgets/app_colors.dart';
 import 'liters_counter.dart';
 
 class ProductItem extends StatelessWidget {
@@ -34,15 +35,42 @@ class ProductItem extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    AspectRatio(
-                      aspectRatio: 1,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: CachedNetworkImage(
-                          imageUrl: product.imageUrl,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        double stickerSize = constraints.maxWidth;
+                        return AspectRatio(
+                          aspectRatio: 1,
+                          child: Stack(
+                            children: [
+                              Align(
+                                alignment: Alignment.center,
+                                child: AspectRatio(
+                                  aspectRatio: 1,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(15),
+                                    child: CachedNetworkImage(
+                                      imageUrl: product.imageUrl,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              if (product.isDiscount == true)
+                                Positioned(
+                                  top: 0,
+                                  right: 10,
+                                  child: SizedBox(
+                                    height: stickerSize,
+                                    child: Image.asset(
+                                      'assets/img/promotional_sticker.png',
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
                     const SizedBox(height: 10),
                     Text(product.title,
@@ -55,10 +83,28 @@ class ProductItem extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          '₴${product.price.toString()}',
-                          style: const TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.w500),
+                          product.isDiscount == true
+                              ? '₴${product.discountPrice!.toStringAsFixed(2)}'
+                              : '₴${product.price.toStringAsFixed(0)}',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: product.isDiscount == true
+                                  ? AppColors.primaryColor
+                                  : Colors.white),
                         ),
+                        const SizedBox(width: 5),
+                        if (product.isDiscount == true)
+                          Text(
+                            '₴${product.price.toStringAsFixed(0)}',
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                              decoration: TextDecoration.lineThrough,
+                              decorationColor: Color.fromARGB(255, 201, 76, 76),
+                              color: Color.fromARGB(255, 114, 114, 114),
+                            ),
+                          ),
                         const Text(
                           ' / 0.5 л',
                           style: TextStyle(

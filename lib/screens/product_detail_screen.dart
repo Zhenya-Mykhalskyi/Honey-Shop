@@ -41,36 +41,32 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Center(
-                          child: SizedBox(
-                            child: Stack(
-                              children: [
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.95,
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.4,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: Image.network(
-                                      widget.product.imageUrl,
-                                      fit: BoxFit.cover,
-                                    ),
+                          child: Stack(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width * 0.95,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.4,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.network(
+                                    widget.product.imageUrl,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
-                                if (widget.product.isDiscount == true)
-                                  Positioned(
-                                    right: MediaQuery.of(context).size.width *
-                                        0.045,
-                                    child: Image.asset(
-                                      'assets/img/promotional_sticker.png',
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.4,
-                                      fit: BoxFit.contain,
-                                    ),
+                              ),
+                              if (widget.product.isDiscount == true)
+                                Positioned(
+                                  right:
+                                      MediaQuery.of(context).size.width * 0.035,
+                                  child: Image.asset(
+                                    'assets/img/promotional_sticker.png',
+                                    height: MediaQuery.of(context).size.height *
+                                        0.4,
+                                    fit: BoxFit.contain,
                                   ),
-                              ],
-                            ),
+                                ),
+                            ],
                           ),
                         ),
                         const SizedBox(height: 20),
