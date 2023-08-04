@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import 'package:honey/providers/cart.dart';
 
 class TotalAmountOfCart extends StatelessWidget {
+  final double totalAmount;
+
   const TotalAmountOfCart({
     super.key,
+    required this.totalAmount,
   });
 
   @override
   Widget build(BuildContext context) {
-    final cartProvider = Provider.of<CartProvider>(context);
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -18,7 +17,7 @@ class TotalAmountOfCart extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
         child: Text(
-          '₴ ${cartProvider.totalAmountOfCart.toStringAsFixed(2)}',
+          '₴ ${totalAmount.toStringAsFixed(2)}',
           style: const TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 22,

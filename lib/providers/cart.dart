@@ -27,7 +27,6 @@ class CartProvider with ChangeNotifier {
     _items.forEach((key, cartItem) {
       total += cartItem.price * 2 * cartItem.liters;
     });
-
     return total;
   }
 

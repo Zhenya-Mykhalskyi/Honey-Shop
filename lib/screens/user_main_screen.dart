@@ -105,7 +105,7 @@ class _UserMainScreenState extends State<UserMainScreen>
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        '${cartProvider.totalAmountOfCart.toStringAsFixed(0)} грн',
+                        '${cartProvider.totalAmountOfCart.toStringAsFixed(2)} грн',
                         style: const TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 22,

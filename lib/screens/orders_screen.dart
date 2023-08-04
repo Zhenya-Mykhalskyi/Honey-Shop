@@ -21,8 +21,18 @@ import 'user_main_screen.dart';
 class OrdersScreen extends StatefulWidget {
   final Map<String, CartItemModel>? cartData;
   final bool isEditProfile;
+  final double? finalAmount;
+  final bool? useBonuses;
+  final double? bonuses;
 
-  const OrdersScreen({super.key, this.cartData, required this.isEditProfile});
+  const OrdersScreen({
+    super.key,
+    this.cartData,
+    required this.isEditProfile,
+    this.finalAmount,
+    this.useBonuses,
+    this.bonuses,
+  });
 
   @override
   State<OrdersScreen> createState() => _OrdersScreenState();
@@ -103,18 +113,20 @@ class _OrdersScreenState extends State<OrdersScreen> {
       if (!hasInternetConnection) {
         return;
       }
-
       if (user == null) {
         return;
       }
 
-      final orderData = _buildOrderData(cartProvider, user);
       if (!widget.isEditProfile) {
+        final orderData = _buildOrderData(cartProvider, user);
         await _saveOrderToFirestore(orderData);
+        _resetProductsdata();
+        _resetUserBonuses();
       }
 
-      await _saveUserData();
-      _resetProductsdata();
+      if (widget.isEditProfile) {
+        await _saveUserData();
+      }
 
       navigatorContext.pushAndRemoveUntil(
         MaterialPageRoute(
@@ -144,7 +156,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
       'postOfficeNumber': _postOfficeNumberController.text,
       'comment': _commentController.text,
       'userId': user!.uid,
-      'totalAmount': cartProvider.totalAmountOfCart,
+      'totalAmount': widget.finalAmount,
       'date': date,
       'time': time,
       'timestamp': now,
@@ -160,7 +172,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
         });
       }),
     };
-
     return orderData;
   }
 
@@ -200,8 +211,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
       await usersCollection
           .doc(user.uid)
           .set(userData, SetOptions(merge: true));
-      if (_pickedImage != null) {}
-      await _uploadProfileImageToStorageAndFirestore(_pickedImage!);
+      if (_pickedImage != null) {
+        await _uploadProfileImageToStorageAndFirestore(_pickedImage!);
+      }
     } catch (e) {
       print('Error saving user data: $e');
     }
@@ -239,6 +251,21 @@ class _OrdersScreenState extends State<OrdersScreen> {
           .set(userData, SetOptions(merge: true));
     } catch (e) {
       print('Error uploading image: $e');
+    }
+  }
+
+  Future<void> _resetUserBonuses() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        final userDoc =
+            FirebaseFirestore.instance.collection('users').doc(user.uid);
+        if (widget.useBonuses == true) {
+          await userDoc.update({'bonuses': 0});
+        }
+      }
+    } catch (e) {
+      print("Error updating user bonuses: $e");
     }
   }
 
@@ -450,27 +477,29 @@ class _OrdersScreenState extends State<OrdersScreen> {
                       ),
                     ),
                     !widget.isEditProfile
-                        ? const Column(
+                        ? Column(
                             children: [
-                              SizedBox(height: 20),
-                              MyDivider(),
-                              SizedBox(height: 10),
+                              const SizedBox(height: 20),
+                              const MyDivider(),
+                              const SizedBox(height: 10),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
+                                  const Text(
                                     'Загальна сума',
                                     style: TextStyle(
                                         color: AppColors.primaryColor,
                                         fontWeight: FontWeight.w600,
                                         fontSize: 22),
                                   ),
-                                  TotalAmountOfCart()
+                                  TotalAmountOfCart(
+                                    totalAmount: widget.finalAmount!,
+                                  )
                                 ],
                               ),
-                              SizedBox(height: 10),
-                              MyDivider(),
+                              const SizedBox(height: 10),
+                              const MyDivider(),
                             ],
                           )
                         : Container(),

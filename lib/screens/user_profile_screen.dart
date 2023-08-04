@@ -53,7 +53,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   String? _deliveryPhoneNumber;
   String? _postOfficeNumber;
   String? _imageUrl;
-  double? _bonuses;
+  num? _bonuses;
   Key _profileImageKey = UniqueKey();
 
   late Stream<List<Order>> _ordersStream;
