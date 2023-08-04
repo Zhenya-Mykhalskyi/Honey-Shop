@@ -289,6 +289,7 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
                                                 hintText: 'Імʼя',
                                                 maxLength: 20,
                                                 maxLines: 1,
+                                                textSize: 17,
                                                 controller:
                                                     _adminNameController,
                                                 validator: (value) {
@@ -304,6 +305,7 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
                                                 prefix: const Text('+380 '),
                                                 hintText: 'Номер телефону',
                                                 maxLength: 9,
+                                                textSize: 17,
                                                 controller:
                                                     _adminPhoneNumberController,
                                                 validator: (value) {
@@ -327,6 +329,7 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
                                       hintText: 'Електронна адреса',
                                       maxLength: 35,
                                       maxLines: 1,
+                                      textSize: 17,
                                       controller: _adminEmailController,
                                       validator: (value) {
                                         final emailRegExp = RegExp(
@@ -342,6 +345,7 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
                                       hintText: 'Опис магазину',
                                       maxLength: 350,
                                       maxLines: 9,
+                                      textSize: 17,
                                       showCounterText: true,
                                       controller: _aboutStoreTextController,
                                       validator: (value) {
@@ -377,6 +381,7 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
                                             hintText: 'Населений пункт',
                                             maxLength: 20,
                                             maxLines: 1,
+                                            textSize: 17,
                                             controller:
                                                 _salesPointsCityControllers[i],
                                             validator: (value) {
@@ -390,6 +395,7 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
                                             hintText: 'Адреса',
                                             maxLength: 40,
                                             maxLines: 1,
+                                            textSize: 17,
                                             controller:
                                                 _salesPointsAddressControllers[
                                                     i],

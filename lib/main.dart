@@ -77,8 +77,8 @@ class _MyAppState extends State<MyApp> {
               //   return const UserMainScreen();
               // }
               if (userSnapshot.hasData) {
-                return const AdminMainScreen();
-                // return const UserMainScreen();
+                // return const AdminMainScreen();
+                return const UserMainScreen();
               } else {
                 return const AuthScreen();
               }

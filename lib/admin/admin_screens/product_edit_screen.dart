@@ -227,6 +227,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                       hintText: 'Назва товару',
                                       maxLength: 30,
                                       maxLines: 1,
+                                      textSize: 17,
                                       controller: _titleController,
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
@@ -239,6 +240,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                       hintText: 'Ціна за 0.5 л',
                                       maxLength: 7,
                                       maxLines: 1,
+                                      textSize: 17,
                                       controller: _priceController,
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
@@ -280,7 +282,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                               const Flexible(
                                 child: Text(
                                   'Поставте галочку, якщо товар являється медом*',
-                                  style: TextStyle(fontSize: 16),
+                                  style: TextStyle(fontSize: 17),
                                 ),
                               ),
                             ],
@@ -289,6 +291,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                             hintText: 'Кількість літрів',
                             maxLength: 6,
                             maxLines: 1,
+                            textSize: 17,
                             controller: _litersLeftController,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -308,6 +311,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                             hintText: 'Опис товару (розділяйте абзацами)',
                             maxLength: 1000,
                             maxLines: 14,
+                            textSize: 17,
                             controller: _descriptionController,
                             showCounterText: true,
                             validator: (value) {

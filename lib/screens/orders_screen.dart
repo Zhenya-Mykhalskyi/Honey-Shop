@@ -325,6 +325,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                         hintText: 'Ваше імʼя',
                                         maxLength: 15,
                                         maxLines: 1,
+                                        textSize: 17,
                                         controller: _usernameController,
                                         validator: (value) {
                                           if (value == null || value.isEmpty) {
@@ -349,6 +350,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                               hintText: 'Ваше повне імʼя (ПІБ)',
                               keyboardType: TextInputType.name,
                               maxLength: 100,
+                              textSize: 17,
                               controller: _fullNameController,
                               validator: (value) {
                                 if (value == null ||
@@ -363,6 +365,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             prefix: const Text('+380 '),
                             keyboardType: TextInputType.phone,
                             maxLength: 9,
+                            textSize: 17,
                             controller: _phoneNumberController,
                             validator: (value) {
                               final regExp = RegExp(r'^\+380[0-9]{9}$');
@@ -386,6 +389,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                               hintText: 'Місто / населений пункт',
                               keyboardType: TextInputType.name,
                               maxLength: 30,
+                              textSize: 17,
                               controller: _addressController,
                               validator: (value) {
                                 if (value == null ||
@@ -443,7 +447,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                 border: InputBorder.none,
                                 prefixStyle: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 16,
+                                  fontSize: 17,
                                 ),
                               ),
                             ),
@@ -454,6 +458,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                   ? 'Номер відділення або поштомата'
                                   : 'Поштовий індекс та адреса відділення',
                               maxLength: 50,
+                              textSize: 17,
                               maxLines:
                                   _selectedDelivery == 'Нова пошта' ? 1 : 2,
                               controller: _postOfficeNumberController,

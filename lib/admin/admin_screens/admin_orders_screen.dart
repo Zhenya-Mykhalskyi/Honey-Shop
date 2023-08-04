@@ -72,8 +72,6 @@ class AdminOrdersScreen extends StatelessWidget {
                     if (!isFinished) {
                       String userId = orderData['userId'];
                       num usedBonuses = orderData['usedBonuses'] ?? 0.0;
-                      print(usedBonuses);
-                      print('usedBonuses');
                       await FirebaseFirestore.instance
                           .collection('users')
                           .doc(userId)

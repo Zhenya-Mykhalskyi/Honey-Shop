@@ -3,28 +3,31 @@ import 'package:flutter/material.dart';
 import 'app_colors.dart';
 
 class CustomTextField extends StatelessWidget {
+  final int maxLength;
+  final String? Function(String?)? validator;
+  final TextEditingController controller;
+
   final String? hintText;
   final String? sufixText;
   final Widget? prefix;
+  final double? textSize;
   final TextInputType? keyboardType;
-  final int maxLength;
   final int? maxLines;
-  final TextEditingController controller;
-  final String? Function(String?)? validator;
   final bool showCounterText;
   final bool showHintText;
   final bool isTextAlignCenter;
 
   const CustomTextField({
     super.key,
+    required this.maxLength,
+    required this.controller,
+    required this.validator,
     this.hintText,
     this.sufixText,
     this.prefix,
+    this.textSize,
     this.keyboardType,
-    required this.maxLength,
     this.maxLines,
-    required this.controller,
-    required this.validator,
     this.showCounterText = false,
     this.showHintText = true,
     this.isTextAlignCenter = false,
@@ -63,18 +66,19 @@ class CustomTextField extends StatelessWidget {
               controller: controller,
               maxLength: maxLength,
               keyboardType: keyboardType,
-              style: const TextStyle(color: Colors.white, fontSize: 18),
+              style: TextStyle(color: Colors.white, fontSize: textSize ?? 21),
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(8),
                 counterText: showCounterText ? null : '',
                 counterStyle: const TextStyle(color: Colors.white),
                 border: InputBorder.none,
                 prefix: prefix,
-                prefixStyle: const TextStyle(color: Colors.white, fontSize: 18),
+                prefixStyle:
+                    TextStyle(color: Colors.white, fontSize: textSize ?? 21),
                 suffixText: sufixText,
-                suffixStyle: const TextStyle(
+                suffixStyle: TextStyle(
                     color: Colors.white,
-                    fontSize: 18,
+                    fontSize: textSize ?? 18,
                     fontWeight: FontWeight.w500),
               ),
             ),
