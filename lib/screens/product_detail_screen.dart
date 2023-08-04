@@ -42,17 +42,50 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       children: [
                         Center(
                           child: SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.95,
-                            height: MediaQuery.of(context).size.height * 0.4,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: Image.network(
-                                widget.product.imageUrl,
-                                fit: BoxFit.cover,
-                              ),
+                            child: Stack(
+                              children: [
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.95,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.4,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: Image.network(
+                                      widget.product.imageUrl,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                if (widget.product.isDiscount == true)
+                                  Positioned(
+                                    right: MediaQuery.of(context).size.width *
+                                        0.045,
+                                    child: Image.asset(
+                                      'assets/img/promotional_sticker.png',
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.4,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                              ],
                             ),
                           ),
                         ),
+                        // Center(
+                        //   child: SizedBox(
+                        //     width: MediaQuery.of(context).size.width * 0.95,
+                        //     height: MediaQuery.of(context).size.height * 0.4,
+                        //     child: ClipRRect(
+                        //       borderRadius: BorderRadius.circular(20),
+                        //       child: Image.network(
+                        //         widget.product.imageUrl,
+                        //         fit: BoxFit.cover,
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                         const SizedBox(height: 20),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,12 +110,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 ],
                               ),
                             ),
+                            const SizedBox(width: 35),
                             Column(
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(right: 20),
                                   child: Text(
-                                    '₴ ${widget.product.price.toStringAsFixed(2)}',
+                                    widget.product.isDiscount == true
+                                        ? '₴ ${widget.product.discountPrice?.toStringAsFixed(2)}'
+                                        : '₴ ${widget.product.price.toStringAsFixed(2)}',
                                     style: const TextStyle(
                                       fontSize: 24,
                                       color: AppColors.primaryColor,
@@ -90,19 +126,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     ),
                                   ),
                                 ),
-                                const Padding(
-                                  padding: EdgeInsets.only(right: 25),
-                                  child: Text(
-                                    '₴ 199',
-                                    style: TextStyle(
-                                        decoration: TextDecoration.lineThrough,
-                                        decorationColor:
-                                            Color.fromARGB(255, 201, 76, 76),
-                                        color:
-                                            Color.fromARGB(255, 114, 114, 114),
-                                        fontSize: 18),
-                                  ),
-                                )
+                                if (widget.product.isDiscount == true)
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 25),
+                                    child: Text(
+                                      '₴ ${widget.product.price.toStringAsFixed(2)}',
+                                      style: const TextStyle(
+                                          decoration:
+                                              TextDecoration.lineThrough,
+                                          decorationColor:
+                                              Color.fromARGB(255, 201, 76, 76),
+                                          color: Color.fromARGB(
+                                              255, 114, 114, 114),
+                                          fontSize: 18),
+                                    ),
+                                  )
                               ],
                             )
                           ],
