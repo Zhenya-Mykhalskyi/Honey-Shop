@@ -23,7 +23,7 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  double? _bonuses;
+  num? _bonuses;
   bool _useBonuses = false;
 
   @override

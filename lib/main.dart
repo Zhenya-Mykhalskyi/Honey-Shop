@@ -62,15 +62,20 @@ class _MyAppState extends State<MyApp> {
                   userSnapshot.connectionState == ConnectionState.waiting) {
                 return const SplashScreen();
               }
-              final user = userSnapshot.data;
-              if (userSnapshot.hasData &&
-                  user!.phoneNumber == '+380987332919') {
-                return const AdminMainScreen();
-              } else if (user != null) {
-                return const UserMainScreen();
-              }
 
-              return const AuthScreen();
+              // final user = userSnapshot.data;
+              // if (userSnapshot.hasData &&
+              //     user!.phoneNumber == '+380987332919') {
+              //   return const AdminMainScreen();
+              // } else if (user != null) {
+              //   return const UserMainScreen();
+              // }
+              if (userSnapshot.hasData) {
+                return const AdminMainScreen();
+                // return const UserMainScreen();
+              } else {
+                return const AuthScreen();
+              }
             },
           )),
     );

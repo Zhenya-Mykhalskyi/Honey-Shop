@@ -23,7 +23,7 @@ class OrdersScreen extends StatefulWidget {
   final bool isEditProfile;
   final double? finalAmount;
   final bool? useBonuses;
-  final double? bonuses;
+  final num? bonuses;
 
   const OrdersScreen({
     super.key,
@@ -162,6 +162,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
       'timestamp': now,
       'isFinished': false,
       'isVisibleForAdmin': true,
+      'usedBonuses': widget.useBonuses == true ? widget.bonuses : 0,
       'products': widget.cartData?.map((productId, cartItem) {
         return MapEntry(productId, {
           'id': cartItem.id,

@@ -57,12 +57,39 @@ class AdminOrdersScreen extends StatelessWidget {
               return AdminOrderCard(
                 order: order,
                 orderProductsData: productsList,
-                onDelete: () {
+                onDelete: () async {
                   final String orderId = order['orderId'];
-                  FirebaseFirestore.instance
+                  DocumentSnapshot orderSnapshot = await FirebaseFirestore
+                      .instance
                       .collection('orders')
                       .doc(orderId)
-                      .update({'isVisibleForAdmin': false});
+                      .get();
+
+                  if (orderSnapshot.exists) {
+                    Map<String, dynamic> orderData =
+                        orderSnapshot.data() as Map<String, dynamic>;
+                    bool isFinished = orderData['isFinished'] ?? false;
+                    if (!isFinished) {
+                      String userId = orderData['userId'];
+                      num usedBonuses = orderData['usedBonuses'] ?? 0.0;
+                      print(usedBonuses);
+                      print('usedBonuses');
+                      await FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(userId)
+                          .update({
+                        'bonuses': FieldValue.increment(usedBonuses),
+                      });
+
+                      await FirebaseFirestore.instance
+                          .collection('orders')
+                          .doc(orderId)
+                          .update({
+                        'isFinished': true,
+                        'isVisibleForAdmin': false,
+                      });
+                    }
+                  }
                 },
               );
             },
