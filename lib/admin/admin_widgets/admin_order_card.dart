@@ -19,7 +19,7 @@ class AdminOrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isFinished = order['isFinished'] ?? false;
+    bool isOrderFinished = order['isFinished'] ?? false;
 
     Future<Map<String, dynamic>> getCashbackData() async {
       final docSnapshot = await FirebaseFirestore.instance
@@ -44,12 +44,6 @@ class AdminOrderCard extends StatelessWidget {
     }
 
     void updateIsFinishedStatus(bool newValue) async {
-      final hasInternetConnection =
-          await CheckConnectivityUtil.checkInternetConnectivity(context);
-      if (!hasInternetConnection) {
-        return;
-      }
-
       try {
         final String orderId = order['orderId'];
         await FirebaseFirestore.instance
@@ -64,12 +58,6 @@ class AdminOrderCard extends StatelessWidget {
     void updateUserTotalAmountAndBonuses(
         String userId, double orderAmount, double bonusAmount) async {
       try {
-        final hasInternetConnection =
-            await CheckConnectivityUtil.checkInternetConnectivity(context);
-        if (!hasInternetConnection) {
-          return;
-        }
-
         final userDoc = await FirebaseFirestore.instance
             .collection('users')
             .doc(userId)
@@ -94,10 +82,52 @@ class AdminOrderCard extends StatelessWidget {
       }
     }
 
+    void confirmOrder() async {
+      final navContext = Navigator.of(context);
+      final hasInternetConnection =
+          await CheckConnectivityUtil.checkInternetConnectivity(context);
+      try {
+        if (!hasInternetConnection) {
+          return;
+        }
+        final cashbackData = await getCashbackData();
+        isOrderFinished = true;
+        final userId = order['userId'];
+        final double orderAmount = order['totalAmount'];
+        final userDoc = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId)
+            .get();
+
+        final userOrdersTotalAmount =
+            userDoc.data()?['ordersTotalAmount'] ?? 0.0;
+
+        int maxAmountIndex = -1;
+        for (int i = 0; i < cashbackData['amounts'].length; i++) {
+          if (cashbackData['amounts'][i] <=
+              orderAmount + userOrdersTotalAmount) {
+            maxAmountIndex = i;
+          } else {
+            break;
+          }
+        }
+        int percentage = maxAmountIndex >= 0
+            ? cashbackData['percentages'][maxAmountIndex]
+            : 0;
+        double bonusAmount = (percentage / 100) * orderAmount;
+
+        updateUserTotalAmountAndBonuses(userId, orderAmount, bonusAmount);
+        updateIsFinishedStatus(true);
+        navContext.pop();
+      } catch (e) {
+        print(e);
+      }
+    }
+
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Card(
-        color: isFinished
+        color: isOrderFinished
             ? Colors.white.withOpacity(0.01)
             : Colors.white.withOpacity(0.1),
         elevation: 2,
@@ -187,9 +217,9 @@ class AdminOrderCard extends StatelessWidget {
                       Switch(
                         activeColor: Colors.black.withOpacity(0.85),
                         activeTrackColor: const Color.fromARGB(255, 0, 0, 0),
-                        value: isFinished,
+                        value: isOrderFinished,
                         onChanged: (value) {
-                          if (!isFinished) {
+                          if (!isOrderFinished) {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -198,48 +228,8 @@ class AdminOrderCard extends StatelessWidget {
                                       'Впевнені, що хочете завершити замовлення та начислити бонуси клієнту? Цю дію неможливо відмінити!',
                                   confirmButtonText: 'Так',
                                   cancelButtonText: 'Повернутися',
-                                  onConfirm: () async {
-                                    final navContext = Navigator.of(context);
-                                    final cashbackData =
-                                        await getCashbackData();
-
-                                    isFinished = true;
-                                    final userId = order['userId'];
-                                    final double orderAmount =
-                                        order['totalAmount'];
-                                    final userDoc = await FirebaseFirestore
-                                        .instance
-                                        .collection('users')
-                                        .doc(userId)
-                                        .get();
-
-                                    final userOrdersTotalAmount =
-                                        userDoc.data()?['ordersTotalAmount'] ??
-                                            0.0;
-
-                                    int maxAmountIndex = -1;
-                                    for (int i = 0;
-                                        i < cashbackData['amounts'].length;
-                                        i++) {
-                                      if (cashbackData['amounts'][i] <=
-                                          orderAmount + userOrdersTotalAmount) {
-                                        maxAmountIndex = i;
-                                      } else {
-                                        break;
-                                      }
-                                    }
-                                    int percentage = maxAmountIndex >= 0
-                                        ? cashbackData['percentages']
-                                            [maxAmountIndex]
-                                        : 0;
-
-                                    double bonusAmount =
-                                        (percentage / 100) * orderAmount;
-                                    updateUserTotalAmountAndBonuses(
-                                        userId, orderAmount, bonusAmount);
-
-                                    updateIsFinishedStatus(true);
-                                    navContext.pop();
+                                  onConfirm: () {
+                                    confirmOrder();
                                   },
                                 );
                               },
@@ -250,7 +240,7 @@ class AdminOrderCard extends StatelessWidget {
                       Text(
                         '₴${order['totalAmount'].toStringAsFixed(2)}',
                         style: TextStyle(
-                          color: isFinished
+                          color: isOrderFinished
                               ? Colors.white.withOpacity(0.4)
                               : AppColors.primaryColor,
                           fontSize: 16,
