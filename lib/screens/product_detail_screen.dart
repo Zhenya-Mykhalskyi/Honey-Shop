@@ -141,7 +141,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                             .length <=
                                         140
                                     ? widget.product.productDescription
-                                    : '${widget.product.productDescription.substring(0, 140)}... ',
+                                    : '${widget.product.productDescription.substring(0, 140)}...  ',
                                 style: const TextStyle(
                                     height: 1.45,
                                     fontSize: 16,
@@ -152,7 +152,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 style: const TextStyle(
                                   height: 1.45,
                                   fontSize: 16,
-                                  fontWeight: FontWeight.bold,
                                   decoration: TextDecoration.underline,
                                 ),
                                 recognizer: TapGestureRecognizer()
