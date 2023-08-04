@@ -2,9 +2,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:honey/providers/cart.dart';
 import 'package:honey/providers/product_model.dart';
 import 'package:honey/widgets/app_colors.dart';
-import 'package:honey/providers/cart.dart';
 import 'package:honey/widgets/custom_button.dart';
 import 'package:honey/widgets/liters_counter.dart';
 
@@ -73,19 +73,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             ),
                           ),
                         ),
-                        // Center(
-                        //   child: SizedBox(
-                        //     width: MediaQuery.of(context).size.width * 0.95,
-                        //     height: MediaQuery.of(context).size.height * 0.4,
-                        //     child: ClipRRect(
-                        //       borderRadius: BorderRadius.circular(20),
-                        //       child: Image.network(
-                        //         widget.product.imageUrl,
-                        //         fit: BoxFit.cover,
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
                         const SizedBox(height: 20),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -200,7 +187,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   cartProvider
                                       .getTotalAmountForProductById(
                                           widget.product.id)
-                                      .toString(),
+                                      .toStringAsFixed(2),
                                   style: const TextStyle(fontSize: 20),
                                 ),
                               ),
