@@ -196,7 +196,7 @@ class AdminOrderCard extends StatelessWidget {
                         builder: (BuildContext context) {
                           return ConfirmationDialog(
                             title:
-                                'Впевнені, що хочете видалити замовлення? Видаляйте замовлення тільки після начислення бонусів клієнту. Цю дію неможливо відмінити!',
+                                'Якщо замовлення не було завершене, то витрачені бонуси повернуться клієнтові. Впевнені, що хочете видалити замовлення? Цю дію неможливо відмінити!',
                             confirmButtonText: 'Так',
                             cancelButtonText: 'Повернутися',
                             onConfirm: () {
