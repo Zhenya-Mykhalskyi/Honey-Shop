@@ -140,7 +140,9 @@ class _OTPScreenState extends State<OTPScreen> {
                       onCompleted: _onPinCompleted,
                     ),
                   ),
-                  const MyDivider(),
+                  const MyDivider(
+                    verticalPadding: 0,
+                  ),
                 ],
               ),
             ),

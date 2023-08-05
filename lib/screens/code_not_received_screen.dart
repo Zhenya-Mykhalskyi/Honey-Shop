@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import 'package:honey/main.dart';
 import 'package:honey/widgets/app_colors.dart';
 import 'package:honey/widgets/custom_button.dart';
 import 'package:honey/widgets/my_divider.dart';
@@ -74,7 +76,9 @@ class _CodeNotReceivedScreenState extends State<CodeNotReceivedScreen> {
                     ),
                     Image.asset('assets/img/illustration_of_email.png'),
                     const SizedBox(height: 25),
-                    const MyDivider(),
+                    const MyDivider(
+                      verticalPadding: 0,
+                    ),
                   ],
                 ),
               ),
@@ -96,8 +100,7 @@ class _CodeNotReceivedScreenState extends State<CodeNotReceivedScreen> {
                       child: CustomButton(
                         action: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  const CodeNotReceivedScreen()));
+                              builder: (context) => const MyApp()));
                         },
                         text: 'Повернутися до реєстрації',
                       ),

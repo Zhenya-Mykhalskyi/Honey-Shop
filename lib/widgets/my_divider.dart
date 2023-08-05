@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 
 class MyDivider extends StatelessWidget {
-  const MyDivider({Key? key, this.color = Colors.white}) : super(key: key);
-
   final Color color;
+  final double? verticalPadding;
+
+  const MyDivider({
+    Key? key,
+    this.color = Colors.white,
+    this.verticalPadding,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +22,7 @@ class MyDivider extends StatelessWidget {
           direction: Axis.horizontal,
           children: List.generate(dashCount, (_) {
             return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
+              padding: EdgeInsets.symmetric(vertical: verticalPadding ?? 10),
               child: SizedBox(
                 width: dashWidth,
                 height: 1,
