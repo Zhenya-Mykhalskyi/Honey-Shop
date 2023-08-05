@@ -3,9 +3,10 @@ import 'package:honey/widgets/app_colors.dart';
 import 'package:honey/widgets/my_divider.dart';
 
 class AdminOrderDetailsDialog extends StatelessWidget {
-  final order;
-  final orderProductData;
-  const AdminOrderDetailsDialog({super.key, this.order, this.orderProductData});
+  final Map<String, dynamic> order;
+  final List orderProductData;
+  const AdminOrderDetailsDialog(
+      {super.key, required this.order, required this.orderProductData});
 
   @override
   Widget build(BuildContext context) {
@@ -33,18 +34,17 @@ class AdminOrderDetailsDialog extends StatelessWidget {
                     ))
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text(
                       'Замовлення за:',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
-                    const SizedBox(height: 7),
                     Row(
                       children: [
                         Text(order['date']),
@@ -54,11 +54,30 @@ class AdminOrderDetailsDialog extends StatelessWidget {
                     )
                   ],
                 ),
-                Text(
-                  '₴ ${order['totalAmount'].toStringAsFixed(2)}',
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.w600),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Сума замовлення:',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      '₴ ${order['totalAmount'].toStringAsFixed(2)}',
+                      style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.primaryColor),
+                    ),
+                  ],
                 ),
+                const SizedBox(height: 10),
+                if (order['usedBonuses'] != 0)
+                  Text(
+                    '(покупець використав ₴${order['usedBonuses'].toStringAsFixed(2)} накопиченими бонусами',
+                    style: const TextStyle(fontSize: 12),
+                  ),
               ],
             ),
             const MyDivider(),
