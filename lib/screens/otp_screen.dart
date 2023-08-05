@@ -33,9 +33,7 @@ class _OTPScreenState extends State<OTPScreen> {
     width: 56,
     height: 56,
     textStyle: const TextStyle(
-        fontSize: 20,
-        color: Color.fromRGBO(30, 60, 87, 1),
-        fontWeight: FontWeight.w600),
+        fontSize: 20, color: Colors.white, fontWeight: FontWeight.w600),
     decoration: BoxDecoration(
       border: Border.all(color: AppColors.primaryColor),
       borderRadius: BorderRadius.circular(20),
