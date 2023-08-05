@@ -11,7 +11,7 @@ import 'package:honey/widgets/cart_item.dart';
 import 'package:honey/widgets/custom_button.dart';
 import 'package:honey/widgets/my_divider.dart';
 import 'package:honey/widgets/title_appbar.dart';
-import 'orders_screen.dart';
+import 'order_and_edit_profile_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({
