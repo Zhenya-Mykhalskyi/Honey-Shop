@@ -105,10 +105,13 @@ class ProductItem extends StatelessWidget {
                               color: Color.fromARGB(255, 114, 114, 114),
                             ),
                           ),
-                        const Text(
-                          ' / 0.5 л',
-                          style: TextStyle(
-                              fontSize: 13, fontWeight: FontWeight.w500),
+                        const Flexible(
+                          // костилі
+                          child: Text(
+                            ' / 0.5 л',
+                            style: TextStyle(
+                                fontSize: 11, fontWeight: FontWeight.w500),
+                          ),
                         ),
                       ],
                     ),
