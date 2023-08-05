@@ -1,10 +1,17 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:honey/screens/code_not_received_screen.dart';
+
 import 'package:pinput/pinput.dart';
 
+import 'package:honey/widgets/app_colors.dart';
+import 'package:honey/widgets/my_divider.dart';
+import 'package:honey/widgets/title_appbar.dart';
 import 'package:honey/main.dart';
 import 'auth_screen.dart';
 
@@ -30,7 +37,7 @@ class _OTPScreenState extends State<OTPScreen> {
         color: Color.fromRGBO(30, 60, 87, 1),
         fontWeight: FontWeight.w600),
     decoration: BoxDecoration(
-      border: Border.all(color: const Color.fromARGB(255, 255, 255, 255)),
+      border: Border.all(color: AppColors.primaryColor),
       borderRadius: BorderRadius.circular(20),
     ),
   );
@@ -104,32 +111,71 @@ class _OTPScreenState extends State<OTPScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldkey,
-      appBar: AppBar(
-        title: const Text('OTP верифікація'),
-      ),
-      body: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.only(top: 40),
-            child: Center(
-              child: Text(
-                'Верифікуйте +380 ${widget.phone}',
-                style: const TextStyle(
-                    fontWeight: FontWeight.normal, fontSize: 26),
+      appBar: const TitleAppBar(title: 'Верифікація номера'),
+      body: Padding(
+        padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.2),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Column(
+                children: [
+                  const MyDivider(),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Введіть код надісланий на номер:',
+                    style: TextStyle(fontSize: 19),
+                  ),
+                  Text(
+                    '+380 ${widget.phone}',
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(30.0),
+                    child: Pinput(
+                      length: 6,
+                      defaultPinTheme: defaultPinTheme,
+                      controller: _pinPutController,
+                      pinAnimationType: PinAnimationType.fade,
+                      onCompleted: _onPinCompleted,
+                    ),
+                  ),
+                  const MyDivider(),
+                ],
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(30.0),
-            child: Pinput(
-              length: 6,
-              defaultPinTheme: defaultPinTheme,
-              controller: _pinPutController,
-              pinAnimationType: PinAnimationType.fade,
-              onCompleted: _onPinCompleted,
+            Stack(
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  child: Transform.rotate(
+                    angle: pi,
+                    child: Image.asset(
+                      './assets/img/auth_screen_background.png',
+                      fit: BoxFit.fitWidth,
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 30),
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                const CodeNotReceivedScreen()));
+                      },
+                      child: const Text(
+                        'Не приходить код?',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                )
+              ],
             ),
-          )
-        ],
+          ],
+        ),
       ),
     );
   }

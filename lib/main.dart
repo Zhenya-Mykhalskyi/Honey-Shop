@@ -69,17 +69,18 @@ class _MyAppState extends State<MyApp> {
                 return const SplashScreen();
               }
 
-              // final user = userSnapshot.data;
-              // if (userSnapshot.hasData &&
-              //     user!.phoneNumber == '+380987332919') {
-              //   return const AdminMainScreen();
-              // } else if (user != null) {
-              //   return const UserMainScreen();
-              // }
-              if (userSnapshot.hasData) {
-                // return const AdminMainScreen();
+              final user = userSnapshot.data;
+              if (userSnapshot.hasData &&
+                  user!.phoneNumber == '+380987332919') {
+                return const AdminMainScreen();
+              } else if (user != null) {
                 return const UserMainScreen();
-              } else {
+              }
+              // if (userSnapshot.hasData) {
+              //   // return const AdminMainScreen();
+              //   // return const UserMainScreen();
+              // }
+              else {
                 return const AuthScreen();
               }
             },

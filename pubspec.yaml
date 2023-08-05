@@ -49,6 +49,7 @@ dependencies:
 
 
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -75,6 +76,7 @@ flutter:
   assets:
     - assets/img/logo.png
     - assets/img/auth_screen_background.png
+    - assets/img/illustration_of_email.png
     - assets/img/add_photo.png
     - assets/img/appbar_title_left.png
     - assets/img/appbar_title_right.png
