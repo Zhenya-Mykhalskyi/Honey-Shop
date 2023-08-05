@@ -68,8 +68,8 @@ class AdminOrdersScreen extends StatelessWidget {
                   if (orderSnapshot.exists) {
                     Map<String, dynamic> orderData =
                         orderSnapshot.data() as Map<String, dynamic>;
-                    bool isFinished = orderData['isFinished'] ?? false;
-                    if (!isFinished) {
+                    bool isFinished = orderData['isFinished'];
+                    if (isFinished == false) {
                       String userId = orderData['userId'];
                       num usedBonuses = orderData['usedBonuses'] ?? 0.0;
                       await FirebaseFirestore.instance
@@ -78,15 +78,14 @@ class AdminOrdersScreen extends StatelessWidget {
                           .update({
                         'bonuses': FieldValue.increment(usedBonuses),
                       });
-
-                      await FirebaseFirestore.instance
-                          .collection('orders')
-                          .doc(orderId)
-                          .update({
-                        'isFinished': true,
-                        'isVisibleForAdmin': false,
-                      });
                     }
+                    await FirebaseFirestore.instance
+                        .collection('orders')
+                        .doc(orderId)
+                        .update({
+                      'isFinished': true,
+                      'isVisibleForAdmin': false,
+                    });
                   }
                 },
               );

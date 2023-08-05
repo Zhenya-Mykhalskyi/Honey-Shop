@@ -60,7 +60,7 @@ class _OTPScreenState extends State<OTPScreen> {
   void _onVerificationCompleted(PhoneAuthCredential credential) async {
     UserCredential authResult =
         await FirebaseAuth.instance.signInWithCredential(credential);
-    String uid = authResult.user!.uid; // Отримуємо UID з FirebaseAuth
+    String uid = authResult.user!.uid;
     _handleVerificationSuccess(widget.name, widget.phone, uid);
   }
 
@@ -98,7 +98,7 @@ class _OTPScreenState extends State<OTPScreen> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const MyApp()),
-        (route) => false, //видалити всі маршрути крім цільового
+        (route) => false,
       );
     } catch (error) {
       print('Error saving user data: $error');
