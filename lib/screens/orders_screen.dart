@@ -17,6 +17,7 @@ import 'package:honey/widgets/total_amount.dart';
 import 'package:honey/widgets/custom_text_field.dart';
 import 'package:honey/widgets/edit_form_image.dart';
 import 'user_main_screen.dart';
+import 'package:honey/main.dart';
 
 class OrdersScreen extends StatefulWidget {
   final Map<String, CartItemModel>? cartData;
@@ -275,13 +276,44 @@ class _OrdersScreenState extends State<OrdersScreen> {
     cartProvider.clear();
   }
 
+  void _logout(BuildContext context) async {
+    try {
+      await FirebaseAuth.instance.signOut();
+    } catch (e) {
+      print("Error logging out: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: TitleAppBar(
-          title: widget.isEditProfile
-              ? 'Редагування профіля'
-              : 'Оформлення замовлення'),
+        title: widget.isEditProfile
+            ? 'Редагування профіля'
+            : 'Оформлення замовлення',
+        action: () {
+          if (widget.isEditProfile == true) {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return ConfirmationDialog(
+                  title: 'Впевнені, що хочете вийти з акаунту?',
+                  confirmButtonText: 'Так',
+                  cancelButtonText: 'Повернутися',
+                  onConfirm: () async {
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (context) => const MyApp()),
+                        (route) => false);
+                    _logout(context);
+                  },
+                );
+              },
+            );
+          }
+        },
+        showIconButton: widget.isEditProfile == true ? true : false,
+        icon: Icons.logout,
+      ),
       body: _isLoading
           ? const Center(
               child: CircularProgressIndicator(
