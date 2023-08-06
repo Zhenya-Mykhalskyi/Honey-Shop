@@ -78,10 +78,11 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void removeHalfLiterFromCart(String productId) {
+  bool removeHalfLiterFromCart(String productId, bool isCart) {
     if (!_items.containsKey(productId)) {
-      return;
+      return false;
     }
+
     if (_items[productId]!.liters > 0.5) {
       _items.update(
         productId,
@@ -94,9 +95,14 @@ class CartProvider with ChangeNotifier {
         ),
       );
     } else {
-      _items.remove(productId);
+      if (!isCart) {
+        _items.remove(productId);
+      } else {
+        return false;
+      }
     }
     notifyListeners();
+    return true;
   }
 
   void removeItemFromCart(String productId) {

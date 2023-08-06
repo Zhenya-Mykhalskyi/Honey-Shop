@@ -126,6 +126,7 @@ class _CartItemState extends State<CartItem> {
                       children: [
                         LitersCounter(
                           product: widget.product,
+                          isCart: true,
                         ),
                       ],
                     ),

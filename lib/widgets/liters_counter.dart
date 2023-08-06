@@ -4,11 +4,13 @@ import 'package:provider/provider.dart';
 import 'package:honey/providers/product_model.dart';
 import 'package:honey/providers/cart.dart';
 import 'app_colors.dart';
+import 'custom_confirm_dialog.dart';
 
 class LitersCounter extends StatefulWidget {
   final Product? product;
+  final bool? isCart;
 
-  const LitersCounter({super.key, this.product});
+  const LitersCounter({super.key, this.product, this.isCart});
 
   @override
   State<LitersCounter> createState() => _LitersCounterState();
@@ -17,7 +19,7 @@ class LitersCounter extends StatefulWidget {
 class _LitersCounterState extends State<LitersCounter> {
   @override
   Widget build(BuildContext context) {
-    final cart = Provider.of<CartProvider>(context);
+    final cartProvider = Provider.of<CartProvider>(context);
 
     return Container(
       height: MediaQuery.of(context).size.height * 0.04,
@@ -30,7 +32,27 @@ class _LitersCounterState extends State<LitersCounter> {
         children: [
           GestureDetector(
             onTap: () {
-              cart.removeHalfLiterFromCart(widget.product!.id);
+              double currentLiters =
+                  cartProvider.getProductLitersById(widget.product!.id);
+              if (widget.isCart == true && currentLiters == 0.5) {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return ConfirmationDialog(
+                      title: 'Видалити товар з корзини?',
+                      confirmButtonText: 'Так',
+                      cancelButtonText: 'Ні',
+                      onConfirm: () {
+                        Navigator.of(context).pop();
+                        cartProvider.removeItemFromCart(widget.product!.id);
+                      },
+                    );
+                  },
+                );
+              } else {
+                cartProvider.removeHalfLiterFromCart(
+                    widget.product!.id, widget.isCart ?? false);
+              }
             },
             child: Container(
               width: MediaQuery.of(context).size.width * 0.093,
@@ -45,7 +67,7 @@ class _LitersCounterState extends State<LitersCounter> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
-              '${cart.getProductLitersById(widget.product!.id).toString()} л',
+              '${cartProvider.getProductLitersById(widget.product!.id).toString()} л',
               style: const TextStyle(
                 fontSize: 15.0,
               ),
@@ -53,7 +75,7 @@ class _LitersCounterState extends State<LitersCounter> {
           ),
           GestureDetector(
             onTap: () {
-              cart.addHalfLiterToCart(
+              cartProvider.addHalfLiterToCart(
                 product: widget.product!,
               );
             },
