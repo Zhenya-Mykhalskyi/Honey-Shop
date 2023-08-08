@@ -262,7 +262,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               style: TextStyle(
                                   color: AppColors.primaryColor,
                                   fontWeight: FontWeight.w800,
-                                  fontSize: 18),
+                                  fontSize: 17),
                             ),
                           ],
                         ),
@@ -297,7 +297,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         style: TextStyle(
                             color: AppColors.primaryColor,
                             fontWeight: FontWeight.w800,
-                            fontSize: 18),
+                            fontSize: 17),
                       ),
                     ),
                     Expanded(
@@ -358,14 +358,14 @@ class ProfileInfoCardSingleRow extends StatelessWidget {
         Icon(
           icon,
           color: color ?? Colors.white,
-          size: 22,
+          size: 19,
         ),
         const SizedBox(width: 10),
         Flexible(
           child: Text(
             text,
             style: TextStyle(
-                fontSize: 17,
+                fontSize: 15,
                 color: color ?? Colors.white,
                 fontWeight: fontWeight),
           ),
@@ -386,7 +386,7 @@ class DeliveryInfoSingleText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: const TextStyle(fontSize: 17, height: 1.7),
+      style: const TextStyle(fontSize: 15, height: 1.7),
     );
   }
 }

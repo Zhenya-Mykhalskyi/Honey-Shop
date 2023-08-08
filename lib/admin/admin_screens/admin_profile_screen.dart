@@ -241,18 +241,19 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                                               _salesPoints[index]['city']
                                                   .toString(),
                                               style: const TextStyle(
-                                                  fontSize: 15,
+                                                  // fontSize: 15,
                                                   fontWeight: FontWeight.w600),
                                             ),
                                             const SizedBox(
                                               height: 2,
                                             ),
                                             Text(
-                                                _salesPoints[index]['address']
-                                                    .toString(),
-                                                style: const TextStyle(
-                                                  fontSize: 15,
-                                                )),
+                                              _salesPoints[index]['address']
+                                                  .toString(),
+                                              // style: const TextStyle(
+                                              //   fontSize: 15,
+                                              // ),
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -267,8 +268,8 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                                 ? 'Опис магазину'
                                 : _aboutStoreText.toString(),
                             style: const TextStyle(
-                              fontSize: 16,
-                            ),
+                                // fontSize: 16,
+                                ),
                           ),
                           const MyDivider(),
                           const Text('сертифікат'),
