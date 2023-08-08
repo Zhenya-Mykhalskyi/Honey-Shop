@@ -154,7 +154,6 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
 
   Future<void> deleteProductAndStorageImage(
       BuildContext context, productId, String imageUrl) async {
-    final popContext = Navigator.of(context);
     ProductsProvider productProvider =
         Provider.of<ProductsProvider>(context, listen: false);
     final hasInternetConnection =
@@ -171,7 +170,6 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     setState(() {
       _isLoading = false;
     });
-    popContext.pop();
   }
 
   @override
