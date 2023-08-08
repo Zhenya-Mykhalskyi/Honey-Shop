@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:honey/widgets/app_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 
@@ -32,7 +33,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    Color backColor = const Color(0xFF1B1B1B);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -45,8 +45,9 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            appBarTheme: AppBarTheme(backgroundColor: backColor),
-            scaffoldBackgroundColor: backColor,
+            appBarTheme:
+                const AppBarTheme(backgroundColor: AppColors.backgraundColor),
+            scaffoldBackgroundColor: AppColors.backgraundColor,
             textTheme: const TextTheme(
               headlineLarge: TextStyle(color: Colors.white, fontFamily: 'MA'),
               headlineMedium: TextStyle(color: Colors.white, fontFamily: 'MA'),
@@ -69,15 +70,11 @@ class _MyAppState extends State<MyApp> {
                 return const SplashScreen();
               }
 
-              // final user = userSnapshot.data;
-              // if (userSnapshot.hasData &&
-              //     user!.phoneNumber == '+380987332919') {
-              //   return const AdminMainScreen();
-              // } else if (user != null) {
-              //   return const UserMainScreen();
-              // }
-              if (userSnapshot.hasData) {
-                // return const AdminMainScreen();
+              final user = userSnapshot.data;
+              if (userSnapshot.hasData &&
+                  user!.phoneNumber == '+380987332919') {
+                return const AdminMainScreen();
+              } else if (user != null) {
                 return const UserMainScreen();
               } else {
                 return const AuthScreen();

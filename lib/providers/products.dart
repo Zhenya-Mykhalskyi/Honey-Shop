@@ -128,9 +128,6 @@ class ProductsProvider with ChangeNotifier {
     Product product, {
     File? pickedImage,
     String? currentImageUrl,
-    // bool isDiscount = false,
-    // int discountPercentage = 0,
-    // double priceWithDiscount = 0.0,
   }) async {
     try {
       String imageUrl;
@@ -155,9 +152,6 @@ class ProductsProvider with ChangeNotifier {
         'litersLeft': product.litersLeft,
         'shortDescription': product.productDescription,
         'isHoney': product.isHoney,
-        // 'isDiscount': isDiscount,
-        // 'discountPrice': priceWithDiscount,
-        // 'discountPercentage': discountPercentage,
       });
 
       int index = _items.indexWhere((item) => item.id == prodId);
@@ -176,7 +170,8 @@ class ProductsProvider with ChangeNotifier {
     }
   }
 
-  Future<void> deleteProduct(String productId, String imageUrl) async {
+  Future<void> deleteProductAndStorageImage(
+      String productId, String imageUrl) async {
     try {
       if (imageUrl.isNotEmpty) {
         final storageRef = FirebaseStorage.instance.refFromURL(imageUrl);

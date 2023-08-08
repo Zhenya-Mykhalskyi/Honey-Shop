@@ -84,7 +84,7 @@ class _OTPScreenState extends State<OTPScreen> {
     try {
       final CollectionReference usersCollection =
           FirebaseFirestore.instance.collection('users');
-      if (widget._authMode == AuthMode.Signup) {
+      if (widget._authMode == AuthMode.signup) {
         try {
           await usersCollection.doc(uid).set({
             'phoneNumber': '+380$phone',

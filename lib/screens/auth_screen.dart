@@ -6,7 +6,7 @@ import 'package:honey/widgets/app_colors.dart';
 import 'package:honey/widgets/custom_button.dart';
 import 'otp_screen.dart';
 
-enum AuthMode { Signup, Login }
+enum AuthMode { signup, login }
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -20,7 +20,7 @@ class _AuthScreenState extends State<AuthScreen> {
   final TextEditingController _namecontroller = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey();
   bool isFocused = false;
-  AuthMode _authMode = AuthMode.Signup;
+  AuthMode _authMode = AuthMode.signup;
 
   Future<void> _submitForm() async {
     final scaffoldContext = ScaffoldMessenger.of(context);
@@ -40,7 +40,7 @@ class _AuthScreenState extends State<AuthScreen> {
     }
     final phoneNumber = '+380${_phonecontroller.text}';
     bool exists = await checkPhoneNumberExists(phoneNumber);
-    if (_authMode == AuthMode.Login && !exists) {
+    if (_authMode == AuthMode.login && !exists) {
       scaffoldContext.showSnackBar(
         const SnackBar(
           content: Text('Такого користувача не існує.  Зареєструйтеся.'),
@@ -48,7 +48,7 @@ class _AuthScreenState extends State<AuthScreen> {
       );
       return;
     }
-    if (_authMode == AuthMode.Signup && exists) {
+    if (_authMode == AuthMode.signup && exists) {
       scaffoldContext.showSnackBar(
         const SnackBar(
           content: Text('Такий користувач вже існує.  Увійдіть в акаунт.'),
@@ -75,13 +75,13 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   void _switchAuthMode() {
-    if (_authMode == AuthMode.Login) {
+    if (_authMode == AuthMode.login) {
       setState(() {
-        _authMode = AuthMode.Signup;
+        _authMode = AuthMode.signup;
       });
     } else {
       setState(() {
-        _authMode = AuthMode.Login;
+        _authMode = AuthMode.login;
       });
     }
   }
@@ -114,7 +114,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       padding:
                           const EdgeInsets.only(top: 60, left: 20, right: 20),
                       child: Text(
-                        _authMode == AuthMode.Signup
+                        _authMode == AuthMode.signup
                             ? 'Введіть необхідні для реєстрації дані та дочекайтеся коду підтвердження :)'
                             : 'Введіть номер телефону для входу та дочекайтеся коду підтвердження :)',
                         textAlign: TextAlign.center,
@@ -136,7 +136,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   child: Column(
                     children: [
                       Container(
-                        decoration: _authMode == AuthMode.Signup
+                        decoration: _authMode == AuthMode.signup
                             ? BoxDecoration(
                                 border: Border.all(
                                   color: AppColors.primaryColor,
@@ -145,7 +145,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                 borderRadius: BorderRadius.circular(9.0),
                               )
                             : null,
-                        child: _authMode == AuthMode.Signup
+                        child: _authMode == AuthMode.signup
                             ? TextFormField(
                                 decoration: const InputDecoration(
                                   border: InputBorder.none,
@@ -218,12 +218,12 @@ class _AuthScreenState extends State<AuthScreen> {
                   _submitForm();
                 },
                 text:
-                    _authMode == AuthMode.Signup ? 'Зареєструватися' : 'Увійти',
+                    _authMode == AuthMode.signup ? 'Зареєструватися' : 'Увійти',
               ),
               TextButton(
                 onPressed: _switchAuthMode,
                 child: Text(
-                  _authMode == AuthMode.Signup
+                  _authMode == AuthMode.signup
                       ? 'Уже існує аккаунт? Увійдіть'
                       : 'Не має акаунту? Зареєструйтеся',
                   style: const TextStyle(color: Colors.white),

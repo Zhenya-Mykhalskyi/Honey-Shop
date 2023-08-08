@@ -166,7 +166,8 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
     setState(() {
       _isLoading = true;
     });
-    await productProvider.deleteProduct(widget.productId, _currentImageUrl!);
+    await productProvider.deleteProductAndStorageImage(
+        widget.productId, _currentImageUrl!);
     setState(() {
       _isLoading = false;
     });
