@@ -82,7 +82,7 @@ class _LitersCounterState extends State<LitersCounter> {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     duration: const Duration(seconds: 2),
                     content: Text(
-                        'В наявності залишилось ${widget.product?.litersLeft} літри')));
+                        'В наявності залишилось ${widget.product?.litersLeft} літри(ів)')));
                 return;
               }
             },

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:honey/widgets/title_appbar.dart';
 import 'package:provider/provider.dart';
 
 import 'package:honey/admin/admin_screens/admin_profile_screen.dart';
@@ -136,7 +137,9 @@ class _UserMainScreenState extends State<UserMainScreen>
                 )
               ],
             )
-          : null,
+          : _selectedBottomNavBarIndex == 0
+              ? const TitleAppBar(title: 'Особистий кабінет')
+              : null,
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false,

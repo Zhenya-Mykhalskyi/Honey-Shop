@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:honey/widgets/app_colors.dart';
 import 'package:honey/widgets/my_divider.dart';
 import 'package:honey/widgets/order_card.dart';
-import 'package:honey/widgets/title_appbar.dart';
 import 'order_and_edit_profile_screen.dart';
 
 class Order {
@@ -38,7 +37,9 @@ class Order {
 }
 
 class UserProfileScreen extends StatefulWidget {
-  const UserProfileScreen({Key? key}) : super(key: key);
+  const UserProfileScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<UserProfileScreen> createState() => _UserProfileScreenState();
@@ -134,117 +135,118 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const TitleAppBar(title: 'Особистий кабінет'),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
-          child: Column(
-            children: [
-              Card(
-                color: Colors.white.withOpacity(0.1),
-                elevation: 2,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(9),
-                ),
-                child: Container(
-                  padding: const EdgeInsets.all(12),
-                  child: IntrinsicHeight(
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 4,
-                          child: AspectRatio(
-                            aspectRatio: 1,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(
-                                  color: Colors.white,
+    return RefreshIndicator(
+      onRefresh: fetchUserData,
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+            child: Column(
+              children: [
+                Card(
+                  color: Colors.white.withOpacity(0.1),
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(9),
+                  ),
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    child: IntrinsicHeight(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: AspectRatio(
+                              aspectRatio: 1,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: _imageUrl == null
+                                      ? const Icon(
+                                          Icons.person_rounded,
+                                          color: Colors.white,
+                                          size: 85,
+                                        )
+                                      : AspectRatio(
+                                          aspectRatio: 1,
+                                          child: CachedNetworkImage(
+                                            key: _profileImageKey,
+                                            placeholder: (context, url) =>
+                                                const CircularProgressIndicator(
+                                              color: AppColors.primaryColor,
+                                            ),
+                                            imageUrl: _imageUrl!,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
                                 ),
                               ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: _imageUrl == null
-                                    ? const Icon(
-                                        Icons.person_rounded,
-                                        color: Colors.white,
-                                        size: 85,
-                                      )
-                                    : AspectRatio(
-                                        aspectRatio: 1,
-                                        child: CachedNetworkImage(
-                                          key: _profileImageKey,
-                                          placeholder: (context, url) =>
-                                              const CircularProgressIndicator(
-                                            color: AppColors.primaryColor,
-                                          ),
-                                          imageUrl: _imageUrl!,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 14),
-                        Expanded(
-                          flex: 7,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          const SizedBox(width: 14),
+                          Expanded(
+                            flex: 7,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  children: [
+                                    ProfileInfoCardSingleRow(
+                                      icon: Icons.person_2_outlined,
+                                      text: _userName.toString(),
+                                    ),
+                                    const SizedBox(height: 7),
+                                    ProfileInfoCardSingleRow(
+                                      icon: Icons.phone_outlined,
+                                      text: _phoneNumber.toString(),
+                                    ),
+                                  ],
+                                ),
+                                ProfileInfoCardSingleRow(
+                                  icon: Icons.star_border_sharp,
+                                  text:
+                                      'Мої бонуси: ${_bonuses?.toStringAsFixed(0)}',
+                                  color: AppColors.primaryColor,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Column(
-                                children: [
-                                  ProfileInfoCardSingleRow(
-                                    icon: Icons.person_2_outlined,
-                                    text: _userName.toString(),
-                                  ),
-                                  const SizedBox(height: 7),
-                                  ProfileInfoCardSingleRow(
-                                    icon: Icons.phone_outlined,
-                                    text: _phoneNumber.toString(),
-                                  ),
-                                ],
-                              ),
-                              ProfileInfoCardSingleRow(
-                                icon: Icons.star_border_sharp,
-                                text:
-                                    'Мої бонуси: ${_bonuses?.toStringAsFixed(0)}',
-                                color: AppColors.primaryColor,
-                                fontWeight: FontWeight.w700,
+                              IconButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => const OrdersScreen(
+                                      isEditProfile: true,
+                                    ),
+                                  ));
+                                },
+                                icon: const Icon(
+                                  Icons.edit,
+                                  color: Color.fromARGB(255, 217, 217, 217),
+                                  size: 22,
+                                ),
                               ),
                             ],
-                          ),
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => const OrdersScreen(
-                                    isEditProfile: true,
-                                  ),
-                                ));
-                              },
-                              icon: const Icon(
-                                Icons.edit,
-                                color: Color.fromARGB(255, 217, 217, 217),
-                                size: 22,
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 15),
-              const MyDivider(),
-              Expanded(
-                child: Column(
+                const SizedBox(height: 15),
+                const MyDivider(),
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
@@ -300,37 +302,35 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             fontSize: 17),
                       ),
                     ),
-                    Expanded(
-                      child: StreamBuilder<List<Order>>(
-                        stream: _ordersStream,
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const CircularProgressIndicator();
-                          } else if (snapshot.hasError) {
-                            return Text(
-                                'Помилка отримання замовлень: ${snapshot.error}');
-                          } else if (!snapshot.hasData ||
-                              snapshot.data!.isEmpty) {
-                            return const Text('Немає замовлень');
-                          } else {
-                            snapshot.data!
-                                .sort((a, b) => b.date.compareTo(a.date));
-                            return ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: snapshot.data!.length,
-                              itemBuilder: (context, index) {
-                                return OrderCard(order: snapshot.data![index]);
-                              },
-                            );
-                          }
-                        },
-                      ),
+                    StreamBuilder<List<Order>>(
+                      stream: _ordersStream,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text(
+                              'Помилка отримання замовлень: ${snapshot.error}');
+                        } else if (!snapshot.hasData ||
+                            snapshot.data!.isEmpty) {
+                          return const Text('Немає замовлень');
+                        } else {
+                          snapshot.data!
+                              .sort((a, b) => b.date.compareTo(a.date));
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              return OrderCard(order: snapshot.data![index]);
+                            },
+                          );
+                        }
+                      },
                     ),
                   ],
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

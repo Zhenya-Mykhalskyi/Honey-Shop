@@ -12,42 +12,47 @@ class ProductsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ProductsProvider>(
-      builder: (context, productProvider, _) {
-        if (productProvider.items.isEmpty) {
-          productProvider.getProductList();
-        }
-        List<Product> products = productProvider.items;
-        List<Product> filteredProducts = isHoney
-            ? products.where((product) => product.isHoney).toList()
-            : products.where((product) => !product.isHoney).toList();
+    ProductsProvider productProvider =
+        Provider.of<ProductsProvider>(context, listen: false);
 
-        if (productProvider.items.isEmpty) {
-          return const Center(
-              child: CircularProgressIndicator(
-            color: AppColors.primaryColor,
-          ));
-        }
+    return RefreshIndicator(
+      onRefresh: () => productProvider.getProductList(),
+      child: Consumer<ProductsProvider>(
+        builder: (context, productProvider, _) {
+          if (productProvider.items.isEmpty) {
+            productProvider.getProductList();
+          }
+          List<Product> products = productProvider.items;
+          List<Product> filteredProducts = isHoney
+              ? products.where((product) => product.isHoney).toList()
+              : products.where((product) => !product.isHoney).toList();
 
-        return Padding(
-          padding: const EdgeInsets.only(right: 20, left: 20, top: 20),
-          child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 25,
-              mainAxisSpacing: 20,
-              childAspectRatio: 1 / 1.7,
+          if (productProvider.items.isEmpty) {
+            return const Center(
+                child: CircularProgressIndicator(
+              color: AppColors.primaryColor,
+            ));
+          }
+          return Padding(
+            padding: const EdgeInsets.only(right: 20, left: 20, top: 20),
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 25,
+                mainAxisSpacing: 20,
+                childAspectRatio: 1 / 1.7,
+              ),
+              itemCount: filteredProducts.length,
+              itemBuilder: (context, index) {
+                final product = filteredProducts[index];
+                return ProductItem(
+                  product: product,
+                );
+              },
             ),
-            itemCount: filteredProducts.length,
-            itemBuilder: (context, index) {
-              final product = filteredProducts[index];
-              return ProductItem(
-                product: product,
-              );
-            },
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
