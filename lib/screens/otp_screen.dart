@@ -105,6 +105,20 @@ class _OTPScreenState extends State<OTPScreen> {
     }
   }
 
+  void _onPinCompleted(String pin) async {
+    try {
+      final credential = PhoneAuthProvider.credential(
+          verificationId: _verificationCode!, smsCode: pin);
+      UserCredential authResult =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      String uid = authResult.user!.uid;
+      _handleVerificationSuccess(widget.name, widget.phone, uid);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Код введено невірно. Повторіть спробу.')));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,19 +192,5 @@ class _OTPScreenState extends State<OTPScreen> {
         ),
       ),
     );
-  }
-
-  void _onPinCompleted(String pin) async {
-    try {
-      final credential = PhoneAuthProvider.credential(
-          verificationId: _verificationCode!, smsCode: pin);
-      UserCredential authResult =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-      String uid = authResult.user!.uid;
-      _handleVerificationSuccess(widget.name, widget.phone, uid);
-    } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(e.toString())));
-    }
   }
 }
