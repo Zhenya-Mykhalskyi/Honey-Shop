@@ -31,13 +31,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         children: [
           Opacity(
             opacity: _isExpanded ? 0.2 : 1,
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Center(
@@ -191,16 +191,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ),
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 20),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).size.height * 0.03),
                       child: CustomButton(
                           action: () {
                             Navigator.of(context).pop();
                           },
                           text: 'Продовжити покупки'),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
