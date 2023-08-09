@@ -20,7 +20,8 @@ class _LitersCounterState extends State<LitersCounter> {
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
-
+    double currentLiters =
+        cartProvider.getProductLitersById(widget.product!.id);
     return Container(
       height: MediaQuery.of(context).size.height * 0.04,
       decoration: BoxDecoration(
@@ -32,8 +33,6 @@ class _LitersCounterState extends State<LitersCounter> {
         children: [
           GestureDetector(
             onTap: () {
-              double currentLiters =
-                  cartProvider.getProductLitersById(widget.product!.id);
               if (widget.isCart == true && currentLiters == 0.5) {
                 showDialog(
                   context: context,
@@ -75,9 +74,17 @@ class _LitersCounterState extends State<LitersCounter> {
           ),
           GestureDetector(
             onTap: () {
-              cartProvider.addHalfLiterToCart(
-                product: widget.product!,
-              );
+              if (widget.product!.litersLeft > currentLiters) {
+                cartProvider.addHalfLiterToCart(
+                  product: widget.product!,
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    duration: const Duration(seconds: 2),
+                    content: Text(
+                        'В наявності залишилось ${widget.product?.litersLeft} літри')));
+                return;
+              }
             },
             child: Container(
               width: MediaQuery.of(context).size.width * 0.093,
