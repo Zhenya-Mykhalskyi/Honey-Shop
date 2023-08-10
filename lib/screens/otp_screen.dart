@@ -5,13 +5,13 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:honey/screens/code_not_received_screen.dart';
 
 import 'package:pinput/pinput.dart';
 
 import 'package:honey/widgets/app_colors.dart';
 import 'package:honey/widgets/my_divider.dart';
 import 'package:honey/widgets/title_appbar.dart';
+import 'code_not_received_screen.dart';
 import 'package:honey/main.dart';
 import 'auth_screen.dart';
 
@@ -42,30 +42,19 @@ class _OTPScreenState extends State<OTPScreen> {
 
   @override
   void initState() {
-    super.initState();
     _verifyPhone();
+    super.initState();
   }
 
   void _verifyPhone() async {
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: '+380${widget.phone}',
+      codeSent: _onCodeSent,
       verificationCompleted: _onVerificationCompleted,
       verificationFailed: _onVerificationFailed,
-      codeSent: _onCodeSent,
       codeAutoRetrievalTimeout: _onCodeAutoRetrievalTimeout,
       timeout: const Duration(seconds: 120),
     );
-  }
-
-  void _onVerificationCompleted(PhoneAuthCredential credential) async {
-    UserCredential authResult =
-        await FirebaseAuth.instance.signInWithCredential(credential);
-    String uid = authResult.user!.uid;
-    _handleVerificationSuccess(widget.name, widget.phone, uid);
-  }
-
-  void _onVerificationFailed(FirebaseAuthException e) {
-    print(e.message);
   }
 
   void _onCodeSent(String? verificationID, int? resendToken) {
@@ -74,10 +63,32 @@ class _OTPScreenState extends State<OTPScreen> {
     });
   }
 
-  void _onCodeAutoRetrievalTimeout(String verificationID) {
-    setState(() {
-      _verificationCode = verificationID;
-    });
+  void _onVerificationAndPinCompleted(String pin,
+      {PhoneAuthCredential? credential}) async {
+    try {
+      credential ??= PhoneAuthProvider.credential(
+        verificationId: _verificationCode!,
+        smsCode: pin,
+      );
+
+      UserCredential authResult =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      String uid = authResult.user!.uid;
+      _handleVerificationSuccess(widget.name, widget.phone, uid);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Код введено невірно. Повторіть спробу.'),
+      ));
+    }
+  }
+
+  void _onPinCompleted(String pin) {
+    _onVerificationAndPinCompleted(pin);
+  }
+
+  void _onVerificationCompleted(PhoneAuthCredential credential) {
+    _onVerificationAndPinCompleted('', credential: credential);
   }
 
   void _handleVerificationSuccess(String name, String phone, String uid) async {
@@ -105,18 +116,14 @@ class _OTPScreenState extends State<OTPScreen> {
     }
   }
 
-  void _onPinCompleted(String pin) async {
-    try {
-      final credential = PhoneAuthProvider.credential(
-          verificationId: _verificationCode!, smsCode: pin);
-      UserCredential authResult =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-      String uid = authResult.user!.uid;
-      _handleVerificationSuccess(widget.name, widget.phone, uid);
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Код введено невірно. Повторіть спробу.')));
-    }
+  void _onVerificationFailed(FirebaseAuthException e) {
+    print(e.message);
+  }
+
+  void _onCodeAutoRetrievalTimeout(String verificationID) {
+    setState(() {
+      _verificationCode = verificationID;
+    });
   }
 
   @override

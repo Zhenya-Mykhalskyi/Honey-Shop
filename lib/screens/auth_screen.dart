@@ -42,17 +42,19 @@ class _AuthScreenState extends State<AuthScreen> {
       );
       return;
     }
+
     final phoneNumber = '+380${_phoneNumberController.text}';
-    bool exists = await checkPhoneNumberExists(phoneNumber);
-    if (_authMode == AuthMode.login && !exists) {
+    bool numberExists = await checkPhoneNumberExists(phoneNumber);
+
+    if (_authMode == AuthMode.login && !numberExists) {
       scaffoldContext.showSnackBar(
         const SnackBar(
-          content: Text('Такого користувача не існує.  Зареєструйтеся.'),
+          content: Text('Такого користувача не існує. Зареєструйтеся.'),
         ),
       );
       return;
     }
-    if (_authMode == AuthMode.signup && exists) {
+    if (_authMode == AuthMode.signup && numberExists) {
       scaffoldContext.showSnackBar(
         const SnackBar(
           content: Text('Такий користувач вже існує.  Увійдіть в акаунт.'),
