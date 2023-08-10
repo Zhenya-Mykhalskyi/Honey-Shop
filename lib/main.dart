@@ -43,44 +43,45 @@ class _MyAppState extends State<MyApp> {
         ),
       ],
       child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            appBarTheme:
-                const AppBarTheme(backgroundColor: AppColors.backgraundColor),
-            scaffoldBackgroundColor: AppColors.backgraundColor,
-            textTheme: const TextTheme(
-              headlineLarge: TextStyle(color: Colors.white, fontFamily: 'MA'),
-              headlineMedium: TextStyle(color: Colors.white, fontFamily: 'MA'),
-              headlineSmall: TextStyle(color: Colors.white, fontFamily: 'MA'),
-              titleLarge: TextStyle(color: Colors.white, fontFamily: 'MA'),
-              titleMedium: TextStyle(color: Colors.white, fontFamily: 'MA'),
-              titleSmall: TextStyle(color: Colors.white, fontFamily: 'MA'),
-              bodyLarge: TextStyle(color: Colors.white, fontFamily: 'MA'),
-              bodyMedium: TextStyle(color: Colors.white, fontFamily: 'MA'),
-              bodySmall: TextStyle(color: Colors.white, fontFamily: 'MA'),
-            ),
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          appBarTheme:
+              const AppBarTheme(backgroundColor: AppColors.backgraundColor),
+          scaffoldBackgroundColor: AppColors.backgraundColor,
+          textTheme: const TextTheme(
+            headlineLarge: TextStyle(color: Colors.white, fontFamily: 'MA'),
+            headlineMedium: TextStyle(color: Colors.white, fontFamily: 'MA'),
+            headlineSmall: TextStyle(color: Colors.white, fontFamily: 'MA'),
+            titleLarge: TextStyle(color: Colors.white, fontFamily: 'MA'),
+            titleMedium: TextStyle(color: Colors.white, fontFamily: 'MA'),
+            titleSmall: TextStyle(color: Colors.white, fontFamily: 'MA'),
+            bodyLarge: TextStyle(color: Colors.white, fontFamily: 'MA'),
+            bodyMedium: TextStyle(color: Colors.white, fontFamily: 'MA'),
+            bodySmall: TextStyle(color: Colors.white, fontFamily: 'MA'),
           ),
-          home: StreamBuilder<User?>(
-            stream: FirebaseAuth.instance.authStateChanges(),
-            builder: (ctx, userSnapshot) {
-              final hasInternet =
-                  userSnapshot.connectionState != ConnectionState.none;
-              if (hasInternet &&
-                  userSnapshot.connectionState == ConnectionState.waiting) {
-                return const SplashScreen();
-              }
-
-              final user = userSnapshot.data;
-              if (userSnapshot.hasData &&
-                  user!.phoneNumber == '+380987332919') {
+        ),
+        home: StreamBuilder<User?>(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (ctx, userSnapshot) {
+            final hasInternet =
+                userSnapshot.connectionState != ConnectionState.none;
+            if (hasInternet &&
+                userSnapshot.connectionState == ConnectionState.waiting) {
+              return const SplashScreen();
+            }
+            final user = userSnapshot.data;
+            if (userSnapshot.hasData) {
+              if (user!.phoneNumber == '+380987332919') {
                 return const AdminMainScreen();
-              } else if (user != null) {
-                return const UserMainScreen();
               } else {
-                return const AuthScreen();
+                return const UserMainScreen();
               }
-            },
-          )),
+            } else {
+              return const AuthScreen();
+            }
+          },
+        ),
+      ),
     );
   }
 }
