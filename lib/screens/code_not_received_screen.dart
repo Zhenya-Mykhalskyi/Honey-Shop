@@ -47,7 +47,7 @@ class _CodeNotReceivedScreenState extends State<CodeNotReceivedScreen> {
     return Scaffold(
       appBar: const TitleAppBar(title: 'Не прийшов код?'),
       body: Padding(
-        padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.2),
+        padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.1),
         child: Center(
           child: Column(
             children: [
