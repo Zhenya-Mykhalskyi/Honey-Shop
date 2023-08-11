@@ -240,6 +240,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                       maxLength: 7,
                                       maxLines: 1,
                                       textSize: 17,
+                                      keyboardType: TextInputType.number,
                                       controller: _priceController,
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
@@ -250,7 +251,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                         }
                                         double price = double.parse(value);
                                         if (price <= 0) {
-                                          return '>= 0)';
+                                          return 'Більше 0)';
                                         }
                                         return null;
                                       },
@@ -288,9 +289,10 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                           ),
                           CustomTextField(
                             hintText: 'Кількість літрів',
-                            maxLength: 6,
+                            maxLength: 4,
                             maxLines: 1,
                             textSize: 17,
+                            keyboardType: TextInputType.number,
                             controller: _litersLeftController,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
