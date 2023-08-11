@@ -318,12 +318,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         } else {
                           snapshot.data!
                               .sort((a, b) => b.date.compareTo(a.date));
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (context, index) {
-                              return OrderCard(order: snapshot.data![index]);
-                            },
+                          return SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.3,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, index) {
+                                return OrderCard(order: snapshot.data![index]);
+                              },
+                            ),
                           );
                         }
                       },
