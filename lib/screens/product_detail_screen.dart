@@ -27,17 +27,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       appBar: AppBar(
         elevation: 0,
       ),
-      body: Stack(
-        children: [
-          Opacity(
-            opacity: _isExpanded ? 0.2 : 1,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Column(
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            Opacity(
+              opacity: _isExpanded ? 0.2 : 1,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Center(
@@ -128,16 +128,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             )
                           ],
                         ),
-                        const SizedBox(height: 30),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.03),
                         RichText(
                           text: TextSpan(
                             children: [
                               TextSpan(
                                 text: widget.product.productDescription
                                             .length <=
-                                        140
+                                        125
                                     ? widget.product.productDescription
-                                    : '${widget.product.productDescription.substring(0, 140)}...  ',
+                                    : '${widget.product.productDescription.substring(0, 125)}...  ',
                                 style: const TextStyle(
                                     height: 1.45,
                                     fontSize: 16,
@@ -160,7 +161,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             ],
                           ),
                         ),
-                        const SizedBox(height: 30),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.04),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -191,75 +193,63 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ),
                       ],
                     ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).size.height * 0.03),
-                      child: CustomButton(
-                          action: () {
-                            Navigator.of(context).pop();
-                          },
-                          text: 'Продовжити покупки'),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          if (_isExpanded)
-            Center(
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Container(
-                    color: Colors.black.withOpacity(0.9),
-                    child: SingleChildScrollView(
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Flexible(
-                                    child: Text(
-                                      widget.product.title,
-                                      style: const TextStyle(
-                                        color: AppColors.primaryColor,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w500,
+            if (_isExpanded)
+              Center(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      color: Colors.black.withOpacity(0.9),
+                      child: SingleChildScrollView(
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        widget.product.title,
+                                        style: const TextStyle(
+                                          color: AppColors.primaryColor,
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        _isExpanded = false;
-                                      });
-                                    },
-                                    icon: const Icon(Icons.close),
-                                    iconSize: 30,
-                                    color: Colors.white,
-                                  )
-                                ],
-                              ),
-                              const SizedBox(height: 15),
-                              Text(
-                                widget.product.productDescription,
-                                style: const TextStyle(
-                                  height: 1.45,
-                                  color: Colors.white,
-                                  fontSize: 15,
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          _isExpanded = false;
+                                        });
+                                      },
+                                      icon: const Icon(Icons.close),
+                                      iconSize: 30,
+                                      color: Colors.white,
+                                    )
+                                  ],
                                 ),
-                              ),
-                            ],
+                                const SizedBox(height: 15),
+                                Text(
+                                  widget.product.productDescription,
+                                  style: const TextStyle(
+                                    height: 1.45,
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -267,8 +257,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(left: 16, right: 16, bottom: 10),
+        child: CustomButton(
+          action: () {
+            Navigator.of(context).pop();
+          },
+          text: 'Продовжити покупки',
+        ),
       ),
     );
   }
