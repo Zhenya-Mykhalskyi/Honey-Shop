@@ -250,9 +250,6 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                                             Text(
                                               _salesPoints[index]['address']
                                                   .toString(),
-                                              // style: const TextStyle(
-                                              //   fontSize: 15,
-                                              // ),
                                             ),
                                           ],
                                         ),
@@ -268,8 +265,8 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                                 ? 'Опис магазину'
                                 : _aboutStoreText.toString(),
                             style: const TextStyle(
-                                // fontSize: 16,
-                                ),
+                              fontSize: 16,
+                            ),
                           ),
                           const MyDivider(),
                           const Text('сертифікат'),
