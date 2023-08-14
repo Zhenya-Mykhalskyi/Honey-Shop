@@ -241,7 +241,6 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                                               _salesPoints[index]['city']
                                                   .toString(),
                                               style: const TextStyle(
-                                                  // fontSize: 15,
                                                   fontWeight: FontWeight.w600),
                                             ),
                                             const SizedBox(

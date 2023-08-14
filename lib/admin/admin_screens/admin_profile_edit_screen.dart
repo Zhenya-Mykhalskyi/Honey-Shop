@@ -211,14 +211,6 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
     final cityController = TextEditingController();
     final addressController = TextEditingController();
 
-    cityController.addListener(() {
-      _updateSalesPointInList(cityController, addressController);
-    });
-
-    addressController.addListener(() {
-      _updateSalesPointInList(cityController, addressController);
-    });
-
     setState(() {
       _salesPointsCityControllers.add(cityController);
       _salesPointsAddressControllers.add(addressController);
@@ -227,22 +219,6 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
         'address': addressController.text,
       });
     });
-  }
-
-  void _updateSalesPointInList(TextEditingController cityController,
-      TextEditingController addressController) {
-    final int index = _salesPointsCityControllers.indexOf(cityController);
-    if (index >= 0 && index < _salesPoints.length) {
-      final String newCity = cityController.text;
-      final String newAddress = addressController.text;
-
-      if (newCity.isNotEmpty) {
-        _salesPoints[index]['city'] = newCity;
-      }
-      if (newAddress.isNotEmpty) {
-        _salesPoints[index]['address'] = newAddress;
-      }
-    }
   }
 
   void _removeSalesPoint(int index) {
