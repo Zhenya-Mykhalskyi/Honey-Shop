@@ -33,7 +33,7 @@ class _OTPScreenState extends State<OTPScreen> {
     width: 56,
     height: 56,
     textStyle: const TextStyle(
-        fontSize: 20, color: Colors.white, fontWeight: FontWeight.w600),
+        fontSize: 20, color: AppColors.whiteColor, fontWeight: FontWeight.w600),
     decoration: BoxDecoration(
       border: Border.all(color: AppColors.primaryColor),
       borderRadius: BorderRadius.circular(20),
@@ -188,7 +188,7 @@ class _OTPScreenState extends State<OTPScreen> {
                       },
                       child: const Text(
                         'Не приходить код?',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: AppColors.whiteColor),
                       ),
                     ),
                   ),

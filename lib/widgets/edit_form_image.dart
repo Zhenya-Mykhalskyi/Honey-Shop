@@ -53,7 +53,7 @@ class _EditFormImageState extends State<EditFormImage> {
                     padding: EdgeInsets.all(25.0),
                     child: Icon(
                       Icons.add_a_photo,
-                      color: Colors.white,
+                      color: AppColors.whiteColor,
                       size: 60,
                     ),
                   ),

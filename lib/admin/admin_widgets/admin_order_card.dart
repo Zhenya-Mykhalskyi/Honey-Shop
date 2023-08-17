@@ -128,8 +128,8 @@ class AdminOrderCard extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: Card(
         color: isOrderFinished
-            ? Colors.white.withOpacity(0.01)
-            : Colors.white.withOpacity(0.1),
+            ? AppColors.whiteColor.withOpacity(0.01)
+            : AppColors.whiteColor.withOpacity(0.1),
         elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(9),
@@ -179,7 +179,7 @@ class AdminOrderCard extends StatelessWidget {
                     },
                     icon: const Icon(
                       Icons.arrow_downward,
-                      color: Colors.white,
+                      color: AppColors.whiteColor,
                     ),
                   )
                 ],
@@ -209,14 +209,14 @@ class AdminOrderCard extends StatelessWidget {
                     },
                     icon: const Icon(
                       Icons.delete,
-                      color: Colors.white,
+                      color: AppColors.whiteColor,
                     ),
                   ),
                   Row(
                     children: [
                       Switch(
-                        activeColor: Colors.black.withOpacity(0.85),
-                        activeTrackColor: const Color.fromARGB(255, 0, 0, 0),
+                        activeColor: AppColors.blackColor.withOpacity(0.85),
+                        activeTrackColor: AppColors.blackColor,
                         value: isOrderFinished,
                         onChanged: (value) {
                           if (!isOrderFinished) {
@@ -241,7 +241,7 @@ class AdminOrderCard extends StatelessWidget {
                         '₴${order['totalAmount'].toStringAsFixed(2)}',
                         style: TextStyle(
                           color: isOrderFinished
-                              ? Colors.white.withOpacity(0.4)
+                              ? AppColors.whiteColor.withOpacity(0.4)
                               : AppColors.primaryColor,
                           fontSize: 16,
                           fontWeight: FontWeight.w600,

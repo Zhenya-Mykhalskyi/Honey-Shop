@@ -216,7 +216,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                 _authMode == AuthMode.signup
                                     ? 'Уже існує аккаунт? Увійдіть'
                                     : 'Не має акаунту? Зареєструйтеся',
-                                style: const TextStyle(color: Colors.white),
+                                style: const TextStyle(
+                                    color: AppColors.whiteColor),
                               ),
                             ),
                           ],

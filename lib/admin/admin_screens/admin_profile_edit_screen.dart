@@ -388,7 +388,8 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
                                                   _removeSalesPoint(i),
                                               child: Text('Видалити точку',
                                                   style: TextStyle(
-                                                      color: Colors.red
+                                                      color: AppColors
+                                                          .errorColor
                                                           .withOpacity(0.7))),
                                             ),
                                           const MyDivider(),
@@ -402,7 +403,7 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
                                           child: const Text(
                                             'Додати точку',
                                             style: TextStyle(
-                                              color: Colors.white,
+                                              color: AppColors.whiteColor,
                                             ),
                                           ),
                                         ),

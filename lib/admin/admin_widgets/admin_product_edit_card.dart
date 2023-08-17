@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:honey/admin/admin_screens/product_edit_screen.dart';
+import 'package:honey/widgets/app_colors.dart';
 
 class AdminProductEditCard extends StatelessWidget {
   final Map<String, dynamic> productData;
@@ -22,7 +23,7 @@ class AdminProductEditCard extends StatelessWidget {
         vertical: 5,
       ),
       child: Card(
-        color: Colors.white.withOpacity(0.1),
+        color: AppColors.whiteColor.withOpacity(0.1),
         elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(9),
@@ -94,7 +95,7 @@ class AdminProductEditCard extends StatelessWidget {
                           ),
                         );
                       },
-                      color: const Color.fromARGB(255, 217, 217, 217),
+                      color: AppColors.whiteColor.withOpacity(0.9),
                     ),
                   ),
               ],

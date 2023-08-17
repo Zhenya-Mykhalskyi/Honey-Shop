@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:honey/admin/admin_screens/admin_profile_edit_screen.dart';
-import 'package:honey/admin/admin_widgets/cashback_form_dialog.dart';
 
+import 'package:honey/admin/admin_widgets/cashback_form_dialog.dart';
+import 'package:honey/widgets/app_colors.dart';
 import 'package:honey/widgets/products_grid.dart';
 import 'package:honey/widgets/tab_button.dart';
 import 'package:honey/widgets/title_appbar.dart';
 import 'admin_profile_screen.dart';
 import 'admin_orders_screen.dart';
 import 'edit_products_overview_screen.dart';
+import 'admin_profile_edit_screen.dart';
 
 class AdminMainScreen extends StatefulWidget {
   const AdminMainScreen({super.key});
@@ -106,7 +107,7 @@ class _AdminMainScreenState extends State<AdminMainScreen>
                             ? Icons.person
                             : Icons.edit_note_outlined,
                         size: 35,
-                        color: Colors.white,
+                        color: AppColors.whiteColor,
                       ),
                       onPressed: _selectedBottomNavBarIndex == 1
                           ? () {
@@ -127,10 +128,10 @@ class _AdminMainScreenState extends State<AdminMainScreen>
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false,
-        backgroundColor: const Color(0xFF1B1B1B),
+        backgroundColor: AppColors.backgraundColor,
         iconSize: 30,
-        unselectedItemColor: const Color.fromARGB(255, 88, 88, 88),
-        selectedItemColor: const Color.fromARGB(255, 217, 217, 217),
+        unselectedItemColor: AppColors.bottomNavBarUnselected,
+        selectedItemColor: AppColors.bottomNavBarSelected,
         currentIndex: _selectedBottomNavBarIndex,
         onTap: _onBottomNavBarTapped,
         items: const [

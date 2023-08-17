@@ -21,7 +21,7 @@ class ProductItem extends StatelessWidget {
       child: GridTile(
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.1),
+            color: AppColors.whiteColor.withOpacity(0.08),
             borderRadius: BorderRadius.circular(15),
           ),
           child: Padding(
@@ -91,7 +91,7 @@ class ProductItem extends StatelessWidget {
                               fontWeight: FontWeight.w500,
                               color: product.isDiscount == true
                                   ? AppColors.primaryColor
-                                  : Colors.white),
+                                  : AppColors.whiteColor),
                         ),
                         const SizedBox(width: 5),
                         if (product.isDiscount == true)
@@ -101,8 +101,8 @@ class ProductItem extends StatelessWidget {
                               fontSize: 13,
                               fontWeight: FontWeight.w500,
                               decoration: TextDecoration.lineThrough,
-                              decorationColor: Color.fromARGB(255, 201, 76, 76),
-                              color: Color.fromARGB(255, 114, 114, 114),
+                              decorationColor: AppColors.saleColor,
+                              color: AppColors.darkGreyColor,
                             ),
                           ),
                         const Flexible(

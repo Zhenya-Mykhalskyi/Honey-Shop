@@ -145,7 +145,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             child: Column(
               children: [
                 Card(
-                  color: Colors.white.withOpacity(0.1),
+                  color: AppColors.whiteColor.withOpacity(0.1),
                   elevation: 2,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(9),
@@ -163,7 +163,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
                                   border: Border.all(
-                                    color: Colors.white,
+                                    color: AppColors.whiteColor,
                                   ),
                                 ),
                                 child: ClipRRect(
@@ -171,7 +171,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   child: _imageUrl == null
                                       ? const Icon(
                                           Icons.person_rounded,
-                                          color: Colors.white,
+                                          color: AppColors.whiteColor,
                                           size: 85,
                                         )
                                       : AspectRatio(
@@ -234,7 +234,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 },
                                 icon: const Icon(
                                   Icons.edit,
-                                  color: Color.fromARGB(255, 217, 217, 217),
+                                  color: AppColors.whiteColor,
                                   size: 22,
                                 ),
                               ),
@@ -362,21 +362,22 @@ class ProfileInfoCardSingleRow extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, color: color ?? Colors.white, size: 20),
+        Icon(icon, color: color ?? AppColors.whiteColor, size: 20),
         const SizedBox(width: 10),
         Flexible(
           child: Text(
             text,
             style: TextStyle(
                 fontSize: 15,
-                color: color ?? Colors.white,
+                color: color ?? AppColors.whiteColor,
                 fontWeight: fontWeight ?? FontWeight.w500),
           ),
         ),
         if (showInfoIcon == true)
           Tooltip(
             decoration: BoxDecoration(
-                color: Colors.black, borderRadius: BorderRadius.circular(10)),
+                color: AppColors.blackColor,
+                borderRadius: BorderRadius.circular(10)),
             margin: const EdgeInsets.symmetric(horizontal: 20),
             textStyle: const TextStyle(fontSize: 16),
             triggerMode: TooltipTriggerMode.tap,
@@ -386,7 +387,7 @@ class ProfileInfoCardSingleRow extends StatelessWidget {
             child: const Padding(
               padding: EdgeInsets.only(left: 5),
               child: Icon(Icons.info_outline,
-                  color: Color.fromARGB(255, 190, 190, 190), size: 13),
+                  color: AppColors.whiteColor, size: 13),
             ),
           ),
       ],

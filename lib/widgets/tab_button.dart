@@ -23,7 +23,8 @@ class TabButton extends StatelessWidget {
           color: isActive ? AppColors.primaryColor : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-              color: isActive ? Colors.transparent : Colors.white, width: 1),
+              color: isActive ? Colors.transparent : AppColors.whiteColor,
+              width: 1),
         ),
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
         alignment: Alignment.center,
@@ -35,7 +36,7 @@ class TabButton extends StatelessWidget {
               fontFamily: 'MA',
               fontSize: 17,
               fontWeight: FontWeight.w600,
-              color: isActive ? Colors.black : Colors.white,
+              color: isActive ? AppColors.blackColor : AppColors.whiteColor,
             ),
           ),
         ),

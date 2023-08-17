@@ -269,7 +269,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                   fillColor: MaterialStateProperty.all<Color>(
                                     AppColors.primaryColor,
                                   ),
-                                  checkColor: Colors.black,
+                                  checkColor: AppColors.blackColor,
                                   activeColor: AppColors.primaryColor,
                                   value: _isHoney,
                                   onChanged: (bool? value) {
@@ -337,7 +337,7 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                 child: const Text(
                                   'Застосувати акцію',
                                   style: TextStyle(
-                                      color: Colors.white,
+                                      color: AppColors.whiteColor,
                                       decoration: TextDecoration.underline,
                                       fontSize: 16),
                                 ))

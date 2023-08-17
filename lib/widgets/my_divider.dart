@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
+import 'app_colors.dart';
+
 class MyDivider extends StatelessWidget {
   final Color color;
   final double? verticalPadding;
 
   const MyDivider({
     Key? key,
-    this.color = Colors.white,
+    this.color = AppColors.whiteColor,
     this.verticalPadding,
   }) : super(key: key);
 

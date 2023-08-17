@@ -88,7 +88,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   Text(
                                     'Залишилось ${widget.product.litersLeft} л',
                                     style: const TextStyle(
-                                        fontSize: 16, color: Color(0xFF929292)),
+                                        fontSize: 16,
+                                        color: AppColors.darkGreyColor),
                                   ),
                                 ],
                               ),
@@ -117,10 +118,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       style: const TextStyle(
                                           decoration:
                                               TextDecoration.lineThrough,
-                                          decorationColor:
-                                              Color.fromARGB(255, 201, 76, 76),
-                                          color: Color.fromARGB(
-                                              255, 114, 114, 114),
+                                          decorationColor: AppColors.saleColor,
+                                          color: AppColors.darkGreyColor,
                                           fontSize: 18),
                                     ),
                                   )
@@ -177,7 +176,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               width: MediaQuery.of(context).size.width * 0.25,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                color: const Color.fromARGB(255, 65, 65, 65),
+                                color: AppColors.whiteColor.withOpacity(0.1),
                               ),
                               child: Center(
                                 child: Text(
@@ -205,7 +204,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Container(
-                      color: Colors.black.withOpacity(0.9),
+                      color: AppColors.blackColor.withOpacity(0.9),
                       child: SingleChildScrollView(
                         child: Center(
                           child: Padding(
@@ -235,7 +234,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       },
                                       icon: const Icon(Icons.close),
                                       iconSize: 30,
-                                      color: Colors.white,
+                                      color: AppColors.whiteColor,
                                     )
                                   ],
                                 ),
@@ -244,7 +243,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   widget.product.productDescription,
                                   style: const TextStyle(
                                     height: 1.45,
-                                    color: Colors.white,
+                                    color: AppColors.whiteColor,
                                     fontSize: 15,
                                   ),
                                 ),

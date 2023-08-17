@@ -26,7 +26,7 @@ class _LitersCounterState extends State<LitersCounter> {
       height: MediaQuery.of(context).size.height * 0.04,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: const Color.fromARGB(255, 65, 65, 65),
+        color: AppColors.whiteColor.withOpacity(0.1),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -59,7 +59,8 @@ class _LitersCounterState extends State<LitersCounter> {
                   color: AppColors.primaryColor.withOpacity(0.85),
                   borderRadius: BorderRadius.circular(15)),
               child: const Center(
-                child: Icon(Icons.remove, size: 20.0, color: Colors.black),
+                child:
+                    Icon(Icons.remove, size: 20.0, color: AppColors.blackColor),
               ),
             ),
           ),
@@ -92,7 +93,7 @@ class _LitersCounterState extends State<LitersCounter> {
                   color: AppColors.primaryColor.withOpacity(0.85),
                   borderRadius: BorderRadius.circular(15)),
               child: const Center(
-                child: Icon(Icons.add, size: 20.0, color: Colors.black),
+                child: Icon(Icons.add, size: 20.0, color: AppColors.blackColor),
               ),
             ),
           ),

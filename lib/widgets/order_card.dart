@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:honey/screens/user_profile_screen.dart';
 import 'package:honey/widgets/order_detail_dialog.dart';
+import 'app_colors.dart';
 
 class OrderCard extends StatelessWidget {
   final Order order;
@@ -9,7 +11,7 @@ class OrderCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.white.withOpacity(0.1),
+      color: AppColors.whiteColor.withOpacity(0.1),
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(9),
@@ -54,7 +56,7 @@ class OrderCard extends StatelessWidget {
                       },
                       icon: const Icon(
                         Icons.arrow_downward,
-                        color: Colors.white,
+                        color: AppColors.whiteColor,
                       ))
                 ],
               )

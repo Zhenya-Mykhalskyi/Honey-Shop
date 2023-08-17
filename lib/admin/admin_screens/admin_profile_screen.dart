@@ -105,7 +105,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                 child: Column(
                   children: [
                     Card(
-                      color: Colors.white.withOpacity(0.1),
+                      color: AppColors.whiteColor.withOpacity(0.1),
                       elevation: 2,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(9),
@@ -123,7 +123,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8),
                                       border: Border.all(
-                                        color: Colors.white,
+                                        color: AppColors.whiteColor,
                                       ),
                                     ),
                                     child: ClipRRect(
@@ -131,7 +131,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                                       child: _adminImageUrl == null
                                           ? const Icon(
                                               Icons.person_rounded,
-                                              color: Colors.white,
+                                              color: AppColors.whiteColor,
                                               size: 85,
                                             )
                                           : AspectRatio(
@@ -221,7 +221,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                               return Card(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(9)),
-                                color: Colors.white.withOpacity(0.1),
+                                color: AppColors.whiteColor.withOpacity(0.1),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Row(

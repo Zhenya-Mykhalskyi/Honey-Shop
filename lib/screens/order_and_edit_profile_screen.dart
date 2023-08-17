@@ -437,7 +437,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             child: Text(
                               'Спосіб доставки',
                               style: TextStyle(
-                                color: Color.fromARGB(255, 169, 169, 169),
+                                color: AppColors.customTextFieldHint,
                                 fontStyle: FontStyle.italic,
                               ),
                             ),
@@ -451,8 +451,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             ),
                             child: DropdownButtonFormField<String>(
                               focusColor: AppColors.primaryColor,
-                              dropdownColor:
-                                  const Color.fromARGB(255, 32, 32, 32),
+                              dropdownColor: AppColors.backgraundColor,
                               value: _selectedDelivery == ''
                                   ? null
                                   : _selectedDelivery,
@@ -478,7 +477,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                 counterText: '',
                                 border: InputBorder.none,
                                 prefixStyle: TextStyle(
-                                  color: Colors.white,
+                                  color: AppColors.whiteColor,
                                   fontSize: 17,
                                 ),
                               ),
@@ -551,7 +550,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                   ? 'Зберегти зміни?'
                                   : 'Підтвердити замовлення?',
                               confirmButtonText: 'Так',
-                              confirmButtonColor: Colors.white,
+                              confirmButtonColor: AppColors.whiteColor,
                               cancelButtonText: 'Повернутися',
                               onConfirm: () async {
                                 Navigator.of(context).pop();

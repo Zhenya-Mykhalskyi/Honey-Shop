@@ -185,7 +185,7 @@ class _DiscountScreenState extends State<DiscountScreen> {
             '${percentage.toInt()}%',
             style: TextStyle(
               fontSize: 16,
-              color: isActive ? Colors.white : AppColors.primaryColor,
+              color: isActive ? AppColors.whiteColor : AppColors.primaryColor,
               fontWeight: FontWeight.bold,
             ),
           ),

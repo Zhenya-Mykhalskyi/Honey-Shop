@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:honey/widgets/title_appbar.dart';
 import 'package:provider/provider.dart';
 
+import 'package:honey/widgets/app_colors.dart';
+import 'package:honey/widgets/title_appbar.dart';
 import 'package:honey/admin/admin_screens/admin_profile_screen.dart';
 import 'package:honey/providers/cart.dart';
 import 'package:honey/widgets/badge.dart';
@@ -120,7 +121,7 @@ class _UserMainScreenState extends State<UserMainScreen>
                         child: IconButton(
                           icon: const Icon(
                             Icons.shopping_bag_outlined,
-                            color: Colors.white,
+                            color: AppColors.whiteColor,
                             size: 35,
                           ),
                           onPressed: () {
@@ -143,10 +144,10 @@ class _UserMainScreenState extends State<UserMainScreen>
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false,
-        backgroundColor: const Color(0xFF1B1B1B),
+        backgroundColor: AppColors.backgraundColor,
         iconSize: 30,
-        unselectedItemColor: const Color.fromARGB(255, 88, 88, 88),
-        selectedItemColor: const Color.fromARGB(255, 217, 217, 217),
+        unselectedItemColor: AppColors.bottomNavBarUnselected,
+        selectedItemColor: AppColors.bottomNavBarSelected,
         currentIndex: _selectedBottomNavBarIndex,
         onTap: _onBottomNavBarTapped,
         items: const [

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'app_colors.dart';
+
 class TotalAmountOfCart extends StatelessWidget {
   final double totalAmount;
 
@@ -13,7 +15,7 @@ class TotalAmountOfCart extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: Colors.white.withOpacity(0.1)),
+          color: AppColors.whiteColor.withOpacity(0.1)),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
         child: Text(

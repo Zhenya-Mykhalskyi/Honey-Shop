@@ -46,7 +46,7 @@ class CustomTextField extends StatelessWidget {
               child: Text(
                 hintText ?? '',
                 style: const TextStyle(
-                  color: Color.fromARGB(255, 169, 169, 169),
+                  color: AppColors.customTextFieldHint,
                   fontStyle: FontStyle.italic,
                 ),
               ),
@@ -66,18 +66,19 @@ class CustomTextField extends StatelessWidget {
               controller: controller,
               maxLength: maxLength,
               keyboardType: keyboardType,
-              style: TextStyle(color: Colors.white, fontSize: textSize ?? 21),
+              style: TextStyle(
+                  color: AppColors.whiteColor, fontSize: textSize ?? 21),
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(8),
                 counterText: showCounterText ? null : '',
-                counterStyle: const TextStyle(color: Colors.white),
+                counterStyle: const TextStyle(color: AppColors.whiteColor),
                 border: InputBorder.none,
                 prefix: prefix,
-                prefixStyle:
-                    TextStyle(color: Colors.white, fontSize: textSize ?? 21),
+                prefixStyle: TextStyle(
+                    color: AppColors.whiteColor, fontSize: textSize ?? 21),
                 suffixText: sufixText,
                 suffixStyle: TextStyle(
-                    color: Colors.white,
+                    color: AppColors.whiteColor,
                     fontSize: textSize ?? 18,
                     fontWeight: FontWeight.w500),
               ),

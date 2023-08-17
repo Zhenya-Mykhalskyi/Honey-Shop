@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'app_colors.dart';
+
 class ConfirmationDialog extends StatelessWidget {
   final String title;
 
@@ -20,7 +22,7 @@ class ConfirmationDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: const Color.fromARGB(255, 27, 27, 27),
+      backgroundColor: AppColors.backgraundColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
@@ -47,7 +49,7 @@ class ConfirmationDialog extends StatelessWidget {
                   child: Text(
                     confirmButtonText,
                     style: TextStyle(
-                        color: confirmButtonColor ?? Colors.red,
+                        color: confirmButtonColor ?? AppColors.errorColor,
                         fontFamily: 'MA'),
                   ),
                 ),
@@ -57,8 +59,8 @@ class ConfirmationDialog extends StatelessWidget {
                   },
                   child: Text(
                     cancelButtonText,
-                    style:
-                        const TextStyle(color: Colors.white, fontFamily: 'MA'),
+                    style: const TextStyle(
+                        color: AppColors.whiteColor, fontFamily: 'MA'),
                   ),
                 ),
               ],

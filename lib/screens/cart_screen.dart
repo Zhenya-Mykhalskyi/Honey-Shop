@@ -116,7 +116,7 @@ class _CartScreenState extends State<CartScreen> {
                                   fillColor: MaterialStateProperty.all<Color>(
                                     AppColors.primaryColor,
                                   ),
-                                  checkColor: Colors.black,
+                                  checkColor: AppColors.blackColor,
                                   activeColor: AppColors.primaryColor,
                                   value: _useBonuses,
                                   onChanged: (value) {

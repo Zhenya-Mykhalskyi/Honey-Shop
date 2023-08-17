@@ -49,15 +49,22 @@ class _MyAppState extends State<MyApp> {
               const AppBarTheme(backgroundColor: AppColors.backgraundColor),
           scaffoldBackgroundColor: AppColors.backgraundColor,
           textTheme: const TextTheme(
-            headlineLarge: TextStyle(color: Colors.white, fontFamily: 'MA'),
-            headlineMedium: TextStyle(color: Colors.white, fontFamily: 'MA'),
-            headlineSmall: TextStyle(color: Colors.white, fontFamily: 'MA'),
-            titleLarge: TextStyle(color: Colors.white, fontFamily: 'MA'),
-            titleMedium: TextStyle(color: Colors.white, fontFamily: 'MA'),
-            titleSmall: TextStyle(color: Colors.white, fontFamily: 'MA'),
-            bodyLarge: TextStyle(color: Colors.white, fontFamily: 'MA'),
-            bodyMedium: TextStyle(color: Colors.white, fontFamily: 'MA'),
-            bodySmall: TextStyle(color: Colors.white, fontFamily: 'MA'),
+            headlineLarge:
+                TextStyle(color: AppColors.whiteColor, fontFamily: 'MA'),
+            headlineMedium:
+                TextStyle(color: AppColors.whiteColor, fontFamily: 'MA'),
+            headlineSmall:
+                TextStyle(color: AppColors.whiteColor, fontFamily: 'MA'),
+            titleLarge:
+                TextStyle(color: AppColors.whiteColor, fontFamily: 'MA'),
+            titleMedium:
+                TextStyle(color: AppColors.whiteColor, fontFamily: 'MA'),
+            titleSmall:
+                TextStyle(color: AppColors.whiteColor, fontFamily: 'MA'),
+            bodyLarge: TextStyle(color: AppColors.whiteColor, fontFamily: 'MA'),
+            bodyMedium:
+                TextStyle(color: AppColors.whiteColor, fontFamily: 'MA'),
+            bodySmall: TextStyle(color: AppColors.whiteColor, fontFamily: 'MA'),
           ),
         ),
         home: StreamBuilder<User?>(

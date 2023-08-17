@@ -14,7 +14,7 @@ class AdminOrderDetailsDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
-      backgroundColor: const Color.fromARGB(255, 27, 27, 27),
+      backgroundColor: AppColors.backgraundColor,
       child: Padding(
         padding: const EdgeInsets.only(right: 20, left: 20, bottom: 20),
         child: Column(
@@ -29,7 +29,7 @@ class AdminOrderDetailsDialog extends StatelessWidget {
                     },
                     icon: const Icon(
                       Icons.close,
-                      color: Colors.white,
+                      color: AppColors.whiteColor,
                       size: 28,
                     ))
               ],
@@ -110,7 +110,7 @@ class AdminOrderDetailsDialog extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white.withOpacity(0.7),
+                            color: AppColors.whiteColor.withOpacity(0.7),
                           ),
                         ),
                       ],

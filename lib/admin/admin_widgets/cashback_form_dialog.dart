@@ -123,9 +123,9 @@ class _CashbackFormState extends State<CashbackForm> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),
-        backgroundColor: const Color.fromARGB(255, 27, 27, 27),
+        backgroundColor: AppColors.backgraundColor,
         child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.48,
+          height: MediaQuery.of(context).size.height * 0.53,
           child: _isLoading
               ? const Center(
                   child:
@@ -141,7 +141,7 @@ class _CashbackFormState extends State<CashbackForm> {
                         children: [
                           Tooltip(
                             decoration: BoxDecoration(
-                                color: Colors.black,
+                                color: AppColors.blackColor,
                                 borderRadius: BorderRadius.circular(10)),
                             margin: const EdgeInsets.symmetric(horizontal: 20),
                             textStyle: const TextStyle(fontSize: 16),
@@ -150,14 +150,14 @@ class _CashbackFormState extends State<CashbackForm> {
                             message:
                                 'Заповніть таблицю у порядку зростання. Тобто зверху повинні бути менші пари значень (наприклад, 5% - 500 грн), і зростати донизу (наприклад, 15% - 3000 грн)',
                             child: const Icon(Icons.info_outline,
-                                color: Colors.white, size: 28),
+                                color: AppColors.whiteColor, size: 28),
                           ),
                           IconButton(
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
                             icon: const Icon(Icons.close,
-                                color: Colors.white, size: 28),
+                                color: AppColors.whiteColor, size: 28),
                           ),
                         ],
                       ),

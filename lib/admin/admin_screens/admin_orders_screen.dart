@@ -27,7 +27,7 @@ class AdminOrdersScreen extends StatelessWidget {
           if (orders.isEmpty) {
             return const Center(child: Text('Немає замовлень'));
           }
-
+          //сортування чи завершений ордер
           orders.sort((order1, order2) {
             final data1 = order1.data();
             final data2 = order2.data();
@@ -40,7 +40,7 @@ class AdminOrdersScreen extends StatelessWidget {
               return isFinished1 ? 1 : -1;
             }
           });
-
+          //сортування чи завершений ордер
           final adminOrders = orders
               .where((order) => (order.data()['isVisibleForAdmin'] ?? false))
               .toList();
