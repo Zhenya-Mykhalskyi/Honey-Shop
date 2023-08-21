@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'app_colors.dart';
+import 'package:honey/providers/theme_provider.dart';
 
 class ConfirmationDialog extends StatelessWidget {
   final String title;
@@ -22,7 +22,7 @@ class ConfirmationDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: AppColors.backgraundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
@@ -35,9 +35,10 @@ class ConfirmationDialog extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 fontFamily: 'MA',
+                color: Theme.of(context).primaryColor,
               ),
             ),
             const SizedBox(height: 15),
@@ -59,8 +60,9 @@ class ConfirmationDialog extends StatelessWidget {
                   },
                   child: Text(
                     cancelButtonText,
-                    style: const TextStyle(
-                        color: AppColors.whiteColor, fontFamily: 'MA'),
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontFamily: 'MA'),
                   ),
                 ),
               ],

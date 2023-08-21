@@ -6,12 +6,12 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 import 'package:honey/services/check_internet_connection.dart';
-import 'package:honey/widgets/app_colors.dart';
+import 'package:honey/providers/theme_provider.dart';
 import 'package:honey/widgets/custom_button.dart';
 import 'package:honey/widgets/custom_text_field.dart';
 import 'package:honey/widgets/edit_form_image.dart';
-import 'package:honey/widgets/my_divider.dart';
-import 'package:honey/widgets/title_appbar.dart';
+import 'package:honey/widgets/custom_divider.dart';
+import 'package:honey/widgets/theme_switcher.dart';
 
 class AdminProfileEditScreen extends StatefulWidget {
   const AdminProfileEditScreen({
@@ -232,7 +232,17 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const TitleAppBar(title: 'Редагування профіля'),
+      appBar: AppBar(
+        elevation: 0,
+        title: Text(
+          'Редагування профіля',
+          style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 24,
+              color: Theme.of(context).primaryColor),
+        ),
+        actions: const [ThemeSwitcher()],
+      ),
       body: _isLoading
           ? const Center(
               child: CircularProgressIndicator(color: AppColors.primaryColor),

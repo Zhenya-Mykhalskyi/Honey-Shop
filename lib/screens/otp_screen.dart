@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 
 import 'package:pinput/pinput.dart';
 
-import 'package:honey/widgets/app_colors.dart';
-import 'package:honey/widgets/my_divider.dart';
+import 'package:honey/providers/theme_provider.dart';
+import 'package:honey/widgets/custom_divider.dart';
 import 'package:honey/widgets/title_appbar.dart';
 import 'code_not_received_screen.dart';
 import 'package:honey/main.dart';
@@ -33,7 +33,9 @@ class _OTPScreenState extends State<OTPScreen> {
     width: 56,
     height: 56,
     textStyle: const TextStyle(
-        fontSize: 20, color: AppColors.whiteColor, fontWeight: FontWeight.w600),
+        fontSize: 20,
+        color: AppColors.primaryColor,
+        fontWeight: FontWeight.w600),
     decoration: BoxDecoration(
       border: Border.all(color: AppColors.primaryColor),
       borderRadius: BorderRadius.circular(20),

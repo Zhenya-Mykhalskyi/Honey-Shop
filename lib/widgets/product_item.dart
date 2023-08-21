@@ -3,7 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:honey/providers/product_model.dart';
 import 'package:honey/screens/product_detail_screen.dart';
-import 'package:honey/widgets/app_colors.dart';
+import 'package:honey/providers/theme_provider.dart';
 import 'liters_counter.dart';
 
 class ProductItem extends StatelessWidget {
@@ -15,13 +15,14 @@ class ProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData currentTheme = Theme.of(context);
     return GestureDetector(
       onTap: () => Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => ProductDetailScreen(product: product))),
       child: GridTile(
         child: Container(
           decoration: BoxDecoration(
-            color: AppColors.whiteColor.withOpacity(0.08),
+            color: currentTheme.cardColor,
             borderRadius: BorderRadius.circular(15),
           ),
           child: Padding(
@@ -91,7 +92,7 @@ class ProductItem extends StatelessWidget {
                               fontWeight: FontWeight.w500,
                               color: product.isDiscount == true
                                   ? AppColors.primaryColor
-                                  : AppColors.whiteColor),
+                                  : currentTheme.primaryColor),
                         ),
                         const SizedBox(width: 5),
                         if (product.isDiscount == true)

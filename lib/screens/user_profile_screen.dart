@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'package:honey/widgets/app_colors.dart';
-import 'package:honey/widgets/my_divider.dart';
+import 'package:honey/providers/theme_provider.dart';
+import 'package:honey/widgets/custom_divider.dart';
 import 'package:honey/widgets/order_card.dart';
 import 'order_and_edit_profile_screen.dart';
 
@@ -145,7 +145,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             child: Column(
               children: [
                 Card(
-                  color: AppColors.whiteColor.withOpacity(0.1),
+                  color: Theme.of(context).cardColor,
                   elevation: 2,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(9),
@@ -169,9 +169,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
                                   child: _imageUrl == null
-                                      ? const Icon(
+                                      ? Icon(
                                           Icons.person_rounded,
-                                          color: AppColors.whiteColor,
+                                          color: Theme.of(context).primaryColor,
                                           size: 85,
                                         )
                                       : AspectRatio(
@@ -232,9 +232,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                     ),
                                   ));
                                 },
-                                icon: const Icon(
+                                icon: Icon(
                                   Icons.edit,
-                                  color: AppColors.whiteColor,
+                                  color: Theme.of(context).primaryColor,
                                   size: 22,
                                 ),
                               ),
@@ -362,32 +362,33 @@ class ProfileInfoCardSingleRow extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, color: color ?? AppColors.whiteColor, size: 20),
+        Icon(icon, color: color ?? Theme.of(context).primaryColor, size: 20),
         const SizedBox(width: 10),
         Flexible(
           child: Text(
             text,
             style: TextStyle(
                 fontSize: 15,
-                color: color ?? AppColors.whiteColor,
+                color: color ?? Theme.of(context).primaryColor,
                 fontWeight: fontWeight ?? FontWeight.w500),
           ),
         ),
         if (showInfoIcon == true)
           Tooltip(
             decoration: BoxDecoration(
-                color: AppColors.blackColor,
+                color: Theme.of(context).canvasColor,
                 borderRadius: BorderRadius.circular(10)),
             margin: const EdgeInsets.symmetric(horizontal: 20),
-            textStyle: const TextStyle(fontSize: 16),
+            textStyle:
+                TextStyle(fontSize: 16, color: Theme.of(context).primaryColor),
             triggerMode: TooltipTriggerMode.tap,
             showDuration: const Duration(seconds: 5),
             message:
-                'Чим більша загальна сума Ваших покупок, тим більший відсоток нарахування бонусів*',
-            child: const Padding(
-              padding: EdgeInsets.only(left: 5),
+                'Чим більша загальна сума Ваших успішних замовлень, тим більший відсоток нарахування бонусів*',
+            child: Padding(
+              padding: const EdgeInsets.only(left: 5),
               child: Icon(Icons.info_outline,
-                  color: AppColors.whiteColor, size: 13),
+                  color: Theme.of(context).primaryColor, size: 13),
             ),
           ),
       ],

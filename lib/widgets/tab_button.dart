@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'app_colors.dart';
+import 'package:honey/providers/theme_provider.dart';
 
 class TabButton extends StatelessWidget {
   final String text;
@@ -16,6 +16,7 @@ class TabButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData currentTheme = Theme.of(context);
     return TextButton(
       onPressed: onPressed,
       child: Container(
@@ -23,7 +24,7 @@ class TabButton extends StatelessWidget {
           color: isActive ? AppColors.primaryColor : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-              color: isActive ? Colors.transparent : AppColors.whiteColor,
+              color: isActive ? Colors.transparent : currentTheme.primaryColor,
               width: 1),
         ),
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
@@ -33,11 +34,12 @@ class TabButton extends StatelessWidget {
           child: Text(
             text,
             style: TextStyle(
-              fontFamily: 'MA',
-              fontSize: 17,
-              fontWeight: FontWeight.w600,
-              color: isActive ? AppColors.blackColor : AppColors.whiteColor,
-            ),
+                fontFamily: 'MA',
+                fontSize: 17,
+                fontWeight: FontWeight.w600,
+                color: isActive
+                    ? AppColors.blackColor
+                    : currentTheme.textTheme.bodyMedium!.color),
           ),
         ),
       ),

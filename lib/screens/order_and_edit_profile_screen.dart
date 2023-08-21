@@ -8,9 +8,9 @@ import 'package:provider/provider.dart';
 
 import 'package:honey/widgets/custom_confirm_dialog.dart';
 import 'package:honey/services/check_internet_connection.dart';
-import 'package:honey/providers/cart.dart';
-import 'package:honey/widgets/app_colors.dart';
-import 'package:honey/widgets/my_divider.dart';
+import 'package:honey/providers/cart_provider.dart';
+import 'package:honey/providers/theme_provider.dart';
+import 'package:honey/widgets/custom_divider.dart';
 import 'package:honey/widgets/title_appbar.dart';
 import 'package:honey/widgets/custom_button.dart';
 import 'package:honey/widgets/total_amount.dart';
@@ -437,7 +437,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             child: Text(
                               'Спосіб доставки',
                               style: TextStyle(
-                                color: AppColors.customTextFieldHint,
+                                color: AppColors.lightGreyColor,
                                 fontStyle: FontStyle.italic,
                               ),
                             ),
@@ -451,7 +451,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             ),
                             child: DropdownButtonFormField<String>(
                               focusColor: AppColors.primaryColor,
-                              dropdownColor: AppColors.backgraundColor,
+                              dropdownColor: Theme.of(context).canvasColor,
                               value: _selectedDelivery == ''
                                   ? null
                                   : _selectedDelivery,
@@ -472,12 +472,14 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                 }
                                 return null;
                               },
-                              decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.all(8),
+                              decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.all(8),
                                 counterText: '',
                                 border: InputBorder.none,
                                 prefixStyle: TextStyle(
-                                  color: AppColors.whiteColor,
+                                  color: Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(0.6),
                                   fontSize: 17,
                                 ),
                               ),
@@ -550,7 +552,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                   ? 'Зберегти зміни?'
                                   : 'Підтвердити замовлення?',
                               confirmButtonText: 'Так',
-                              confirmButtonColor: AppColors.whiteColor,
+                              confirmButtonColor:
+                                  Theme.of(context).primaryColor,
                               cancelButtonText: 'Повернутися',
                               onConfirm: () async {
                                 Navigator.of(context).pop();

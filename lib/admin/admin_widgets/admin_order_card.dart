@@ -2,9 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:honey/services/check_internet_connection.dart';
-import 'package:honey/widgets/app_colors.dart';
+import 'package:honey/providers/theme_provider.dart';
 import 'package:honey/widgets/custom_confirm_dialog.dart';
-import 'package:honey/widgets/my_divider.dart';
+import 'package:honey/widgets/custom_divider.dart';
 import 'admin_order_dialog.dart';
 
 class AdminOrderCard extends StatelessWidget {
@@ -128,9 +128,9 @@ class AdminOrderCard extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: Card(
         color: isOrderFinished
-            ? AppColors.whiteColor.withOpacity(0.01)
-            : AppColors.whiteColor.withOpacity(0.1),
-        elevation: 2,
+            ? Theme.of(context).primaryColor.withOpacity(0.4)
+            : Theme.of(context).cardColor,
+        elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(9),
         ),
@@ -177,9 +177,9 @@ class AdminOrderCard extends StatelessWidget {
                         ),
                       );
                     },
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.arrow_downward,
-                      color: AppColors.whiteColor,
+                      color: Theme.of(context).primaryColor,
                     ),
                   )
                 ],
@@ -207,16 +207,16 @@ class AdminOrderCard extends StatelessWidget {
                         },
                       );
                     },
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.delete,
-                      color: AppColors.whiteColor,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                   Row(
                     children: [
                       Switch(
-                        activeColor: AppColors.blackColor.withOpacity(0.85),
-                        activeTrackColor: AppColors.blackColor,
+                        activeColor: AppColors.darkGreyColor,
+                        activeTrackColor: AppColors.blackColor.withOpacity(0.4),
                         value: isOrderFinished,
                         onChanged: (value) {
                           if (!isOrderFinished) {

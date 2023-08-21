@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'app_colors.dart';
-
 class MyDivider extends StatelessWidget {
-  final Color color;
   final double? verticalPadding;
 
   const MyDivider({
     Key? key,
-    this.color = AppColors.whiteColor,
     this.verticalPadding,
   }) : super(key: key);
 
@@ -29,7 +25,8 @@ class MyDivider extends StatelessWidget {
                 width: dashWidth,
                 height: 1,
                 child: DecoratedBox(
-                  decoration: BoxDecoration(color: color.withOpacity(0.2)),
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor.withOpacity(0.3)),
                 ),
               ),
             );

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:honey/services/check_internet_connection.dart';
-import 'package:honey/widgets/app_colors.dart';
+import 'package:honey/providers/theme_provider.dart';
 import 'package:honey/widgets/custom_button.dart';
 import 'package:honey/widgets/custom_text_field.dart';
 
@@ -123,7 +123,7 @@ class _CashbackFormState extends State<CashbackForm> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),
-        backgroundColor: AppColors.backgraundColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         child: SizedBox(
           height: MediaQuery.of(context).size.height * 0.53,
           child: _isLoading
@@ -143,21 +143,25 @@ class _CashbackFormState extends State<CashbackForm> {
                             decoration: BoxDecoration(
                                 color: AppColors.blackColor,
                                 borderRadius: BorderRadius.circular(10)),
+                            padding: const EdgeInsets.all(10),
                             margin: const EdgeInsets.symmetric(horizontal: 20),
-                            textStyle: const TextStyle(fontSize: 16),
+                            textStyle: const TextStyle(
+                                fontSize: 16, color: AppColors.whiteColor),
                             triggerMode: TooltipTriggerMode.tap,
                             showDuration: const Duration(seconds: 10),
                             message:
-                                'Заповніть таблицю у порядку зростання. Тобто зверху повинні бути менші пари значень (наприклад, 5% - 500 грн), і зростати донизу (наприклад, 15% - 3000 грн)',
-                            child: const Icon(Icons.info_outline,
-                                color: AppColors.whiteColor, size: 28),
+                                'Заповніть таблицю у порядку зростання. Тобто зверху повинні бути менші пари значень (наприклад, 5% - 0 грн), і зростати донизу (наприклад, 15% - 3000 грн)',
+                            child: Icon(Icons.info_outline,
+                                color: Theme.of(context).primaryColor,
+                                size: 28),
                           ),
                           IconButton(
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            icon: const Icon(Icons.close,
-                                color: AppColors.whiteColor, size: 28),
+                            icon: Icon(Icons.close,
+                                color: Theme.of(context).primaryColor,
+                                size: 28),
                           ),
                         ],
                       ),

@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:honey/main.dart';
-import 'package:honey/widgets/app_colors.dart';
+import 'package:honey/providers/theme_provider.dart';
 import 'package:honey/widgets/custom_button.dart';
-import 'package:honey/widgets/my_divider.dart';
+import 'package:honey/widgets/custom_divider.dart';
 import 'package:honey/widgets/title_appbar.dart';
 
 class CodeNotReceivedScreen extends StatefulWidget {

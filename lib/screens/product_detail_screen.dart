@@ -2,9 +2,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:honey/providers/cart.dart';
+import 'package:honey/providers/cart_provider.dart';
 import 'package:honey/providers/product_model.dart';
-import 'package:honey/widgets/app_colors.dart';
+import 'package:honey/providers/theme_provider.dart';
 import 'package:honey/widgets/custom_button.dart';
 import 'package:honey/widgets/liters_counter.dart';
 
@@ -138,14 +138,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                         125
                                     ? widget.product.productDescription
                                     : '${widget.product.productDescription.substring(0, 125)}...  ',
-                                style: const TextStyle(
+                                style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
                                     height: 1.45,
                                     fontSize: 16,
                                     fontFamily: 'MA'),
                               ),
                               TextSpan(
                                 text: 'Детальніше',
-                                style: const TextStyle(
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
                                   height: 1.45,
                                   fontSize: 16,
                                   decoration: TextDecoration.underline,
@@ -176,7 +178,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               width: MediaQuery.of(context).size.width * 0.25,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                color: AppColors.whiteColor.withOpacity(0.1),
+                                color: Theme.of(context).cardColor,
                               ),
                               child: Center(
                                 child: Text(
@@ -204,7 +206,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Container(
-                      color: AppColors.blackColor.withOpacity(0.9),
+                      color: Theme.of(context).canvasColor,
                       child: SingleChildScrollView(
                         child: Center(
                           child: Padding(
@@ -234,16 +236,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       },
                                       icon: const Icon(Icons.close),
                                       iconSize: 30,
-                                      color: AppColors.whiteColor,
+                                      color: Theme.of(context).primaryColor,
                                     )
                                   ],
                                 ),
                                 const SizedBox(height: 15),
                                 Text(
                                   widget.product.productDescription,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     height: 1.45,
-                                    color: AppColors.whiteColor,
+                                    color: Theme.of(context).primaryColor,
                                     fontSize: 15,
                                   ),
                                 ),

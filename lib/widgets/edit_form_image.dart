@@ -3,7 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'package:honey/widgets/app_colors.dart';
+import 'package:honey/providers/theme_provider.dart';
 
 class EditFormImage extends StatefulWidget {
   final String? currentProfileImage;
@@ -49,11 +49,11 @@ class _EditFormImageState extends State<EditFormImage> {
           ? widget.currentProfileImage == null
               ? InkWell(
                   onTap: pickProfileImage,
-                  child: const Padding(
-                    padding: EdgeInsets.all(25.0),
+                  child: Padding(
+                    padding: const EdgeInsets.all(25.0),
                     child: Icon(
                       Icons.add_a_photo,
-                      color: AppColors.whiteColor,
+                      color: Theme.of(context).primaryColor.withOpacity(0.6),
                       size: 60,
                     ),
                   ),

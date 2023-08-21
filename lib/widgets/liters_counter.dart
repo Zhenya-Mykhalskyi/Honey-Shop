@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:honey/providers/product_model.dart';
-import 'package:honey/providers/cart.dart';
-import 'app_colors.dart';
+import 'package:honey/providers/cart_provider.dart';
+import 'package:honey/providers/theme_provider.dart';
 import 'custom_confirm_dialog.dart';
 
 class LitersCounter extends StatefulWidget {
@@ -19,6 +19,7 @@ class LitersCounter extends StatefulWidget {
 class _LitersCounterState extends State<LitersCounter> {
   @override
   Widget build(BuildContext context) {
+    ThemeData currentTheme = Theme.of(context);
     final cartProvider = Provider.of<CartProvider>(context);
     double currentLiters =
         cartProvider.getProductLitersById(widget.product!.id);
@@ -26,7 +27,7 @@ class _LitersCounterState extends State<LitersCounter> {
       height: MediaQuery.of(context).size.height * 0.04,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: AppColors.whiteColor.withOpacity(0.1),
+        color: currentTheme.primaryColor.withOpacity(0.07),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

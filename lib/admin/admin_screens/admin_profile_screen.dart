@@ -5,8 +5,8 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:honey/screens/user_profile_screen.dart';
-import 'package:honey/widgets/app_colors.dart';
-import 'package:honey/widgets/my_divider.dart';
+import 'package:honey/providers/theme_provider.dart';
+import 'package:honey/widgets/custom_divider.dart';
 import 'package:honey/widgets/title_appbar.dart';
 
 class AdminProfileScreen extends StatefulWidget {
@@ -105,7 +105,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                 child: Column(
                   children: [
                     Card(
-                      color: AppColors.whiteColor.withOpacity(0.1),
+                      color: Theme.of(context).cardColor,
                       elevation: 2,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(9),
@@ -221,7 +221,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                               return Card(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(9)),
-                                color: AppColors.whiteColor.withOpacity(0.1),
+                                color: Theme.of(context).cardColor,
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Row(

@@ -4,10 +4,10 @@ import 'package:provider/provider.dart';
 
 import 'package:honey/widgets/custom_confirm_dialog.dart';
 import 'package:honey/widgets/title_appbar.dart';
-import 'package:honey/widgets/app_colors.dart';
+import 'package:honey/providers/theme_provider.dart';
 import 'package:honey/widgets/custom_button.dart';
 import 'package:honey/providers/product_model.dart';
-import 'package:honey/providers/products.dart';
+import 'package:honey/providers/products_provider.dart';
 import 'package:honey/admin/admin_widgets/admin_product_edit_card.dart';
 
 class DiscountScreen extends StatefulWidget {

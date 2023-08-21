@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:honey/screens/user_profile_screen.dart';
-import 'package:honey/widgets/app_colors.dart';
+import 'package:honey/providers/theme_provider.dart';
 
 class OrderDetailsDialog extends StatelessWidget {
   final Order order;
@@ -13,7 +13,7 @@ class OrderDetailsDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
-      backgroundColor: AppColors.backgraundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       child: Container(
         padding: const EdgeInsets.only(right: 20, left: 20, bottom: 20),
         child: Column(
@@ -26,9 +26,9 @@ class OrderDetailsDialog extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.close,
-                      color: AppColors.whiteColor,
+                      color: Theme.of(context).primaryColor,
                       size: 28,
                     ))
               ],
@@ -39,10 +39,13 @@ class OrderDetailsDialog extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Замовлення за:',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Theme.of(context).primaryColor,
+                      ),
                     ),
                     const SizedBox(height: 7),
                     Row(
@@ -76,7 +79,7 @@ class OrderDetailsDialog extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: AppColors.whiteColor.withOpacity(0.1),
+                          color: Theme.of(context).cardColor,
                           borderRadius: BorderRadius.circular(7),
                         ),
                         child: Padding(
@@ -111,7 +114,8 @@ class OrderDetailsDialog extends StatelessWidget {
                                       '${product['liters'].toString()} л.',
                                       style: TextStyle(
                                         fontSize: 14,
-                                        color: AppColors.whiteColor
+                                        color: Theme.of(context)
+                                            .primaryColor
                                             .withOpacity(0.7),
                                       ),
                                     ),
@@ -125,8 +129,9 @@ class OrderDetailsDialog extends StatelessWidget {
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
-                                    color:
-                                        AppColors.whiteColor.withOpacity(0.7),
+                                    color: Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(0.7),
                                   ),
                                 ),
                               ),

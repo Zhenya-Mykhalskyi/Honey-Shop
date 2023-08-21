@@ -3,13 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:honey/providers/cart.dart';
-import 'package:honey/providers/products.dart';
+import 'package:honey/providers/cart_provider.dart';
+import 'package:honey/providers/products_provider.dart';
 import 'package:honey/widgets/total_amount.dart';
-import 'package:honey/widgets/app_colors.dart';
+import 'package:honey/providers/theme_provider.dart';
 import 'package:honey/widgets/cart_item.dart';
 import 'package:honey/widgets/custom_button.dart';
-import 'package:honey/widgets/my_divider.dart';
+import 'package:honey/widgets/custom_divider.dart';
 import 'package:honey/widgets/title_appbar.dart';
 import 'order_and_edit_profile_screen.dart';
 

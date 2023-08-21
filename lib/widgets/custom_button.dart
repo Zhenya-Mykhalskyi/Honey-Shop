@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'app_colors.dart';
+import 'package:honey/providers/theme_provider.dart';
 
 class CustomButton extends StatelessWidget {
   final void Function() action;

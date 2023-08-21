@@ -2,9 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:honey/providers/cart.dart';
+import 'package:honey/providers/cart_provider.dart';
 import 'package:honey/providers/product_model.dart';
-import 'app_colors.dart';
 import 'liters_counter.dart';
 import 'custom_confirm_dialog.dart';
 
@@ -29,7 +28,7 @@ class _CartItemState extends State<CartItem> {
         vertical: 5,
       ),
       child: Card(
-        color: AppColors.whiteColor.withOpacity(0.1),
+        color: Theme.of(context).cardColor,
         elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(9),
@@ -99,7 +98,7 @@ class _CartItemState extends State<CartItem> {
                           margin: const EdgeInsets.only(bottom: 18),
                           child: IconButton(
                               icon: const Icon(Icons.delete),
-                              color: AppColors.whiteColor.withOpacity(0.6),
+                              color: Theme.of(context).primaryColor,
                               onPressed: () {
                                 showDialog(
                                   context: context,

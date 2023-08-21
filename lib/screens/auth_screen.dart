@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:honey/services/check_internet_connection.dart';
-import 'package:honey/widgets/app_colors.dart';
+import 'package:honey/providers/theme_provider.dart';
 import 'package:honey/widgets/custom_button.dart';
 import 'package:honey/widgets/custom_text_field.dart';
-import 'package:honey/widgets/my_divider.dart';
+import 'package:honey/widgets/custom_divider.dart';
 import 'otp_screen.dart';
 
 enum AuthMode { signup, login }
@@ -216,8 +216,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                 _authMode == AuthMode.signup
                                     ? 'Уже існує аккаунт? Увійдіть'
                                     : 'Не має акаунту? Зареєструйтеся',
-                                style: const TextStyle(
-                                    color: AppColors.whiteColor),
+                                style: TextStyle(
+                                    color: Theme.of(context).primaryColor),
                               ),
                             ),
                           ],

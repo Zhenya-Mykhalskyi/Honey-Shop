@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:honey/admin/admin_widgets/cashback_form_dialog.dart';
-import 'package:honey/widgets/app_colors.dart';
 import 'package:honey/widgets/products_grid.dart';
 import 'package:honey/widgets/tab_button.dart';
 import 'package:honey/widgets/title_appbar.dart';
@@ -31,6 +30,7 @@ class _AdminMainScreenState extends State<AdminMainScreen>
 
   @override
   Widget build(BuildContext context) {
+    ThemeData currentTheme = Theme.of(context);
     return Scaffold(
       body: Column(
         children: [
@@ -107,7 +107,7 @@ class _AdminMainScreenState extends State<AdminMainScreen>
                             ? Icons.person
                             : Icons.edit_note_outlined,
                         size: 35,
-                        color: AppColors.whiteColor,
+                        color: currentTheme.primaryColor,
                       ),
                       onPressed: _selectedBottomNavBarIndex == 1
                           ? () {
@@ -128,10 +128,10 @@ class _AdminMainScreenState extends State<AdminMainScreen>
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false,
-        backgroundColor: AppColors.backgraundColor,
+        // backgroundColor: AppColors.backgraundColor,
         iconSize: 30,
-        unselectedItemColor: AppColors.bottomNavBarUnselected,
-        selectedItemColor: AppColors.bottomNavBarSelected,
+        // unselectedItemColor: AppColors.bottomNavBarUnselected,
+        // selectedItemColor: AppColors.bottomNavBarSelected,
         currentIndex: _selectedBottomNavBarIndex,
         onTap: _onBottomNavBarTapped,
         items: const [

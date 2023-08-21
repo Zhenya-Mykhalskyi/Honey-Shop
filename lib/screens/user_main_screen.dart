@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:honey/widgets/app_colors.dart';
-import 'package:honey/widgets/title_appbar.dart';
+import 'package:honey/widgets/theme_switcher.dart';
 import 'package:honey/admin/admin_screens/admin_profile_screen.dart';
-import 'package:honey/providers/cart.dart';
+import 'package:honey/providers/cart_provider.dart';
 import 'package:honey/widgets/badge.dart';
 import 'package:honey/widgets/tab_button.dart';
 import 'package:honey/widgets/products_grid.dart';
@@ -108,9 +107,10 @@ class _UserMainScreenState extends State<UserMainScreen>
                     children: [
                       Text(
                         '${cartProvider.totalAmountOfCart.toStringAsFixed(2)} грн',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 22,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                       Consumer<CartProvider>(
@@ -119,9 +119,9 @@ class _UserMainScreenState extends State<UserMainScreen>
                           child: child!,
                         ),
                         child: IconButton(
-                          icon: const Icon(
+                          icon: Icon(
                             Icons.shopping_bag_outlined,
-                            color: AppColors.whiteColor,
+                            color: Theme.of(context).primaryColor,
                             size: 35,
                           ),
                           onPressed: () {
@@ -139,15 +139,22 @@ class _UserMainScreenState extends State<UserMainScreen>
               ],
             )
           : _selectedBottomNavBarIndex == 0
-              ? const TitleAppBar(title: 'Особистий кабінет')
+              ? AppBar(
+                  elevation: 0,
+                  title: Text(
+                    'Особистий кабінет',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 24,
+                        color: Theme.of(context).primaryColor),
+                  ),
+                  actions: const [ThemeSwitcher()],
+                )
               : null,
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false,
-        backgroundColor: AppColors.backgraundColor,
         iconSize: 30,
-        unselectedItemColor: AppColors.bottomNavBarUnselected,
-        selectedItemColor: AppColors.bottomNavBarSelected,
         currentIndex: _selectedBottomNavBarIndex,
         onTap: _onBottomNavBarTapped,
         items: const [

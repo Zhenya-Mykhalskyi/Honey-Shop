@@ -9,8 +9,8 @@ import 'package:provider/provider.dart';
 
 import 'package:honey/services/check_internet_connection.dart';
 import 'package:honey/providers/product_model.dart';
-import 'package:honey/providers/products.dart';
-import 'package:honey/widgets/app_colors.dart';
+import 'package:honey/providers/products_provider.dart';
+import 'package:honey/providers/theme_provider.dart';
 import 'package:honey/widgets/custom_button.dart';
 import 'package:honey/widgets/custom_confirm_dialog.dart';
 import 'discount_screen.dart';
@@ -334,10 +334,10 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                                     ));
                                   }
                                 },
-                                child: const Text(
+                                child: Text(
                                   'Застосувати акцію',
                                   style: TextStyle(
-                                      color: AppColors.whiteColor,
+                                      color: Theme.of(context).primaryColor,
                                       decoration: TextDecoration.underline,
                                       fontSize: 16),
                                 ))

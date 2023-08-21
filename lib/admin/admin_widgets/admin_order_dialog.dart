@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:honey/widgets/app_colors.dart';
-import 'package:honey/widgets/my_divider.dart';
+import 'package:honey/providers/theme_provider.dart';
+import 'package:honey/widgets/custom_divider.dart';
 
 class AdminOrderDetailsDialog extends StatelessWidget {
   final Map<String, dynamic> order;
@@ -14,7 +14,7 @@ class AdminOrderDetailsDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
-      backgroundColor: AppColors.backgraundColor,
+      backgroundColor: Theme.of(context).canvasColor,
       child: Padding(
         padding: const EdgeInsets.only(right: 20, left: 20, bottom: 20),
         child: Column(
@@ -27,9 +27,9 @@ class AdminOrderDetailsDialog extends StatelessWidget {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.close,
-                      color: AppColors.whiteColor,
+                      color: Theme.of(context).primaryColor,
                       size: 28,
                     ))
               ],

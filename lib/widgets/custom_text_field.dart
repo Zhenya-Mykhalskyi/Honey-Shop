@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'app_colors.dart';
+import 'package:honey/providers/theme_provider.dart';
 
 class CustomTextField extends StatelessWidget {
   final int maxLength;
@@ -45,8 +45,8 @@ class CustomTextField extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 5),
               child: Text(
                 hintText ?? '',
-                style: const TextStyle(
-                  color: AppColors.customTextFieldHint,
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor.withOpacity(0.6),
                   fontStyle: FontStyle.italic,
                 ),
               ),
@@ -67,7 +67,8 @@ class CustomTextField extends StatelessWidget {
               maxLength: maxLength,
               keyboardType: keyboardType,
               style: TextStyle(
-                  color: AppColors.whiteColor, fontSize: textSize ?? 21),
+                  color: Theme.of(context).primaryColor,
+                  fontSize: textSize ?? 21),
               decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(8),
                 counterText: showCounterText ? null : '',
@@ -75,10 +76,11 @@ class CustomTextField extends StatelessWidget {
                 border: InputBorder.none,
                 prefix: prefix,
                 prefixStyle: TextStyle(
-                    color: AppColors.whiteColor, fontSize: textSize ?? 21),
+                    color: Theme.of(context).primaryColor,
+                    fontSize: textSize ?? 21),
                 suffixText: sufixText,
                 suffixStyle: TextStyle(
-                    color: AppColors.whiteColor,
+                    color: Theme.of(context).primaryColor,
                     fontSize: textSize ?? 18,
                     fontWeight: FontWeight.w500),
               ),

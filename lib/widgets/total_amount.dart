@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'app_colors.dart';
+import 'package:honey/providers/theme_provider.dart';
 
 class TotalAmountOfCart extends StatelessWidget {
   final double totalAmount;
