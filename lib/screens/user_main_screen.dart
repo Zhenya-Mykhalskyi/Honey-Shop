@@ -147,6 +147,7 @@ class _UserMainScreenState extends State<UserMainScreen>
                         fontWeight: FontWeight.w600,
                         fontSize: 24,
                         color: Theme.of(context).primaryColor),
+                    textAlign: TextAlign.center,
                   ),
                   actions: const [ThemeSwitcher()],
                 )

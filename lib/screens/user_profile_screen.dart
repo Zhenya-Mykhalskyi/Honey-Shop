@@ -136,6 +136,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
+      color: AppColors.primaryColor,
       onRefresh: fetchUserData,
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),

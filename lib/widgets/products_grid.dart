@@ -16,6 +16,7 @@ class ProductsGrid extends StatelessWidget {
         Provider.of<ProductsProvider>(context, listen: false);
 
     return RefreshIndicator(
+      color: AppColors.primaryColor,
       onRefresh: () => productProvider.getProductList(),
       child: Consumer<ProductsProvider>(
         builder: (context, productProvider, _) {
