@@ -266,9 +266,6 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                               Transform.scale(
                                 scale: 1.5,
                                 child: Checkbox(
-                                  fillColor: MaterialStateProperty.all<Color>(
-                                    AppColors.primaryColor,
-                                  ),
                                   checkColor: AppColors.blackColor,
                                   activeColor: AppColors.primaryColor,
                                   value: _isHoney,

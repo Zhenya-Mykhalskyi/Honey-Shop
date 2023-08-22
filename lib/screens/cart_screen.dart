@@ -113,9 +113,6 @@ class _CartScreenState extends State<CartScreen> {
                               Transform.scale(
                                 scale: 1.4,
                                 child: Checkbox(
-                                  fillColor: MaterialStateProperty.all<Color>(
-                                    AppColors.primaryColor,
-                                  ),
                                   checkColor: AppColors.blackColor,
                                   activeColor: AppColors.primaryColor,
                                   value: _useBonuses,
