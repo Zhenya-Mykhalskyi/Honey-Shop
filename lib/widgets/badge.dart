@@ -21,8 +21,8 @@ class Badgee extends StatelessWidget {
       children: [
         child,
         Positioned(
-          right: 1,
-          top: 1,
+          right: 0,
+          top: 0,
           child: Container(
             padding: const EdgeInsets.all(2.0),
             decoration: BoxDecoration(

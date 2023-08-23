@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:honey/admin/admin_widgets/cashback_form_dialog.dart';
+import 'package:honey/widgets/badge.dart';
 import 'package:honey/widgets/products_grid.dart';
 import 'package:honey/widgets/tab_button.dart';
 import 'package:honey/widgets/title_appbar.dart';
@@ -20,6 +22,23 @@ class _AdminMainScreenState extends State<AdminMainScreen>
     with SingleTickerProviderStateMixin {
   int _selectedTabIndex = 0;
   int _selectedBottomNavBarIndex = 0;
+  int _unfinishedOrderCount = 0;
+
+  @override
+  void initState() {
+    FirebaseFirestore.instance
+        .collection('orders')
+        .where('isFinished', isEqualTo: false)
+        .snapshots()
+        .listen((snapshot) {
+      if (mounted) {
+        setState(() {
+          _unfinishedOrderCount = snapshot.docs.length;
+        });
+      }
+    });
+    super.initState();
+  }
 
   void _onBottomNavBarTapped(int index) {
     setState(() {
@@ -131,19 +150,26 @@ class _AdminMainScreenState extends State<AdminMainScreen>
         iconSize: 30,
         currentIndex: _selectedBottomNavBarIndex,
         onTap: _onBottomNavBarTapped,
-        items: const [
-          BottomNavigationBarItem(
+        items: [
+          const BottomNavigationBarItem(
             icon: Icon(
               Icons.home,
             ),
             label: 'Домашня',
           ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.edit),
             label: 'Редагувати',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_bag),
+            icon: Badgee(
+              value: _unfinishedOrderCount.toString(),
+              child: const Padding(
+                  padding: EdgeInsets.only(right: 5, top: 5),
+                  child: Icon(
+                    Icons.shopping_bag,
+                  )),
+            ),
             label: 'Замовлення',
           ),
         ],
