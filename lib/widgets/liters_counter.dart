@@ -81,12 +81,9 @@ class _LitersCounterState extends State<LitersCounter> {
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    backgroundColor: Theme.of(context).canvasColor,
                     duration: const Duration(seconds: 2),
                     content: Text(
-                      'В наявності залишилось ${widget.product?.litersLeft} літри(ів)',
-                      style: TextStyle(color: Theme.of(context).primaryColor),
-                    )));
+                        'В наявності залишилось ${widget.product?.litersLeft} літри(ів)')));
                 return;
               }
             },

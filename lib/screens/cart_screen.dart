@@ -120,15 +120,10 @@ class _CartScreenState extends State<CartScreen> {
                                     if (_bonuses == 0) {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
-                                        SnackBar(
-                                          backgroundColor:
-                                              Theme.of(context).canvasColor,
-                                          duration: const Duration(seconds: 2),
+                                        const SnackBar(
+                                          duration: Duration(seconds: 2),
                                           content: Text(
                                             'У вас немає бонусів',
-                                            style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .primaryColor),
                                           ),
                                         ),
                                       );

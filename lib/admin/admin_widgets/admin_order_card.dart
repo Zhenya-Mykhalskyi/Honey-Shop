@@ -128,7 +128,7 @@ class AdminOrderCard extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       child: Card(
         color: isOrderFinished
-            ? Theme.of(context).primaryColor.withOpacity(0.4)
+            ? Theme.of(context).primaryColor.withOpacity(0.25)
             : Theme.of(context).cardColor,
         elevation: 0,
         shape: RoundedRectangleBorder(

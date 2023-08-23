@@ -59,6 +59,9 @@ class MyThemes {
     primaryColor: Colors.white,
     cardColor: const Color.fromARGB(255, 46, 46, 46),
     iconTheme: const IconThemeData(color: AppColors.primaryColor),
+    snackBarTheme: const SnackBarThemeData(
+        backgroundColor: Color.fromARGB(255, 51, 51, 51),
+        contentTextStyle: TextStyle(color: Colors.white)),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: AppColors.backgraundColor,
       selectedIconTheme: IconThemeData(
@@ -87,6 +90,9 @@ class MyThemes {
     ),
     iconButtonTheme: const IconButtonThemeData(
         style: ButtonStyle(iconColor: MaterialStatePropertyAll(Colors.black))),
+    snackBarTheme: const SnackBarThemeData(
+        backgroundColor: Color.fromARGB(255, 225, 225, 225),
+        contentTextStyle: TextStyle(color: Colors.black)),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       selectedIconTheme: IconThemeData(
