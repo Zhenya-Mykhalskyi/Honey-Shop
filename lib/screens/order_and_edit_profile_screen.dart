@@ -433,12 +433,14 @@ class _OrderAndEditProfileScreenState extends State<OrderAndEditProfileScreen> {
                                 return null;
                               }),
                           const SizedBox(height: 14),
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: 5),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 5),
                             child: Text(
                               'Спосіб доставки',
                               style: TextStyle(
-                                color: AppColors.lightGreyColor,
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(0.6),
                                 fontStyle: FontStyle.italic,
                               ),
                             ),

@@ -46,7 +46,6 @@ class AppColors {
   static const Color blackColor = Colors.black;
   static const Color errorColor = Colors.red;
   static const Color darkGreyColor = Color.fromARGB(255, 120, 120, 120);
-  static const Color lightGreyColor = Color.fromARGB(255, 169, 169, 169);
   static const Color saleColor = Color.fromARGB(255, 201, 76, 76);
 }
 
@@ -59,7 +58,7 @@ class MyThemes {
     scaffoldBackgroundColor: AppColors.backgraundColor,
     primaryColor: Colors.white,
     cardColor: const Color.fromARGB(255, 46, 46, 46),
-    iconTheme: const IconThemeData(color: Color.fromARGB(255, 255, 179, 0)),
+    iconTheme: const IconThemeData(color: AppColors.primaryColor),
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: AppColors.backgraundColor,
       selectedIconTheme: IconThemeData(
@@ -80,7 +79,7 @@ class MyThemes {
       color: Colors.white,
       iconTheme: IconThemeData(color: Colors.black),
     ),
-    scaffoldBackgroundColor: const Color.fromARGB(255, 255, 255, 255),
+    scaffoldBackgroundColor: Colors.white,
     primaryColor: Colors.black,
     cardColor: const Color.fromARGB(255, 243, 243, 243),
     textTheme: const TextTheme(
