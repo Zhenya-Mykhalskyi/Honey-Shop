@@ -82,7 +82,7 @@ class MyThemes {
     ),
     scaffoldBackgroundColor: const Color.fromARGB(255, 255, 255, 255),
     primaryColor: Colors.black,
-    cardColor: const Color.fromARGB(255, 239, 239, 239),
+    cardColor: const Color.fromARGB(255, 243, 243, 243),
     textTheme: const TextTheme(
       bodyMedium: TextStyle(fontFamily: 'MA'),
     ),
