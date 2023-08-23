@@ -146,7 +146,7 @@ class _CartScreenState extends State<CartScreen> {
                         final cartData = cartProvider.items;
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => OrdersScreen(
+                            builder: (context) => OrderAndEditProfileScreen(
                               cartData: cartData,
                               isEditProfile: false,
                               finalAmount: finalAmount,

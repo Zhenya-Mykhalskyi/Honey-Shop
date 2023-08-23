@@ -19,14 +19,14 @@ import 'package:honey/widgets/edit_form_image.dart';
 import 'user_main_screen.dart';
 import 'package:honey/main.dart';
 
-class OrdersScreen extends StatefulWidget {
+class OrderAndEditProfileScreen extends StatefulWidget {
   final Map<String, CartItemModel>? cartData;
   final bool isEditProfile;
   final double? finalAmount;
   final bool? useBonuses;
   final num? bonuses;
 
-  const OrdersScreen({
+  const OrderAndEditProfileScreen({
     super.key,
     this.cartData,
     required this.isEditProfile,
@@ -36,10 +36,11 @@ class OrdersScreen extends StatefulWidget {
   });
 
   @override
-  State<OrdersScreen> createState() => _OrdersScreenState();
+  State<OrderAndEditProfileScreen> createState() =>
+      _OrderAndEditProfileScreenState();
 }
 
-class _OrdersScreenState extends State<OrdersScreen> {
+class _OrderAndEditProfileScreenState extends State<OrderAndEditProfileScreen> {
   final _formkey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _fullNameController = TextEditingController();

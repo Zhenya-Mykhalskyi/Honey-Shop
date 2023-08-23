@@ -228,7 +228,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                               IconButton(
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => const OrdersScreen(
+                                    builder: (context) =>
+                                        const OrderAndEditProfileScreen(
                                       isEditProfile: true,
                                     ),
                                   ));
