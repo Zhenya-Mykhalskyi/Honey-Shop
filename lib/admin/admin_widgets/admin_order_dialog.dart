@@ -14,7 +14,7 @@ class AdminOrderDetailsDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
-      backgroundColor: Theme.of(context).canvasColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       child: Padding(
         padding: const EdgeInsets.only(right: 20, left: 20, bottom: 20),
         child: Column(
