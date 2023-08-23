@@ -119,15 +119,14 @@ class _OrderAndEditProfileScreenState extends State<OrderAndEditProfileScreen> {
         return;
       }
 
+      await _saveUserData();
+
       if (!widget.isEditProfile) {
         final orderData = _buildOrderData(cartProvider, user);
         await _saveOrderToFirestore(orderData);
+        await _saveUserData();
         _resetProductsdata();
         _resetUserBonuses();
-      }
-
-      if (widget.isEditProfile) {
-        await _saveUserData();
       }
 
       navigatorContext.pushAndRemoveUntil(
