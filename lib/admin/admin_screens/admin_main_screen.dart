@@ -128,10 +128,7 @@ class _AdminMainScreenState extends State<AdminMainScreen>
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false,
-        // backgroundColor: AppColors.backgraundColor,
         iconSize: 30,
-        // unselectedItemColor: AppColors.bottomNavBarUnselected,
-        // selectedItemColor: AppColors.bottomNavBarSelected,
         currentIndex: _selectedBottomNavBarIndex,
         onTap: _onBottomNavBarTapped,
         items: const [

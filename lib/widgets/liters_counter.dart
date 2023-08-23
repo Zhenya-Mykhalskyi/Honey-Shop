@@ -19,7 +19,6 @@ class LitersCounter extends StatefulWidget {
 class _LitersCounterState extends State<LitersCounter> {
   @override
   Widget build(BuildContext context) {
-    ThemeData currentTheme = Theme.of(context);
     final cartProvider = Provider.of<CartProvider>(context);
     double currentLiters =
         cartProvider.getProductLitersById(widget.product!.id);
@@ -27,7 +26,7 @@ class _LitersCounterState extends State<LitersCounter> {
       height: MediaQuery.of(context).size.height * 0.04,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: currentTheme.primaryColor.withOpacity(0.07),
+        color: Theme.of(context).primaryColor.withOpacity(0.07),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -82,9 +81,12 @@ class _LitersCounterState extends State<LitersCounter> {
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    backgroundColor: Theme.of(context).canvasColor,
                     duration: const Duration(seconds: 2),
                     content: Text(
-                        'В наявності залишилось ${widget.product?.litersLeft} літри(ів)')));
+                      'В наявності залишилось ${widget.product?.litersLeft} літри(ів)',
+                      style: TextStyle(color: Theme.of(context).primaryColor),
+                    )));
                 return;
               }
             },

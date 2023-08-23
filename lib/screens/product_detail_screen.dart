@@ -206,7 +206,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Container(
-                      color: Theme.of(context).canvasColor,
+                      color: Theme.of(context).scaffoldBackgroundColor,
                       child: SingleChildScrollView(
                         child: Center(
                           child: Padding(
