@@ -26,8 +26,8 @@ class _DiscountScreenState extends State<DiscountScreen> {
   int _discountPercentage = 0;
   @override
   void initState() {
-    super.initState();
     _fetchDiscountPercentage();
+    super.initState();
   }
 
   void _fetchDiscountPercentage() async {

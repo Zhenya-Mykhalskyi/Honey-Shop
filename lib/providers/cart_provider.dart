@@ -71,7 +71,9 @@ class CartProvider with ChangeNotifier {
           () => CartItemModel(
               id: product.id,
               title: product.title,
-              price: product.price,
+              price: product.discountPrice == 0
+                  ? product.price
+                  : product.discountPrice!,
               liters: 0.5,
               imageUrl: product.imageUrl));
     }
