@@ -26,6 +26,11 @@ class _AdminMainScreenState extends State<AdminMainScreen>
 
   @override
   void initState() {
+    _countUnfinishedOrders();
+    super.initState();
+  }
+
+  Future<void> _countUnfinishedOrders() async {
     FirebaseFirestore.instance
         .collection('orders')
         .where('isFinished', isEqualTo: false)
@@ -37,7 +42,6 @@ class _AdminMainScreenState extends State<AdminMainScreen>
         });
       }
     });
-    super.initState();
   }
 
   void _onBottomNavBarTapped(int index) {
