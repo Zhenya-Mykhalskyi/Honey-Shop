@@ -141,13 +141,13 @@ class _UserMainScreenState extends State<UserMainScreen>
           : _selectedBottomNavBarIndex == 0
               ? AppBar(
                   elevation: 0,
+                  centerTitle: true,
                   title: Text(
                     'Особистий кабінет',
                     style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 24,
                         color: Theme.of(context).primaryColor),
-                    textAlign: TextAlign.center,
                   ),
                   actions: const [ThemeSwitcher()],
                 )

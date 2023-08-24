@@ -19,14 +19,13 @@ class TitleAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData currentTheme = Theme.of(context);
     return AppBar(
       title: Text(
         title,
         style: TextStyle(
             fontWeight: FontWeight.w600,
             fontSize: 24,
-            color: currentTheme.primaryColor),
+            color: Theme.of(context).primaryColor),
       ),
       elevation: 0,
       centerTitle: true,
@@ -41,7 +40,7 @@ class TitleAppBar extends StatelessWidget implements PreferredSizeWidget {
             icon: Icon(
               icon,
               size: 28,
-              color: currentTheme.primaryColor,
+              color: Theme.of(context).primaryColor,
             ),
           ),
       ],
