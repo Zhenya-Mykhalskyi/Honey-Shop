@@ -62,12 +62,6 @@ class _DiscountScreenState extends State<DiscountScreen> {
     });
   }
 
-  double calculateDiscountedPrice() {
-    double discountAmount = widget.product.price * (_discountPercentage / 100);
-    double discountedPrice = widget.product.price - discountAmount;
-    return discountedPrice;
-  }
-
   Future<void> saveDiscount() async {
     final navContext = Navigator.of(context);
     double discountedPrice = calculateDiscountedPrice();
@@ -81,6 +75,12 @@ class _DiscountScreenState extends State<DiscountScreen> {
     } catch (e) {
       print(e);
     }
+  }
+
+  double calculateDiscountedPrice() {
+    double discountAmount = widget.product.price * (_discountPercentage / 100);
+    double discountedPrice = widget.product.price - discountAmount;
+    return discountedPrice;
   }
 
   void _deleteDiscount() async {
