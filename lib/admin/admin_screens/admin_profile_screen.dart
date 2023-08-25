@@ -28,11 +28,11 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
 
   @override
   initState() {
-    _fetchAdminData();
+    _fetchAdminDataFromFirestore();
     super.initState();
   }
 
-  Future<void> _fetchAdminData() async {
+  Future<void> _fetchAdminDataFromFirestore() async {
     try {
       setState(() {
         _isLoading = true;

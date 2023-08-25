@@ -40,11 +40,11 @@ class _AdminProfileEditScreenState extends State<AdminProfileEditScreen> {
 
   @override
   void initState() {
-    _fetchAdminData();
+    _fetchAdminDataFromFirestore();
     super.initState();
   }
 
-  Future<void> _fetchAdminData() async {
+  Future<void> _fetchAdminDataFromFirestore() async {
     try {
       setState(() {
         _isLoading = true;

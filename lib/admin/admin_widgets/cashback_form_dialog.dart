@@ -6,25 +6,21 @@ import 'package:honey/providers/theme_provider.dart';
 import 'package:honey/widgets/custom_button.dart';
 import 'package:honey/widgets/custom_text_field.dart';
 
-class CashbackForm extends StatefulWidget {
-  const CashbackForm({super.key});
+class CashbackFormDialog extends StatefulWidget {
+  const CashbackFormDialog({super.key});
 
   @override
-  State<CashbackForm> createState() => _CashbackFormState();
+  State<CashbackFormDialog> createState() => _CashbackFormState();
 }
 
-class _CashbackFormState extends State<CashbackForm> {
+class _CashbackFormState extends State<CashbackFormDialog> {
   final _formKey = GlobalKey<FormState>();
-
-  final List<TextEditingController> _percentageControllers = List.generate(
-    4,
-    (_) => TextEditingController(),
-  );
-  final List<TextEditingController> _amountControllers = List.generate(
-    4,
-    (_) => TextEditingController(),
-  );
   bool _isLoading = false;
+
+  final List<TextEditingController> _percentageControllers =
+      List.generate(4, (_) => TextEditingController());
+  final List<TextEditingController> _amountControllers =
+      List.generate(4, (_) => TextEditingController());
 
   @override
   void initState() {

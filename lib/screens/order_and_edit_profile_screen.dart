@@ -119,12 +119,12 @@ class _OrderAndEditProfileScreenState extends State<OrderAndEditProfileScreen> {
         return;
       }
 
-      await _saveUserData();
+      await _saveUserDataToFirestore();
 
       if (!widget.isEditProfile) {
         final orderData = _buildOrderData(cartProvider, user);
         await _saveOrderToFirestore(orderData);
-        await _saveUserData();
+        await _saveUserDataToFirestore();
         _resetProductsdata();
         _resetUserBonuses();
       }
@@ -192,7 +192,7 @@ class _OrderAndEditProfileScreenState extends State<OrderAndEditProfileScreen> {
     }
   }
 
-  Future<void> _saveUserData() async {
+  Future<void> _saveUserDataToFirestore() async {
     try {
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) {

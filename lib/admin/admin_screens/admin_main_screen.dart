@@ -82,7 +82,7 @@ class _AdminMainScreenState extends State<AdminMainScreen>
               action: () {
                 showDialog(
                     context: context,
-                    builder: (context) => const CashbackForm());
+                    builder: (context) => const CashbackFormDialog());
               },
             )
           : AppBar(
