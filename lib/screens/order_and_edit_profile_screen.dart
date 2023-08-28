@@ -143,11 +143,11 @@ class _OrderAndEditProfileScreenState extends State<OrderAndEditProfileScreen> {
   }
 
   Map<String, dynamic> _buildOrderData(CartProvider cartProvider, User? user) {
-    final DateTime now = DateTime.now();
+    final DateTime dateTimeNow = DateTime.now();
     final String date =
-        '${now.day.toString().padLeft(2, '0')}.${now.month.toString().padLeft(2, '0')}.${now.year}';
+        '${dateTimeNow.day.toString().padLeft(2, '0')}.${dateTimeNow.month.toString().padLeft(2, '0')}.${dateTimeNow.year}';
     final String time =
-        '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+        '${dateTimeNow.hour.toString().padLeft(2, '0')}:${dateTimeNow.minute.toString().padLeft(2, '0')}';
 
     final orderData = {
       'fullName': _fullNameController.text,
@@ -160,7 +160,7 @@ class _OrderAndEditProfileScreenState extends State<OrderAndEditProfileScreen> {
       'totalAmount': widget.finalAmount,
       'date': date,
       'time': time,
-      'timestamp': now,
+      'timestamp': dateTimeNow,
       'isFinished': false,
       'isVisibleForAdmin': true,
       'usedBonuses': widget.useBonuses == true ? widget.bonuses : 0,

@@ -18,6 +18,7 @@ class Order {
   final double totalAmount;
   final String date;
   final String time;
+  final Timestamp dateTime;
   final bool isFinished;
 
   final List<Map<String, dynamic>> products;
@@ -28,6 +29,7 @@ class Order {
     required this.postOfficeNumber,
     required this.date,
     required this.time,
+    required this.dateTime,
     required this.orderId,
     required this.userId,
     required this.totalAmount,
@@ -102,6 +104,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     }
     return FirebaseFirestore.instance
         .collection('orders')
+        // .orderBy('timestamp', descending: true)
         .where('userId', isEqualTo: user.uid)
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) {
@@ -127,6 +130,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 totalAmount: data['totalAmount'],
                 date: data['date'],
                 time: data['time'],
+                dateTime: data['timestamp'],
                 products: products,
                 isFinished: data['isFinished'],
               );
@@ -319,7 +323,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           return const Text('Немає замовлень');
                         } else {
                           snapshot.data!
-                              .sort((a, b) => b.date.compareTo(a.date));
+                              .sort((a, b) => b.dateTime.compareTo(a.dateTime));
                           return SizedBox(
                             height: MediaQuery.of(context).size.height * 0.3,
                             child: ListView.builder(
