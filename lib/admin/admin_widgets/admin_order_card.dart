@@ -21,7 +21,7 @@ class AdminOrderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isOrderFinished = order['isFinished'] ?? false;
 
-    Future<Map<String, dynamic>> getCashbackData() async {
+    Future<Map<String, dynamic>> getCashbackDataFromFirestore() async {
       final docSnapshot = await FirebaseFirestore.instance
           .collection('admin')
           .doc('cashback')
@@ -83,14 +83,13 @@ class AdminOrderCard extends StatelessWidget {
     }
 
     void confirmOrder() async {
-      final navContext = Navigator.of(context);
       final hasInternetConnection =
           await CheckConnectivityUtil.checkInternetConnectivity(context);
       try {
         if (!hasInternetConnection) {
           return;
         }
-        final cashbackData = await getCashbackData();
+        final cashbackData = await getCashbackDataFromFirestore();
         isOrderFinished = true;
         final userId = order['userId'];
         final double orderAmount = order['totalAmount'];
@@ -104,8 +103,7 @@ class AdminOrderCard extends StatelessWidget {
 
         int maxAmountIndex = -1;
         for (int i = 0; i < cashbackData['amounts'].length; i++) {
-          if (cashbackData['amounts'][i] <=
-              orderAmount + userOrdersTotalAmount) {
+          if (cashbackData['amounts'][i] <= userOrdersTotalAmount) {
             maxAmountIndex = i;
           } else {
             break;
@@ -118,7 +116,6 @@ class AdminOrderCard extends StatelessWidget {
 
         updateUserTotalAmountAndBonuses(userId, orderAmount, bonusAmount);
         updateIsFinishedStatus(true);
-        navContext.pop();
       } catch (e) {
         print(e);
       }
@@ -230,6 +227,7 @@ class AdminOrderCard extends StatelessWidget {
                                   cancelButtonText: 'Повернутися',
                                   onConfirm: () {
                                     confirmOrder();
+                                    Navigator.of(context).pop();
                                   },
                                 );
                               },
