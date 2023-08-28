@@ -34,6 +34,7 @@ class _AdminMainScreenState extends State<AdminMainScreen>
     FirebaseFirestore.instance
         .collection('orders')
         .where('isFinished', isEqualTo: false)
+        .where('isVisibleForAdmin', isEqualTo: true)
         .snapshots()
         .listen((snapshot) {
       if (mounted) {
@@ -55,25 +56,6 @@ class _AdminMainScreenState extends State<AdminMainScreen>
   Widget build(BuildContext context) {
     ThemeData currentTheme = Theme.of(context);
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: IndexedStack(
-              index: _selectedBottomNavBarIndex,
-              children: [
-                if (_selectedTabIndex == 0) const ProductsGrid(isHoney: true),
-                if (_selectedTabIndex == 0)
-                  const EditProductsOverviewScreen(isHoney: true),
-                if (_selectedTabIndex == 0) const AdminOrdersScreen(),
-                if (_selectedTabIndex == 1) const ProductsGrid(isHoney: false),
-                if (_selectedTabIndex == 1)
-                  const EditProductsOverviewScreen(isHoney: false),
-                if (_selectedTabIndex == 1) const AdminOrdersScreen(),
-              ],
-            ),
-          ),
-        ],
-      ),
       appBar: _selectedBottomNavBarIndex == 2
           ? TitleAppBar(
               title: 'Замовлення',
@@ -92,30 +74,31 @@ class _AdminMainScreenState extends State<AdminMainScreen>
               bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(30),
                 child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Row(
-                      children: [
-                        TabButton(
-                          text: 'мед',
-                          isActive: _selectedTabIndex == 0,
-                          onPressed: () {
-                            setState(() {
-                              _selectedTabIndex = 0;
-                            });
-                          },
-                        ),
-                        const SizedBox(width: 10),
-                        TabButton(
-                          text: 'інше',
-                          isActive: _selectedTabIndex == 1,
-                          onPressed: () {
-                            setState(() {
-                              _selectedTabIndex = 1;
-                            });
-                          },
-                        ),
-                      ],
-                    )),
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Row(
+                    children: [
+                      TabButton(
+                        text: 'мед',
+                        isActive: _selectedTabIndex == 0,
+                        onPressed: () {
+                          setState(() {
+                            _selectedTabIndex = 0;
+                          });
+                        },
+                      ),
+                      const SizedBox(width: 10),
+                      TabButton(
+                        text: 'інше',
+                        isActive: _selectedTabIndex == 1,
+                        onPressed: () {
+                          setState(() {
+                            _selectedTabIndex = 1;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
               ),
               leading: Padding(
                 padding: const EdgeInsets.only(left: 20, bottom: 10),
@@ -148,6 +131,25 @@ class _AdminMainScreenState extends State<AdminMainScreen>
                 )
               ],
             ),
+      body: Column(
+        children: [
+          Expanded(
+            child: IndexedStack(
+              index: _selectedBottomNavBarIndex,
+              children: [
+                if (_selectedTabIndex == 0) const ProductsGrid(isHoney: true),
+                if (_selectedTabIndex == 0)
+                  const EditProductsOverviewScreen(isHoney: true),
+                if (_selectedTabIndex == 0) const AdminOrdersScreen(),
+                if (_selectedTabIndex == 1) const ProductsGrid(isHoney: false),
+                if (_selectedTabIndex == 1)
+                  const EditProductsOverviewScreen(isHoney: false),
+                if (_selectedTabIndex == 1) const AdminOrdersScreen(),
+              ],
+            ),
+          ),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false,
