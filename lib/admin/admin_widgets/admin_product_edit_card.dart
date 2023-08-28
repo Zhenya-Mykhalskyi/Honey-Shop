@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:honey/admin/admin_screens/product_edit_screen.dart';
+import 'package:honey/providers/theme_provider.dart';
 
 class AdminProductEditCard extends StatelessWidget {
   final Map<String, dynamic> productData;
@@ -62,12 +63,39 @@ class AdminProductEditCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      Text(
-                        '₴${productData['price'].toStringAsFixed(2)} / 0.5',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
+                      Row(
+                        children: [
+                          Text(
+                            productData['isDiscount']
+                                ? '₴ ${productData['discountPrice'].toStringAsFixed(2)}'
+                                : '₴ ${productData['price'].toStringAsFixed(2)}',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                              color: productData['isDiscount']
+                                  ? AppColors.primaryColor
+                                  : Theme.of(context).primaryColor,
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          if (productData['isDiscount'])
+                            Text(
+                              '₴${productData['price'].toStringAsFixed(2)}',
+                              style: const TextStyle(
+                                decoration: TextDecoration.lineThrough,
+                                decorationColor: AppColors.saleColor,
+                                color: AppColors.darkGreyColor,
+                              ),
+                            ),
+                          Text(
+                            ' /0.5 л',
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(0.7)),
+                          )
+                        ],
                       ),
                       const SizedBox(height: 25),
                       Text(

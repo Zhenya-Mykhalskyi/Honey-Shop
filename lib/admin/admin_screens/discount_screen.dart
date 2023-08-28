@@ -54,6 +54,7 @@ class _DiscountScreenState extends State<DiscountScreen> {
         'title': widget.product.title,
         'litersLeft': widget.product.litersLeft,
         'imageUrl': widget.product.imageUrl,
+        'isDiscount': false,
       };
 
   void _applyDiscount(int percentage) {
