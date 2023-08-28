@@ -63,7 +63,7 @@ class _DiscountScreenState extends State<DiscountScreen> {
   }
 
   Future<void> saveDiscount() async {
-    final navContext = Navigator.of(context);
+    final scaffoldContext = ScaffoldMessenger.of(context);
     double discountedPrice = calculateDiscountedPrice();
     try {
       await Provider.of<ProductsProvider>(context, listen: false).applyDiscount(
@@ -71,7 +71,9 @@ class _DiscountScreenState extends State<DiscountScreen> {
         _discountPercentage,
         discountedPrice,
       );
-      navContext.pop();
+      scaffoldContext.showSnackBar(
+        const SnackBar(content: Text('Акція на товар успішно збережена')),
+      );
     } catch (e) {
       print(e);
     }
@@ -155,7 +157,25 @@ class _DiscountScreenState extends State<DiscountScreen> {
                   ),
                 ],
               ),
-              CustomButton(action: saveDiscount, text: 'Зберегти')
+              CustomButton(
+                  action: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return ConfirmationDialog(
+                          title: 'Застосувати акцію на цей товар?',
+                          confirmButtonText: 'Так',
+                          cancelButtonText: 'Повернутися',
+                          onConfirm: () {
+                            saveDiscount();
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                          },
+                        );
+                      },
+                    );
+                  },
+                  text: 'Застосувати акцію')
             ],
           ),
         ),
