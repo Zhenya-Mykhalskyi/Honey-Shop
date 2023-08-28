@@ -76,7 +76,9 @@ class AdminOrderDetailsDialog extends StatelessWidget {
                 const SizedBox(height: 10),
                 if (order['usedBonuses'] != 0)
                   Text(
-                      '(покупець використав ₴${order['usedBonuses'].toStringAsFixed(2)} накопиченими бонусами'),
+                    'Покупець використав ${order['usedBonuses'].toStringAsFixed(0)} грн накопиченими бонусами',
+                    style: const TextStyle(fontSize: 13),
+                  ),
               ],
             ),
             const MyDivider(),

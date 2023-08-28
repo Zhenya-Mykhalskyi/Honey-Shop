@@ -64,6 +64,13 @@ class OrderDetailsDialog extends StatelessWidget {
                 ),
               ],
             ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Text(
+                    'Використано бонусів: ${order.usedBonuses.toStringAsFixed(0)} грн.'),
+              ],
+            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -143,10 +150,14 @@ class OrderDetailsDialog extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 30),
+                // if ()
+                //   const Text(),
                 Text(
-                  order.isFinished
-                      ? 'Замовлення виконане, бонуси начислені'
-                      : 'Замовлення в обробці...',
+                  order.isFinished && order.isDeleted
+                      ? 'Замовлення відхилено'
+                      : order.isFinished
+                          ? 'Замовлення виконане, бонуси начислені'
+                          : 'Замовлення в обробці...',
                   style: const TextStyle(
                       color: AppColors.primaryColor,
                       fontWeight: FontWeight.w600),

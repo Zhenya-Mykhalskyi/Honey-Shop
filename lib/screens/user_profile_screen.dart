@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:honey/providers/theme_provider.dart';
 import 'package:honey/widgets/custom_divider.dart';
 import 'package:honey/widgets/order_card.dart';
+import 'package:honey/widgets/profile_info_card_single_row.dart';
 import 'order_and_edit_profile_screen.dart';
 
 class Order {
@@ -18,8 +19,10 @@ class Order {
   final double totalAmount;
   final String date;
   final String time;
-  final Timestamp dateTime;
+  final Timestamp timestamp;
+  final num usedBonuses;
   final bool isFinished;
+  final bool isDeleted;
 
   final List<Map<String, dynamic>> products;
   Order({
@@ -29,12 +32,14 @@ class Order {
     required this.postOfficeNumber,
     required this.date,
     required this.time,
-    required this.dateTime,
+    required this.timestamp,
+    required this.usedBonuses,
     required this.orderId,
     required this.userId,
     required this.totalAmount,
     required this.products,
     required this.isFinished,
+    required this.isDeleted,
   });
 }
 
@@ -104,7 +109,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     }
     return FirebaseFirestore.instance
         .collection('orders')
-        // .orderBy('timestamp', descending: true)
         .where('userId', isEqualTo: user.uid)
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) {
@@ -121,19 +125,20 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           })
                       .toList();
               return Order(
-                orderId: doc.id,
-                userId: data['userId'],
-                fullName: data['fullName'],
-                phoneNumber: data['phoneNumber'],
-                address: data['address'],
-                postOfficeNumber: data['postOfficeNumber'],
-                totalAmount: data['totalAmount'],
-                date: data['date'],
-                time: data['time'],
-                dateTime: data['timestamp'],
-                products: products,
-                isFinished: data['isFinished'],
-              );
+                  orderId: doc.id,
+                  userId: data['userId'],
+                  fullName: data['fullName'],
+                  phoneNumber: data['phoneNumber'],
+                  address: data['address'],
+                  postOfficeNumber: data['postOfficeNumber'],
+                  totalAmount: data['totalAmount'],
+                  date: data['date'],
+                  time: data['time'],
+                  timestamp: data['timestamp'],
+                  usedBonuses: data['usedBonuses'],
+                  products: products,
+                  isFinished: data['isFinished'],
+                  isDeleted: data['isVisibleForAdmin']);
             }).toList());
   }
 
@@ -322,8 +327,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                             snapshot.data!.isEmpty) {
                           return const Text('Немає замовлень');
                         } else {
-                          snapshot.data!
-                              .sort((a, b) => b.dateTime.compareTo(a.dateTime));
+                          snapshot.data!.sort(
+                              (a, b) => b.timestamp.compareTo(a.timestamp));
                           return SizedBox(
                             height: MediaQuery.of(context).size.height * 0.3,
                             child: ListView.builder(
@@ -344,60 +349,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class ProfileInfoCardSingleRow extends StatelessWidget {
-  final IconData icon;
-  final String text;
-  final Color? color;
-  final FontWeight? fontWeight;
-  final bool? showInfoIcon;
-  const ProfileInfoCardSingleRow({
-    super.key,
-    required this.icon,
-    required this.text,
-    this.color,
-    this.fontWeight,
-    this.showInfoIcon = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(icon, color: color ?? Theme.of(context).primaryColor, size: 20),
-        const SizedBox(width: 10),
-        Flexible(
-          child: Text(
-            text,
-            style: TextStyle(
-                fontSize: 15,
-                color: color ?? Theme.of(context).primaryColor,
-                fontWeight: fontWeight ?? FontWeight.w500),
-          ),
-        ),
-        if (showInfoIcon == true)
-          Tooltip(
-            decoration: BoxDecoration(
-                color: Theme.of(context).canvasColor,
-                borderRadius: BorderRadius.circular(10)),
-            margin: const EdgeInsets.symmetric(horizontal: 20),
-            textStyle:
-                TextStyle(fontSize: 16, color: Theme.of(context).primaryColor),
-            triggerMode: TooltipTriggerMode.tap,
-            showDuration: const Duration(seconds: 5),
-            message:
-                'Чим більша загальна сума Ваших успішних замовлень, тим більший відсоток нарахування бонусів*',
-            child: Padding(
-              padding: const EdgeInsets.only(left: 5),
-              child: Icon(Icons.info_outline,
-                  color: Theme.of(context).primaryColor, size: 13),
-            ),
-          ),
-      ],
     );
   }
 }
