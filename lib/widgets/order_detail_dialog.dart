@@ -150,11 +150,9 @@ class OrderDetailsDialog extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 30),
-                // if ()
-                //   const Text(),
                 Text(
-                  order.isFinished && order.isDeleted
-                      ? 'Замовлення відхилено'
+                  !order.isFinished && !order.isVisibleForAdmin
+                      ? 'Замовлення відхилено, бонуси повернуто'
                       : order.isFinished
                           ? 'Замовлення виконане, бонуси начислені'
                           : 'Замовлення в обробці...',

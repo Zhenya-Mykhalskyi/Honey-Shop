@@ -22,7 +22,7 @@ class Order {
   final Timestamp timestamp;
   final num usedBonuses;
   final bool isFinished;
-  final bool isDeleted;
+  final bool isVisibleForAdmin;
 
   final List<Map<String, dynamic>> products;
   Order({
@@ -39,7 +39,7 @@ class Order {
     required this.totalAmount,
     required this.products,
     required this.isFinished,
-    required this.isDeleted,
+    required this.isVisibleForAdmin,
   });
 }
 
@@ -138,7 +138,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   usedBonuses: data['usedBonuses'],
                   products: products,
                   isFinished: data['isFinished'],
-                  isDeleted: data['isVisibleForAdmin']);
+                  isVisibleForAdmin: data['isVisibleForAdmin']);
             }).toList());
   }
 
