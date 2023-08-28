@@ -92,22 +92,20 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
         Provider.of<ProductsProvider>(context, listen: false);
     final popContext = Navigator.of(context);
     final scaffoldContext = ScaffoldMessenger.of(context);
-
     final isValid = _formkey.currentState?.validate();
     if (!isValid!) {
       return;
     }
-
     final hasInternetConnection =
         await CheckConnectivityUtil.checkInternetConnectivity(context);
     if (!hasInternetConnection) {
       return;
     }
-
     try {
       setState(() {
         _isLoading = true;
       });
+
       _editedProduct.title = _titleController.text;
       _editedProduct.price = double.parse(_priceController.text);
       _editedProduct.litersLeft = int.parse(_litersLeftController.text);
@@ -123,6 +121,11 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
         await productProvider.updateProduct(widget.productId, _editedProduct,
             pickedImage: _pickedImage, currentImageUrl: _currentImageUrl);
         popContext.pop();
+        scaffoldContext.showSnackBar(
+          const SnackBar(
+            content: Text('Товар успішно збережений'),
+          ),
+        );
       } else {
         if (_pickedImage != null) {
           await productProvider.addProduct(_editedProduct, _pickedImage!);
@@ -130,7 +133,6 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
           scaffoldContext.showSnackBar(
             const SnackBar(
               content: Text('Додайте картинку'),
-              duration: Duration(seconds: 3),
             ),
           );
           return;
@@ -343,7 +345,20 @@ class _ProductEditScreenState extends State<ProductEditScreen> {
                     ),
                     CustomButton(
                       action: () {
-                        submitProductForm(context);
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return ConfirmationDialog(
+                              title: 'Зберегти товар?',
+                              confirmButtonText: 'Так',
+                              cancelButtonText: 'Повернутися',
+                              onConfirm: () {
+                                submitProductForm(context);
+                                Navigator.of(context).pop();
+                              },
+                            );
+                          },
+                        );
                       },
                       text: 'Зберегти',
                     ),
