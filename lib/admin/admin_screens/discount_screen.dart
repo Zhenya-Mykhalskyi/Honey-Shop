@@ -72,7 +72,7 @@ class _DiscountScreenState extends State<DiscountScreen> {
         discountedPrice,
       );
       scaffoldContext.showSnackBar(
-        const SnackBar(content: Text('Акція на товар успішно збережена')),
+        const SnackBar(content: Text('Акція на товар успішно застосована')),
       );
     } catch (e) {
       print(e);
@@ -163,7 +163,7 @@ class _DiscountScreenState extends State<DiscountScreen> {
                       context: context,
                       builder: (BuildContext context) {
                         return ConfirmationDialog(
-                          title: 'Застосувати акцію на цей товар?',
+                          title: 'Застосувати акцію на даний товар?',
                           confirmButtonText: 'Так',
                           cancelButtonText: 'Повернутися',
                           onConfirm: () {

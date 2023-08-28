@@ -67,8 +67,9 @@ class OrderDetailsDialog extends StatelessWidget {
             const SizedBox(height: 10),
             Row(
               children: [
-                Text(
-                    'Використано бонусів: ${order.usedBonuses.toStringAsFixed(0)} грн.'),
+                if (order.usedBonuses != 0)
+                  Text(
+                      'Використано бонусів: ${order.usedBonuses.toStringAsFixed(0)} грн.'),
               ],
             ),
             Column(

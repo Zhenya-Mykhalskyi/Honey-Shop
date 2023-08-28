@@ -6,7 +6,6 @@ class Product {
   int litersLeft;
   String productDescription;
   bool isHoney;
-
   bool? isDiscount;
   double? discountPrice;
   int? discountPercentage;

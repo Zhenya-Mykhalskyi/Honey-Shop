@@ -8,6 +8,37 @@ class AdminOrdersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Future<void> deleteOrderForAdmin(order) async {
+      final String orderId = order['orderId'];
+      DocumentSnapshot orderSnapshot = await FirebaseFirestore.instance
+          .collection('orders')
+          .doc(orderId)
+          .get();
+
+      if (orderSnapshot.exists) {
+        Map<String, dynamic> orderData =
+            orderSnapshot.data() as Map<String, dynamic>;
+        bool isFinished = orderData['isFinished'];
+        if (isFinished == false) {
+          String userId = orderData['userId'];
+          num usedBonuses = orderData['usedBonuses'] ?? 0.0;
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(userId)
+              .update({
+            'bonuses': FieldValue.increment(usedBonuses),
+          });
+        }
+        await FirebaseFirestore.instance
+            .collection('orders')
+            .doc(orderId)
+            .update({
+          // 'isFinished': true,
+          'isVisibleForAdmin': false,
+        });
+      }
+    }
+
     return Scaffold(
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: FirebaseFirestore.instance
@@ -57,36 +88,8 @@ class AdminOrdersScreen extends StatelessWidget {
               return AdminOrderCard(
                 order: order,
                 orderProductsData: productsList,
-                onDelete: () async {
-                  final String orderId = order['orderId'];
-                  DocumentSnapshot orderSnapshot = await FirebaseFirestore
-                      .instance
-                      .collection('orders')
-                      .doc(orderId)
-                      .get();
-
-                  if (orderSnapshot.exists) {
-                    Map<String, dynamic> orderData =
-                        orderSnapshot.data() as Map<String, dynamic>;
-                    bool isFinished = orderData['isFinished'];
-                    if (isFinished == false) {
-                      String userId = orderData['userId'];
-                      num usedBonuses = orderData['usedBonuses'] ?? 0.0;
-                      await FirebaseFirestore.instance
-                          .collection('users')
-                          .doc(userId)
-                          .update({
-                        'bonuses': FieldValue.increment(usedBonuses),
-                      });
-                    }
-                    await FirebaseFirestore.instance
-                        .collection('orders')
-                        .doc(orderId)
-                        .update({
-                      'isFinished': true,
-                      'isVisibleForAdmin': false,
-                    });
-                  }
+                onDelete: () {
+                  deleteOrderForAdmin(order);
                 },
               );
             },

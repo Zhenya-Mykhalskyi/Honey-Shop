@@ -42,23 +42,6 @@ class _UserMainScreenState extends State<UserMainScreen>
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: IndexedStack(
-              index: _selectedBottomNavBarIndex,
-              children: [
-                if (_selectedTabIndex == 0) const UserProfileScreen(),
-                if (_selectedTabIndex == 0) const ProductsGrid(isHoney: true),
-                if (_selectedTabIndex == 0) const AdminProfileScreen(),
-                if (_selectedTabIndex == 1) const UserProfileScreen(),
-                if (_selectedTabIndex == 1) const ProductsGrid(isHoney: false),
-                if (_selectedTabIndex == 1) const AdminProfileScreen(),
-              ],
-            ),
-          ),
-        ],
-      ),
       appBar: _selectedBottomNavBarIndex == 1
           ? AppBar(
               toolbarHeight: 100,
@@ -67,33 +50,30 @@ class _UserMainScreenState extends State<UserMainScreen>
               bottom: PreferredSize(
                 preferredSize: const Size.fromHeight(30),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: _selectedBottomNavBarIndex == 1
-                      ? Row(
-                          children: [
-                            TabButton(
-                              text: 'мед',
-                              isActive: _selectedTabIndex == 0,
-                              onPressed: () {
-                                setState(() {
-                                  _selectedTabIndex = 0;
-                                });
-                              },
-                            ),
-                            const SizedBox(width: 10),
-                            TabButton(
-                              text: 'інше',
-                              isActive: _selectedTabIndex == 1,
-                              onPressed: () {
-                                setState(() {
-                                  _selectedTabIndex = 1;
-                                });
-                              },
-                            ),
-                          ],
-                        )
-                      : const SizedBox.shrink(),
-                ),
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Row(
+                      children: [
+                        TabButton(
+                          text: 'мед',
+                          isActive: _selectedTabIndex == 0,
+                          onPressed: () {
+                            setState(() {
+                              _selectedTabIndex = 0;
+                            });
+                          },
+                        ),
+                        const SizedBox(width: 10),
+                        TabButton(
+                          text: 'інше',
+                          isActive: _selectedTabIndex == 1,
+                          onPressed: () {
+                            setState(() {
+                              _selectedTabIndex = 1;
+                            });
+                          },
+                        ),
+                      ],
+                    )),
               ),
               leading: Padding(
                 padding: const EdgeInsets.only(left: 20),
@@ -152,6 +132,23 @@ class _UserMainScreenState extends State<UserMainScreen>
                   actions: const [ThemeSwitcher()],
                 )
               : null,
+      body: Column(
+        children: [
+          Expanded(
+            child: IndexedStack(
+              index: _selectedBottomNavBarIndex,
+              children: [
+                if (_selectedTabIndex == 0) const UserProfileScreen(),
+                if (_selectedTabIndex == 0) const ProductsGrid(isHoney: true),
+                if (_selectedTabIndex == 0) const AdminProfileScreen(),
+                if (_selectedTabIndex == 1) const UserProfileScreen(),
+                if (_selectedTabIndex == 1) const ProductsGrid(isHoney: false),
+                if (_selectedTabIndex == 1) const AdminProfileScreen(),
+              ],
+            ),
+          ),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
         showUnselectedLabels: false,
