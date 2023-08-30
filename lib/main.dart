@@ -56,7 +56,7 @@ class _MyAppState extends State<MyApp> {
               }
               final user = userSnapshot.data;
               if (userSnapshot.hasData) {
-                if (user!.phoneNumber == '+380987332919') {
+                if (user!.phoneNumber == '+380987332917') {
                   return const AdminMainScreen();
                 } else {
                   return const UserMainScreen();

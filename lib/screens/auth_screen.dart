@@ -153,6 +153,7 @@ class _AuthScreenState extends State<AuthScreen> {
                           ? CustomTextField(
                               hintText: 'Ваше імʼя',
                               maxLength: 15,
+                              textSize: 18,
                               controller: _nameController,
                               validator: (value) {
                                 if (value!.isEmpty || value.length < 2) {
@@ -167,7 +168,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         prefix: const Text('+380 '),
                         keyboardType: TextInputType.phone,
                         maxLength: 9,
-                        textSize: 17,
+                        textSize: 18,
                         controller: _phoneNumberController,
                         validator: (value) {
                           final regExp = RegExp(r'^\+380[0-9]{9}$');
